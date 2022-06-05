@@ -1,0 +1,16 @@
+In case of new ATK 18% arti:
+    update player_phase.py line 39
+In case of new character:
+    Add new characters to characters.json, one way to help: run "npm install genshin-db" "node get_characters.js", copy terminal, find new characters
+    Change indexes at comp_rates.py lines 74 to 81 for the travelers
+    Add comp role at composition line 56
+    If new char is traveler, update comp_rates.py, char_usage.py, and player_phase.py
+(update ver in char_csv_filterer.py, csv_filterer.py, and comp_rates)
+
+(Update previous char usage at line 168 on comps/char_usage.py, take it from previous infographics)
+delete old phase_characters.csv and compositions.csv
+Run char_csv_filterer.py and csv_filterer.py
+Run comp_rates.py thrice:
+    Once while commenting the write commands, to check the UIDs
+    Second with the commands uncommented
+    Third onward for the comp names, comment the chars usage

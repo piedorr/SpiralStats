@@ -1,0 +1,522 @@
+{
+	"Albedo": {
+		"weapon": "Sword",
+		"element": "Geo",
+		"version": 1.2,
+		"phase": "1.5a",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 5,
+		"availability": "Limited 5*"
+	},
+    "Aloy": {
+        "weapon": "Bow",
+        "element": "Cryo",
+        "version": 2.1,
+        "phase": "2.1a",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 5,
+		"availability": "Free"
+    },
+	"Amber": {
+		"weapon": "Bow",
+		"element": "Pyro",
+		"version": 1.0,
+		"phase": "1.5a",
+		"alt_name": "Ambor",
+		"out_name": false,
+		"rarity": 4,
+		"availability": "Free"
+	},
+	"Arataki Itto": {
+		"weapon": "Claymore",
+		"element": "Geo",
+		"version": 2.3,
+		"phase": "2.3a",
+		"alt_name": "Itto",
+		"out_name": true,
+		"rarity": 5,
+		"availability": "Limited 5*"
+	},
+	"Barbara": {
+		"weapon": "Catalyst",
+		"element": "Hydro",
+		"version": 1.0,
+		"phase": "1.5a",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 4,
+		"availability": "Free"
+	},
+	"Beidou": {
+		"weapon": "Claymore",
+		"element": "Electro",
+		"version": 1.0,
+		"phase": "1.5a",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 4,
+		"availability": "4*"
+	},
+	"Bennett": {
+		"weapon": "Sword",
+		"element": "Pyro",
+		"version": 1.0,
+		"phase": "1.5a",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 4,
+		"availability": "4*"
+	},
+	"Chongyun": {
+		"weapon": "Claymore",
+		"element": "Cryo",
+		"version": 1.0,
+		"phase": "1.5a",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 4,
+		"availability": "4*"
+	},
+	"Diluc": {
+		"weapon": "Claymore",
+		"element": "Pyro",
+		"version": 1.0,
+		"phase": "1.5a",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 5,
+		"availability": "5*"
+	},
+	"Diona": {
+		"weapon": "Bow",
+		"element": "Cryo",
+		"version": 1.1,
+		"phase": "1.5a",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 4,
+		"availability": "4*"
+	},
+	"Eula": {
+		"weapon": "Claymore",
+		"element": "Cryo",
+		"version": 1.5,
+		"phase": "1.5b",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 5,
+		"availability": "Limited 5*"
+	},
+	"Fischl": {
+		"weapon": "Bow",
+		"element": "Electro",
+		"version": 1.0,
+		"phase": "1.5a",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 4,
+		"availability": "4*"
+	},
+	"Ganyu": {
+		"weapon": "Bow",
+		"element": "Cryo",
+		"version": 1.2,
+		"phase": "1.5a",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 5,
+		"availability": "Limited 5*"
+	},
+	"Gorou": {
+		"weapon": "Bow",
+		"element": "Geo",
+		"version": 2.3,
+		"phase": "2.3a",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 4,
+		"availability": "4*"
+	},
+	"Hu Tao": {
+		"weapon": "Spear",
+		"element": "Pyro",
+		"version": 1.3,
+		"phase": "1.5a",
+		"alt_name": "Hutao",
+		"out_name": false,
+		"rarity": 5,
+		"availability": "Limited 5*"
+	},
+	"Jean": {
+		"weapon": "Sword",
+		"element": "Anemo",
+		"version": 1.0,
+		"phase": "1.5a",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 5,
+		"availability": "5*"
+	},
+	"Kaedehara Kazuha": {
+		"weapon": "Sword",
+		"element": "Anemo",
+		"version": 1.6,
+		"phase": "1.6b",
+		"alt_name": "Kazuha",
+		"out_name": true,
+		"rarity": 5,
+		"availability": "Limited 5*"
+	},
+	"Kaeya": {
+		"weapon": "Sword",
+		"element": "Cryo",
+		"version": 1.0,
+		"phase": "1.5a",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 4,
+		"availability": "Free"
+	},
+	"Kamisato Ayaka": {
+		"weapon": "Sword",
+		"element": "Cryo",
+		"version": 2.0,
+		"phase": "1.6c",
+		"alt_name": "Ayaka",
+		"out_name": true,
+		"rarity": 5,
+		"availability": "Limited 5*"
+	},
+    "Kamisato Ayato": {
+        "weapon": "Sword",
+        "element": "Hydro",
+        "version": 2.6,
+        "phase": "1.5",
+		"alt_name": "Ayato",
+		"out_name": true,
+        "rarity": 5,
+		"availability": "Limited 5*"
+    },
+	"Keqing": {
+		"weapon": "Sword",
+		"element": "Electro",
+		"version": 1.0,
+		"phase": "1.5a",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 5,
+		"availability": "5*"
+	},
+	"Klee": {
+		"weapon": "Catalyst",
+		"element": "Pyro",
+		"version": 1.0,
+		"phase": "1.5a",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 5,
+		"availability": "Limited 5*"
+	},
+    "Kujou Sara": {
+        "weapon": "Claymore",
+        "element": "Electro",
+        "version": 2.1,
+        "phase": "2.1a",
+        "alt_name": "Sara",
+        "out_name": true,
+        "rarity": 4,
+        "availability": "4*"
+    },
+	"Lisa": {
+		"weapon": "Catalyst",
+		"element": "Electro",
+		"version": 1.0,
+		"phase": "1.5a",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 4,
+		"availability": "Free"
+	},
+	"Mona": {
+		"weapon": "Catalyst",
+		"element": "Hydro",
+		"version": 1.0,
+		"phase": "1.5a",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 5,
+		"availability": "5*"
+	},
+	"Ningguang": {
+		"weapon": "Catalyst",
+		"element": "Geo",
+		"version": 1.0,
+		"phase": "1.5a",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 4,
+		"availability": "4*"
+	},
+	"Noelle": {
+		"weapon": "Claymore",
+		"element": "Geo",
+		"version": 1.0,
+		"phase": "1.5a",
+		"alt_name": "Noel",
+		"out_name": false,
+		"rarity": 4,
+		"availability": "Free"
+	},
+	"Qiqi": {
+		"weapon": "Sword",
+		"element": "Cryo",
+		"version": 1.0,
+		"phase": "1.5a",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 5,
+		"availability": "5*"
+	},
+    "Raiden Shogun": {
+		"weapon": "Spear",
+		"element": "Electro",
+		"version": 2.1,
+		"phase": "2.1a",
+		"alt_name": "Raiden",
+		"out_name": true,
+		"rarity": 5,
+		"availability": "Limited 5*"
+    },
+	"Razor": {
+		"weapon": "Claymore",
+		"element": "Electro",
+		"version": 1.0,
+		"phase": "1.5a",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 4,
+		"availability": "4*"
+	},
+	"Rosaria": {
+		"weapon": "Spear",
+		"element": "Cryo",
+		"version": 1.4,
+		"phase": "1.5a",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 4,
+		"availability": "4*"
+	},
+    "Sangonomiya Kokomi": {
+		"weapon": "Catalyst",
+		"element": "Hydro",
+		"version": 2.1,
+		"phase": "2.1b",
+		"alt_name": "Kokomi",
+		"out_name": true,
+		"rarity": 5,
+		"availability": "Limited 5*"
+    },
+    "Sayu": {
+        "weapon": "Claymore",
+        "element": "Anemo",
+        "version": 2.0,
+        "phase": "2.0a",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 4,
+        "availability": "4*"
+    },
+    "Shenhe": {
+        "weapon": "Polearm",
+        "element": "Cryo",
+        "version": 2.4,
+        "phase": "1.5",
+		"alt_name": null,
+		"out_name": false,
+        "rarity": 5,
+		"availability": "Limited 5*"
+    },
+	"Sucrose": {
+		"weapon": "Catalyst",
+		"element": "Anemo",
+		"version": 1.0,
+		"phase": "1.5a",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 4,
+		"availability": "4*"
+	},
+	"Tartaglia": {
+		"weapon": "Bow",
+		"element": "Hydro",
+		"version": 1.1,
+		"phase": "1.5a",
+		"alt_name": "Childe",
+		"out_name": false,
+		"rarity": 5,
+		"availability": "Limited 5*"
+	},
+	"Thoma": {
+		"weapon": "Spear",
+		"element": "Pyro",
+		"version": 2.2,
+		"phase": "2.2b",
+		"alt_name": "Tohma",
+		"out_name": false,
+		"rarity": 4,
+		"availability": "4*"
+	},
+	"Traveler": {
+		"weapon": "Sword",
+		"element": "Anemo",
+		"version": 1.0,
+		"phase": "1.5a",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 4,
+		"availability": "Free"
+	},
+	"Traveler-A": {
+		"weapon": "Sword",
+		"element": "Anemo",
+		"version": 1.0,
+		"phase": "1.5a",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 4,
+		"availability": "Free"
+	},
+	"Traveler-G": {
+		"weapon": "Sword",
+		"element": "Geo",
+		"version": 1.0,
+		"phase": "1.5a",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 4,
+		"availability": "Free"
+	},
+	"Traveler-E": {
+		"weapon": "Sword",
+		"element": "Electro",
+		"version": 2.0,
+		"phase": "1.6c",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 4,
+		"availability": "Free"
+	},
+	"Venti": {
+		"weapon": "Bow",
+		"element": "Anemo",
+		"version": 1.0,
+		"phase": "1.5a",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 5,
+		"availability": "Limited 5*"
+	},
+	"Xiangling": {
+		"weapon": "Spear",
+		"element": "Pyro",
+		"version": 1.0,
+		"phase": "1.5a",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 4,
+		"availability": "4*"
+	},
+	"Xiao": {
+		"weapon": "Spear",
+		"element": "Anemo",
+		"version": 1.3,
+		"phase": "1.5a",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 5,
+		"availability": "Limited 5*"
+	},
+	"Xingqiu": {
+		"weapon": "Sword",
+		"element": "Hydro",
+		"version": 1.0,
+		"phase": "1.5a",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 4,
+		"availability": "4*"
+	},
+	"Xinyan": {
+		"weapon": "Claymore",
+		"element": "Pyro",
+		"version": 1.1,
+		"phase": "1.5a",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 4,
+		"availability": "4*"
+	},
+    "Yae Miko": {
+        "weapon": "Catalyst",
+        "element": "Electro",
+        "version": 2.5,
+        "phase": "1.5",
+		"alt_name": "Yae",
+		"out_name": true,
+        "rarity": 5,
+		"availability": "Limited 5*"
+    },
+	"Yanfei": {
+		"weapon": "Catalyst",
+		"element": "Pyro",
+		"version": 1.5,
+		"phase": "1.5a",
+		"alt_name": "Feiyan",
+		"out_name": false,
+		"rarity": 4,
+		"availability": "4*"
+	},
+	"Yelan": {
+		"weapon": "Bow",
+		"element": "Hydro",
+		"version": 2.7,
+		"phase": "2.7a",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 5,
+		"availability": "Limited 5*"
+	},
+    "Yoimiya": {
+        "weapon": "Bow",
+		"element": "Pyro",
+		"version": 2.0,
+		"phase": "2.0a",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 5,
+		"availability": "Limited 5*"
+    },
+    "Yun Jin": {
+        "weapon": "Polearm",
+        "element": "Geo",
+        "version": 2.4,
+        "phase": "1.5a",
+		"alt_name": null,
+		"out_name": false,
+        "rarity": 4,
+		"availability": "4*"
+    },
+	"Zhongli": {
+		"weapon": "Spear",
+		"element": "Geo",
+		"version": 1.1,
+		"phase": "1.5a",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 5,
+		"availability": "Limited 5*"
+	}
+}

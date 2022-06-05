@@ -1,0 +1,42 @@
+{   
+    "Pyro": {
+        "Hydro": "Vaporize",
+        "Electro": "Overload",
+        "Cryo": "Melt",
+        "Anemo": "Pyro Swirl",
+        "Geo": "Pyro Crystalize"
+    },
+    "Hydro": {   
+        "Pyro": "Vaporize",
+        "Electro": "Electro-Charged",
+        "Cryo": "Freeze",
+        "Anemo": "Hydro Swirl",
+        "Geo": "Hydro Crystalize"
+    },
+    "Electro": {   
+        "Pyro": "Overload",
+        "Hydro": "Electro-Charged",
+        "Cryo": "Superconduct",
+        "Anemo": "Electro Swirl",
+        "Geo": "Electro Crystalize"
+    },
+    "Cryo": {   
+        "Pyro": "Melt",
+        "Hydro": "Freeze",
+        "Electro": "Superconduct",
+        "Anemo": "Cryo Swirl",
+        "Geo": "Cryo Crystalize"
+    },
+    "Anemo": {   
+        "Pyro": "Pyro Swirl",
+        "Hydro": "Hydro Swirl",
+        "Electro": "Electro Swirl",
+        "Cryo": "Cryo Swirl"
+    },
+    "Geo": {   
+        "Pyro": "Pyro Crystalize",
+        "Hydro": "Hydro Crystalize",
+        "Electro": "Electro Crystalize",
+        "Cryo": "Cryo Crystalize"
+    }
+}
