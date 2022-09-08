@@ -58,9 +58,9 @@ class Composition:
                 if CHARACTERS[character]["availability"] in ["Limited 5*", "5*"]:
                     fives.append(character)
 
-                if character in ["Tartaglia","Kamisato Ayaka","Hu Tao","Xiao","Eula","Arataki Itto","Razor","Diluc","Yoimiya","Keqing","Noelle","Klee"]:
+                if character in ["Tartaglia","Kamisato Ayaka","Tighnari","Hu Tao","Xiao","Eula","Arataki Itto","Razor","Diluc","Yoimiya","Keqing","Noelle","Klee","Shikanoin Heizou"]:
                     dps.insert(0, character)
-                elif character in ["Bennett","Qiqi","Diona","Sayu"]:
+                elif character in ["Bennett","Qiqi","Diona","Sayu","Kuki Shinobu"]:
                     healer.append(character)
                 elif character in ["Kaedehara Kazuha","Venti","Traveler-A"]:
                     anemo.append(character)
@@ -68,7 +68,7 @@ class Composition:
                     healer.insert(0, character)
                 elif character in ["Raiden Shogun"]:
                     dps.append(character)
-                elif character in ["Shenhe","Gorou","Mona","Kujou Sara","Rosaria","Fischl","Kaeya","Yun Jin","Lisa","Traveler-G","Aloy","Traveler-E","Xinyan"]:
+                elif character in ["Shenhe","Collei","Gorou","Mona","Kujou Sara","Rosaria","Fischl","Kaeya","Yun Jin","Traveler-G","Aloy","Traveler-E","Xinyan","Traveler-D"]:
                     sub.insert(0, character)
                 elif character in ["Beidou","Chongyun","Amber"]:
                     sub.append(character)
@@ -166,7 +166,7 @@ class Composition:
 
             if dps:
                 if character in ["Sucrose"]:
-                    # For Sukokomon, where Kokomi is DPS and Xiangling, Fischl is sub
+                    # For Sukokomon, where Kokomi is DPS and Xiangling+Fischl is sub
                     if "Fischl" in sub and "Xiangling" in temp:
                         dps.append(character)
                         temp_remove.append(character)
@@ -176,17 +176,17 @@ class Composition:
                         temp_remove.append(character)
                         continue
                 if healer and "Zhongli" not in healer:
-                    if character in ["Sangonomiya Kokomi"]:
+                    if character in ["Sangonomiya Kokomi","Lisa"]:
                         sub.append(character)
                         temp_remove.append(character)
                         continue
                 else:
-                    if character in ["Sangonomiya Kokomi"]:
+                    if character in ["Sangonomiya Kokomi","Lisa"]:
                         sub.append(character)
                         temp_remove.append(character)
                         continue
             else:
-                if character in ["Sangonomiya Kokomi"]:
+                if character in ["Sangonomiya Kokomi","Lisa"]:
                     dps.insert(0, character)
                     temp_remove.append(character)
                     continue
@@ -195,7 +195,7 @@ class Composition:
             temp.remove(character)
         for character in temp:
             if character in ["Sucrose"]:
-                if "Xiangling" in sub:
+                if "Xiangling" in sub or "Yae Miko" in sub:
                     anemo.insert(0, character)
                     temp_remove.append(character)
                     continue
@@ -208,7 +208,7 @@ class Composition:
                 temp_remove.append(character)
                 continue
             else:
-                # print("dps: " + str(dps) + ", sub: " + str(sub) + ", anemo: " + str(anemo) + ", healer: " + str(healer))
+                print("dps: " + str(dps) + ", sub: " + str(sub) + ", anemo: " + str(anemo) + ", healer: " + str(healer))
                 print("not included: " + str(temp))
         self.fivecount = len(fives)
         self.characters = dps + sub + anemo + healer
@@ -224,7 +224,8 @@ class Composition:
                 ["Ganyu","Mona","Sucrose","Diona"],
                 ["Ganyu","Mona","Venti","Zhongli"],
                 ["Ganyu","Kamisato Ayato","Venti","Diona"],
-                ["Ganyu","Kamisato Ayato","Kaedehara Kazuha","Diona"]
+                ["Ganyu","Kamisato Ayato","Kaedehara Kazuha","Diona"],
+                ["Ganyu","Sangonomiya Kokomi","Venti","Diona"]
             ],
             "Moryana": [
             # Ayaka and Diona/Zhongli, no Shenhe/Rosaria/Ganyu
@@ -242,6 +243,7 @@ class Composition:
                 ["Kamisato Ayaka","Sangonomiya Kokomi","Kaedehara Kazuha","Diona"],
                 ["Kamisato Ayaka","Sangonomiya Kokomi","Venti","Diona"],
                 ["Kamisato Ayaka","Kamisato Ayato","Venti","Diona"],
+                ["Kamisato Ayaka","Kamisato Ayato","Kaedehara Kazuha","Diona"],
                 ["Kamisato Ayaka","Kamisato Ayato","Sucrose","Diona"]
             ],
             "Freeze Ayaka/Ganyu": [
@@ -271,6 +273,7 @@ class Composition:
                 ["Kamisato Ayaka","Shenhe","Mona","Venti"],
                 ["Kamisato Ayaka","Shenhe","Mona","Sucrose"],
                 ["Kamisato Ayaka","Shenhe","Mona","Zhongli"],
+                ["Kamisato Ayaka","Shenhe","Mona","Kaedehara Kazuha"],
                 ["Kamisato Ayaka","Shenhe","Kaedehara Kazuha","Zhongli"],
                 ["Kamisato Ayaka","Rosaria","Sangonomiya Kokomi","Sucrose"],
                 ["Kamisato Ayaka","Rosaria","Sangonomiya Kokomi","Venti"],
@@ -298,21 +301,45 @@ class Composition:
                 ["Sangonomiya Kokomi","Fischl","Beidou","Sucrose"],
                 ["Sangonomiya Kokomi","Fischl","Beidou","Venti"]
             ],
+            "Hyperbloom Kokomi": [
+                ["Sangonomiya Kokomi","Traveler-D","Fischl","Kaedehara Kazuha"],
+                ["Sangonomiya Kokomi","Traveler-D","Fischl","Sucrose"]
+            ],
+            "Hyperbloom Sucrose": [["Sucrose","Xingqiu","Traveler-D","Fischl"]],
+            "Hyperbloom Raiden": [["Raiden Shogun","Xingqiu","Traveler-D","Bennett"]],
+            "Hyperbloom Lisa": [["Lisa","Xingqiu","Traveler-D","Fischl"]],
+            "Aggravate Sucrose": [["Sucrose","Traveler-D","Fischl","Beidou"]],
+            "Aggravate Quickswap": [
+                ["Traveler-D","Fischl","Beidou","Kaedehara Kazuha"],
+                ["Traveler-D","Fischl","Kaedehara Kazuha","Bennett"],
+            ],
+            "Aggravate Keqing": [
+                ["Keqing","Traveler-D","Fischl","Kaedehara Kazuha"],
+                ["Keqing","Traveler-D","Fischl","Sucrose"]
+            ],
+            "Aggravate Yae": [
+                ["Yae Miko","Traveler-D","Fischl","Sucrose"],
+                ["Yae Miko","Traveler-D","Sucrose","Bennett"]
+            ],
+            "Aggravate Raiden": [["Raiden Shogun","Traveler-D","Kaedehara Kazuha","Bennett"]],
             "Taser": [
                 ["Sucrose","Xingqiu","Fischl","Beidou"],
                 ["Sucrose","Yelan","Fischl","Beidou"],
                 ["Sucrose","Fischl","Beidou","Barbara"],
-                ["Xingqiu","Fischl","Beidou","Kaedehara Kazuha"]
+                ["Xingqiu","Fischl","Beidou","Kaedehara Kazuha"],
+                ["Sucrose","Yelan","Xingqiu","Fischl"]
             ],
             "Raiden National Team": [
                 ["Raiden Shogun","Xiangling","Xingqiu","Bennett"],
-                ["Raiden Shogun","Xiangling","Mona","Bennett"],
                 ["Xiangling","Xingqiu","Kaedehara Kazuha","Bennett"],
                 ["Xiangling","Xingqiu","Sucrose","Bennett"],
                 ["Xiangling","Xingqiu","Rosaria","Bennett"],
                 ["Xiangling","Xingqiu","Chongyun","Bennett"],
                 ["Xiangling","Xingqiu","Venti","Bennett"],
+                ["Xiangling","Xingqiu","Fischl","Bennett"],
                 ["Raiden Shogun","Xiangling","Yelan","Bennett"],
+                ["Shikanoin Heizou","Xiangling","Xingqiu","Bennett"],
+                ["Kamisato Ayaka,Xiangling,Xingqiu,Bennett"],
                 ["Xiangling","Yelan","Kaedehara Kazuha","Bennett"],
                 ["Xiangling","Yelan","Sucrose","Bennett"],
                 ["Xiangling","Yelan","Rosaria","Bennett"],
@@ -329,7 +356,8 @@ class Composition:
                 ["Raiden Shogun","Yelan","Kaedehara Kazuha","Bennett"],
                 ["Raiden Shogun","Yelan","Sucrose","Bennett"],
                 ["Raiden Shogun","Xiangling","Yelan","Sucrose"],
-                ["Raiden Shogun","Mona","Venti","Bennett"]
+                ["Raiden Shogun","Mona","Venti","Bennett"],
+                ["Raiden Shogun","Mona","Kaedehara Kazuha","Bennett"]
             ],
             "Raiden Hypercarry": [
             # Raiden, Sara, anemo, Bennett
@@ -337,11 +365,16 @@ class Composition:
                 ["Raiden Shogun","Kujou Sara","Sucrose","Bennett"],
                 ["Raiden Shogun","Kujou Sara","Venti","Bennett"]
             ],
+            "Raiden Sunfire": [
+                ["Raiden Shogun","Kujou Sara","Jean","Bennett"],
+                ["Raiden Shogun","Xingqiu","Jean","Bennett"]
+            ],
             "Raikou": [
             # Raiden, Yae, anemo, Bennett
                 ["Raiden Shogun","Yae Miko","Kaedehara Kazuha","Bennett"],
                 ["Raiden Shogun","Yae Miko","Sucrose","Bennett"],
-                ["Raiden Shogun","Yae Miko","Venti","Bennett"]
+                ["Raiden Shogun","Yae Miko","Venti","Bennett"],
+                ["Raiden Shogun","Yae Miko","Venti","Zhongli"]
             ],
             "Raiden Taser": [
             # Raiden, hydro, no other suitable comps
@@ -358,11 +391,13 @@ class Composition:
                 ["Raiden Shogun","Xingqiu","Venti","Zhongli"],
                 ["Raiden Shogun","Yae Miko","Yelan","Sucrose"],
                 ["Raiden Shogun","Yae Miko","Yelan","Venti"],
+                ["Raiden Shogun","Yae Miko","Yelan","Jean"],
                 ["Raiden Shogun","Yae Miko","Yelan","Bennett"],
                 ["Raiden Shogun","Yae Miko","Yelan","Sangonomiya Kokomi"],
                 ["Raiden Shogun","Yelan","Fischl","Sucrose"],
                 ["Raiden Shogun","Yelan","Fischl","Bennett"],
                 ["Raiden Shogun","Yelan","Kujou Sara","Bennett"],
+                ["Raiden Shogun","Yelan","Kujou Sara","Jean"],
                 ["Raiden Shogun","Yelan","Sucrose","Barbara"],
                 ["Raiden Shogun","Yelan","Venti","Zhongli"]
             ],
@@ -377,9 +412,11 @@ class Composition:
                 ["Raiden Shogun","Yelan","Sangonomiya Kokomi","Venti"],
                 ["Raiden Shogun","Yelan","Kamisato Ayato","Bennett"],
                 ["Raiden Shogun","Yelan","Venti","Barbara"],
-                ["Raiden Shogun","Yelan","Sucrose","Barbara"]
+                ["Raiden Shogun","Yelan","Sucrose","Barbara"],
+                ["Raiden Shogun","Yelan","Xingqiu","Zhongli"]
             ],
             "Overvape Raiden/Ayato": [["Raiden Shogun","Kamisato Ayato","Xiangling","Bennett"]],
+            "Overvape Raiden/Mona": [["Raiden Shogun","Xiangling","Mona","Bennett"]],
             "PosEidon": [
             # Raiden, Ayato, anemo, Bennett
                 ["Raiden Shogun","Kamisato Ayato","Venti","Bennett"],
@@ -396,7 +433,10 @@ class Composition:
                 ["Raiden Shogun","Xiangling","Kujou Sara","Bennett"],
                 ["Raiden Shogun","Xiangling","Zhongli","Bennett"]
             ],
-            "Mono Electro": [["Raiden Shogun","Yae Miko","Jean","Venti"]],
+            "Mono Electro": [
+                ["Raiden Shogun","Yae Miko","Jean","Venti"],
+                ["Raiden Shogun","Yae Miko","Kujou Sara","Jean"]
+            ],
             # electro and anemo only
             "Double Geo Xiao": [
                 ["Xiao","Jean","Albedo","Zhongli"],
@@ -412,9 +452,15 @@ class Composition:
             ],
             "Double Pyro Xiao": [
                 ["Xiao","Sucrose","Xiangling","Bennett"],
-                ["Xiao","Xiangling","Zhongli","Bennett"]
+                ["Xiao","Xiangling","Zhongli","Bennett"],
+                ["Xiao","Xiangling","Venti","Bennett"],
+                ["Xiao","Xiangling","Kaedehara Kazuha","Bennett"]
             ],
-            "Mono Geo Itto": [["Arataki Itto","Gorou","Albedo","Zhongli"]],
+            "Xiao/Raiden Dual Carry": [["Xiao","Raiden Shogun","Zhongli","Bennett"]],
+            "Mono Geo Itto": [
+                ["Arataki Itto","Gorou","Albedo","Zhongli"],
+                ["Arataki Itto","Traveler-G","Gorou","Zhongli"]
+            ],
             "Triple Geo Itto": [
                 ["Arataki Itto","Gorou","Zhongli","Bennett"],
                 ["Arataki Itto","Gorou","Albedo","Bennett"],
@@ -434,20 +480,30 @@ class Composition:
             "Double Hydro Hu Tao": [
                 ["Hu Tao","Yelan","Xingqiu","Kaedehara Kazuha"],
                 ["Hu Tao","Yelan","Xingqiu","Sucrose"],
-                ["Hu Tao","Yelan","Xingqiu","Zhongli"]
+                ["Hu Tao","Yelan","Xingqiu","Zhongli"],
+                ["Hu Tao","Yelan","Xingqiu","Bennett"],
+                ["Hu Tao","Yelan","Xingqiu","Diona"],
+                ["Hu Tao","Yelan","Xingqiu","Thoma"],
+                ["Hu Tao","Xingqiu","Mona","Zhongli"],
+                ["Hu Tao","Xingqiu","Mona","Diona"],
+                ["Hu Tao","Yelan","Mona","Zhongli"]
             ],
             "Double Pyro Hu Tao": [["Hu Tao","Xiangling","Xingqiu","Zhongli"]],
+            "Hu Tao National Team": [["Hu Tao","Xiangling","Xingqiu","Bennett"]],
             "VapeMelt Hu Tao": [
                 ["Hu Tao","Xingqiu","Ganyu","Zhongli"],
+                ["Hu Tao","Xingqiu","Ganyu","Diona"],
                 ["Hu Tao","Xingqiu","Chongyun","Zhongli"],
                 ["Hu Tao","Xingqiu","Rosaria","Diona"],
                 ["Hu Tao","Xingqiu","Rosaria","Zhongli"],
                 ["Hu Tao","Xingqiu","Sucrose","Diona"],
+                ["Hu Tao","Xingqiu","Albedo","Diona"],
                 ["Hu Tao","Yelan","Ganyu","Zhongli"],
                 ["Hu Tao","Yelan","Chongyun","Zhongli"],
                 ["Hu Tao","Yelan","Rosaria","Diona"],
                 ["Hu Tao","Yelan","Rosaria","Zhongli"],
-                ["Hu Tao","Yelan","Sucrose","Diona"]
+                ["Hu Tao","Yelan","Sucrose","Diona"],
+                ["Hu Tao","Xingqiu","Kaedehara Kazuha","Diona"]
             ],
             "VV Vape Hu Tao": [
             # Hu Tao, Xingqiu, anemo, pyro
@@ -462,15 +518,16 @@ class Composition:
             # Hu Tao, Xingqiu, no other suitable comps
                 ["Hu Tao","Xingqiu","Sucrose","Zhongli"],
                 ["Hu Tao","Xingqiu","Kaedehara Kazuha","Zhongli"],
+                ["Hu Tao","Xingqiu","Kaedehara Kazuha","Bennett"],
                 ["Hu Tao","Xingqiu","Venti","Zhongli"],
                 ["Hu Tao","Xingqiu","Zhongli","Bennett"],
-                ["Hu Tao","Xingqiu","Mona","Zhongli"],
                 ["Hu Tao","Yelan","Sucrose","Zhongli"],
                 ["Hu Tao","Yelan","Kaedehara Kazuha","Zhongli"],
                 ["Hu Tao","Yelan","Venti","Zhongli"],
-                ["Hu Tao","Yelan","Zhongli","Bennett"],
-                ["Hu Tao","Yelan","Mona","Zhongli"]
+                ["Hu Tao","Yelan","Zhongli","Bennett"]
             ],
+            "Melt Hu Tao": [["Hu Tao","Rosaria","Sucrose","Bennett"]],
+            "Funerational": [["Hu Tao","Xiangling","Yelan","Xingqiu"]],
             "Overvape Hu Tao": [["Hu Tao","Xingqiu","Fischl","Zhongli"]],
             "Hu Tao/Raiden Dual Carry": [["Hu Tao","Raiden Shogun","Xingqiu","Zhongli"]],
             "Melt Ayaka/Hu Tao": [
@@ -480,7 +537,8 @@ class Composition:
             ],
             "Melt Ayaka": [
                 ["Kamisato Ayaka","Xiangling","Shenhe","Bennett"],
-                ["Kamisato Ayaka","Xiangling","Rosaria","Bennett"]
+                ["Kamisato Ayaka","Xiangling","Rosaria","Bennett"],
+                ["Kamisato Ayaka","Xiangling","Kaedehara Kazuha","Bennett"]
             ],
             "Ayato Hypercarry": [
             # Ayato, Yun Jin, anemo, Bennett
@@ -508,62 +566,123 @@ class Composition:
             ],
             "Ayato Soup": [["Kamisato Ayato","Fischl","Kaedehara Kazuha","Bennett"]],
             # Ayato, electro, anemo, pyro
-            "Ayato Taser": [["Kamisato Ayato","Fischl","Beidou","Sucrose"]],
+            "Ayato Taser": [
+                ["Kamisato Ayato","Fischl","Beidou","Sucrose"],
+                ["Kamisato Ayato","Fischl","Beidou","Jean"]
+            ],
             # Ayato, electro, anemo, no pyro
             "International Childe": [
             # Childe, Xiangling, flex, Bennett
                 ["Tartaglia","Xiangling","Kaedehara Kazuha","Bennett"],
                 ["Tartaglia","Xiangling","Sucrose","Bennett"],
                 ["Tartaglia","Xiangling","Venti","Bennett"],
-                ["Tartaglia","Xiangling","Zhongli","Bennett"]
+                ["Tartaglia","Xiangling","Zhongli","Bennett"],
+                ["Tartaglia","Xiangling","Jean","Bennett"]
             ],
             "Double Hydro Childe": [
             # Childe, Xingqiu, anemo, Bennett
                 ["Tartaglia","Xingqiu","Venti","Bennett"],
                 ["Tartaglia","Xingqiu","Sucrose","Bennett"],
-                ["Tartaglia","Xingqiu","Xiangling","Bennett"],
                 ["Tartaglia","Yelan","Venti","Bennett"],
                 ["Tartaglia","Yelan","Sucrose","Bennett"],
                 ["Tartaglia","Yelan","Xiangling","Bennett"]
             ],
+            "Double Hydro Double Pyro": [
+                ["Tartaglia","Xingqiu","Xiangling","Bennett"]
+            ],
             "Fireworks": [["Tartaglia","Fischl","Beidou","Bennett"]],
             "Childe/Raiden Dual Carry": [["Tartaglia","Raiden Shogun","Xiangling","Bennett"]],
+            "Mono Hydro Childe": [["Tartaglia","Yelan","Xingqiu","Mona"]],
+            "Childe Taser": [["Tartaglia","Xingqiu","Fischl","Beidou"]],
             "Melt Ganyu": [
                 ["Ganyu","Xiangling","Zhongli","Bennett"],
                 ["Ganyu","Xiangling","Venti","Bennett"],
-                ["Ganyu","Xiangling","Bennett","Diona"]
+                ["Ganyu","Xiangling","Bennett","Diona"],
+                ["Ganyu","Xiangling","Kaedehara Kazuha","Bennett"],
             ],
             "Eula/Raiden/Zhongli/Bennett": [["Eula","Raiden Shogun","Zhongli","Bennett"]],
             "Eula/Raiden/Venti/Bennett": [["Eula","Raiden Shogun","Venti","Bennett"]],
-            "Eula/Raiden Shogun/Venti/Diona": [["Eula","Raiden Shogun","Venti","Diona"]],
+            "Eula/Raiden/Venti/Diona": [["Eula","Raiden Shogun","Venti","Diona"]],
+            "Eula/Raiden/Rosaria/Bennett": [["Eula","Raiden Shogun","Rosaria","Bennett"]],
+            "Eula/Raiden/Yelan/Diona": [["Eula","Raiden Shogun","Yelan","Diona"]],
+            "Eula/Raiden/Mona/Bennett": [["Eula","Raiden Shogun","Mona","Bennett"]],
             "Eula/Rosaria/Jean/Zhongli": [["Eula","Rosaria","Jean","Zhongli"]],
             "Triple Polearm Eula": [["Eula","Raiden Shogun","Rosaria","Zhongli"]],
             "Double Electo Eula": [["Eula","Fischl","Beidou","Diona"]],
-            "Triple Cryo Eula": [["Eula","Rosaria","Fischl","Diona"]],
-            "Vape Yoimiya": [
-                ["Yoimiya","Yelan","Yun Jin","Zhongli"],
-                ["Yoimiya","Xingqiu","Zhongli","Bennett"],
-                ["Yoimiya","Xingqiu","Yun Jin","Bennett"]
+            "Triple Cryo Eula": [
+                ["Eula","Rosaria","Fischl","Diona"],
+                ["Eula","Raiden Shogun","Rosaria","Diona"]
             ],
+            "Vape Yoimiya": [
+                ["Yoimiya","Yelan","Zhongli","Bennett"],
+                ["Yoimiya","Yelan","Yun Jin","Zhongli"],
+                ["Yoimiya","Yelan","Yun Jin","Bennett"],
+                ["Yoimiya","Xingqiu","Zhongli","Bennett"],
+                ["Yoimiya","Xingqiu","Yun Jin","Bennett"],
+                ["Yoimiya","Xingqiu","Yun Jin","Zhongli"]
+            ],
+            "VV Vape Yoimiya": [["Yoimiya","Yelan","Kaedehara Kazuha","Bennett"]],
             "Overvape Yoimiya": [
                 ["Yoimiya","Xingqiu","Fischl","Zhongli"],
                 ["Yoimiya","Xingqiu","Fischl","Bennett"]
             ],
+            "Double Hydro Yoimiya": [
+                ["Yoimiya","Yelan","Xingqiu","Kaedehara Kazuha"],
+                ["Yoimiya","Yelan","Xingqiu","Sucrose"],
+                ["Yoimiya","Yelan","Xingqiu","Zhongli"],
+                ["Yoimiya","Xingqiu","Mona","Zhongli"],
+                ["Yoimiya","Yelan","Mona","Zhongli"]
+            ],
+            "Double Geo Yoimiya": [["Yoimiya","Yun Jin","Zhongli","Bennett"]],
             "Vape Diluc": [
                 ["Diluc","Xingqiu","Zhongli","Bennett"],
                 ["Diluc","Xingqiu","Kaedehara Kazuha","Bennett"],
-                ["Diluc","Xingqiu","Sucrose","Bennett"]
+                ["Diluc","Xingqiu","Sucrose","Bennett"],
+                ["Diluc","Yelan","Zhongli","Bennett"],
+                ["Diluc","Yelan","Kaedehara Kazuha","Bennett"],
+                ["Diluc","Yelan","Sucrose","Bennett"]
             ],
-            "Vape Yanfei": [["Yanfei","Xingqiu","Sucrose","Bennett"]],
+            "VV Vape Yanfei": [
+                ["Yanfei","Xingqiu","Sucrose","Bennett"]
+            ],
+            "Vape Yanfei": [
+                ["Yanfei","Xingqiu","Zhongli","Bennett"]
+            ],
             "Double Geo Diluc": [["Diluc","Xingqiu","Albedo","Zhongli"]],
             "Quickswap Keqing": [["Keqing","Xingqiu","Sucrose","Bennett"]],
             "Sukokomon": [["Sangonomiya Kokomi","Sucrose","Xiangling","Fischl"]],
             "Reverse Melt Quickswap": [
                 ["Xiangling","Rosaria","Kaeya","Bennett"],
-                ["Xiangling","Rosaria","Chongyun","Bennett"]
+                ["Xiangling","Rosaria","Chongyun","Bennett"],
+                ["Xiangling","Rosaria","Sucrose","Bennett"],
+                ["Xiangling","Kaeya","Amber","Bennett"]
             ],
+            "Mono Pyro Klee": [
+                ["Klee","Xiangling","Kaedehara Kazuha","Bennett"],
+                ["Klee","Xiangling","Sucrose","Bennett"]
+            ],
+            "Mono Pyro Yanfei": [
+                ["Yanfei","Xiangling","Kaedehara Kazuha","Bennett"],
+                ["Yanfei","Xiangling","Sucrose","Bennett"]
+            ],
+            "Mono Pyro Yoimiya": [["Yoimiya","Xiangling","Kaedehara Kazuha","Bennett"]],
+            "Mono Pyro Hu Tao": [
+                ["Hu Tao","Xiangling","Kaedehara Kazuha","Bennett"],
+                ["Hu Tao","Xiangling","Sucrose","Bennett"]
+            ],
+            "Mono Pyro Diluc": [
+                ["Diluc","Xiangling","Kaedehara Kazuha","Bennett"],
+                ["Diluc","Xiangling","Sucrose","Bennett"]
+            ],
+            "Mono Pyro Xiangling": [["Xiangling","Amber","Traveler-A","Bennett"]],
+            "Xiangling Overload": [["Xiangling","Fischl","Kaedehara Kazuha","Bennett"]],
             "Double Geo Double Pyro": [["Ningguang","Xiangling","Zhongli","Bennett"]],
-            "Double Pyro Double Hydro": [["Xiangling","Yelan","Xingqiu","Bennett"]]
+            "Double Pyro Double Hydro": [["Xiangling","Yelan","Xingqiu","Bennett"]],
+            "Double Pyro Heizou": [
+                ["Shikanoin Heizou","Xiangling","Kaedehara Kazuha","Bennett"]
+            ],
+            "Double Electo Heizou": [["Shikanoin Heizou","Xingqiu","Fischl","Beidou"]],
+            "Double Electo Kaeya": [["Xingqiu","Lisa","Kaeya","Fischl"]]
         }
         self.comp_name = "-"
         for comp_name in comp_names:

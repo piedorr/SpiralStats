@@ -46,6 +46,16 @@ class PlayerPhase:
                 artifacts = artifacts.replace(i, "")
                 artifacts = "ATK +18%, " + artifacts
 
+        emcom = ["Wanderer's Troupe, ", "Gilded Dreams, "]
+        comem = [", Wanderer's Troupe", ", Gilded Dreams"]
+        for i in emcom:
+            if i in artifacts:
+                artifacts = artifacts.replace(i, "EM +80, ")
+        for i in comem:
+            if i in artifacts:
+                artifacts = artifacts.replace(i, "")
+                artifacts = "EM +80, " + artifacts
+
         self.owned[name] = {
             "level": int(level),
             "cons": int(cons),
@@ -65,7 +75,7 @@ class PlayerPhase:
     def chars_owned(self, characters):
         """Takes in an iter of character names, and returns true if the player owned them all."""
         for char in characters:
-            if char in {"Traveler-A", "Traveler-G", "Traveler-E"}:
+            if char in {"Traveler-A", "Traveler-G", "Traveler-E", "Traveler-D"}:
                 return True
             elif not self.owned[char]:
                 return False

@@ -12,6 +12,7 @@ with open('../data/characters.json') as char_file:
     CHARACTERS = json.load(char_file)
 
 def main():
+    char = "Diluc"
     # Sample size will be needed to calculate the comp app and own rate
     global sample_size
     sample_size = 0
@@ -29,18 +30,25 @@ def main():
         # Append lines
         for line in reader:
             player_table.append(line)
-            # Change traveler to respective element
+            # Change traveler's name to respective element
             if line[2] == "Traveler":
                 if line[7] == "Geo":
                     line[2] = "Traveler-G"
                 elif line[7] == "Anemo":
                     line[2] = "Traveler-A"
-                else:
+                elif line[7] == "Electro":
                     line[2] = "Traveler-E"
+                elif line[7] == "Dendro":
+                    line[2] = "Traveler-D"
+                elif line[7] == "None":
+                    line[2] = "Traveler-D"
+                else:
+                    print(line[7] + line[2])
                 trav_elements[line[0]] = line[7]
 
-            # Check for missing UIDs by keeping track of
-            # the amount of batches of a UID
+            # Check for duplicate UIDs by keeping track of the amount of
+            # batches of owned characters for each UID. If a UID has
+            # more than two batches of owned characters, it's a duplicate.
             if line[0] != last_uid:
                 if line[0] in uid_freq_char:
                     print("duplicate UID in char: " + line[0])
@@ -67,18 +75,23 @@ def main():
 
             # Change traveler to respective element
             # Need to update in case of new character
-            # 40: index for Traveler
-            # 41: index for Traveler-A
-            # 42: index for Traveler-G
-            # 43: index for Traveler-E
-            if line[40] == "1":
-                line[40] = "0"
-                if trav_elements[line[0]] == "Anemo":
-                    line[41] = "1"
-                elif trav_elements[line[0]] == "Geo":
-                    line[42] = "1"
-                else:
-                    line[43] = "1"
+            if line[44] == "1":
+                try:
+                    line[44] = "0"
+                    if trav_elements[line[0]] == "Anemo":
+                        line[45] = "1"
+                    elif trav_elements[line[0]] == "Geo":
+                        line[46] = "1"
+                    elif trav_elements[line[0]] == "Electro":
+                        line[47] = "1"
+                    elif trav_elements[line[0]] == "Dendro":
+                        line[48] = "1"
+                    elif trav_elements[line[0]] == "None":
+                        line[48] = "1"
+                    else:
+                        print(trav_elements[line[0]])
+                except KeyError:
+                    print("Traveler key error")
             comp_table.append(line)
             sample_size += 1
 
@@ -98,26 +111,27 @@ def main():
     all_comps = form_comps(col_names, comp_table)
     all_players = form_players(player_table, all_comps, [RECENT_PHASE])
 
+    # Below are the commands to print CSV files, comment the ones not needed
+
     # # Char and comp usages for each chamber
     # for room in ["12-1-1", "12-1-2", "12-2-1", "12-2-2", "12-3-1", "12-3-2", "11-1-1", "11-1-2", "11-2-1", "11-2-2", "11-3-1", "11-3-2"]:
     #     char_usages(all_players, rooms=[room], filename=room, offset=1)
     #     comp_usages(all_comps, all_players, rooms=[room], filename=room, offset=1)
 
-    # # Comp usages floor 11
-    # comp_usages(all_comps, all_players, rooms=["11-1-2", "11-2-2", "11-3-2"], filename="11 second", floor=True)
-    # comp_usages(all_comps, all_players, rooms=["11-1-1", "11-2-1", "11-3-1"], filename="11 first", floor=True)
+    # Comp usages floor 11
+    comp_usages(all_comps, all_players, rooms=["11-1-2", "11-2-2", "11-3-2"], filename="11 second", floor=True)
+    comp_usages(all_comps, all_players, rooms=["11-1-1", "11-2-1", "11-3-1"], filename="11 first", floor=True)
 
-    # # Comp usages floor 12
-    # comp_usages(all_comps, all_players, rooms=["12-1-2", "12-2-2", "12-3-2"], filename="12 second", floor=True)
-    # comp_usages(all_comps, all_players, rooms=["12-1-1", "12-2-1", "12-3-1"], filename="12 first", floor=True)
+    # Comp usages floor 12
+    comp_usages(all_comps, all_players, rooms=["12-1-2", "12-2-2", "12-3-2"], filename="12 second", floor=True)
+    comp_usages(all_comps, all_players, rooms=["12-1-1", "12-2-1", "12-3-1"], filename="12 first", floor=True)
 
-    # Char usages floor 11 & 12
-    char_usages(all_players, rooms=["11-1-1", "11-1-2", "11-2-1", "11-2-2", "11-3-1", "11-3-2"], filename="11")
-    usage = char_usages(all_players, filename="12", floor=True)
-    duo_usages(all_comps, all_players, usage)
+    # # Char usages floor 11 & 12
+    # char_usages(all_players, rooms=["11-1-1", "11-1-2", "11-2-1", "11-2-2", "11-3-1", "11-3-2"], filename="11")
+    # usage = char_usages(all_players, filename="12", floor=True)
+    # duo_usages(all_comps, all_players, usage)
 
     # # Character infographics
-    # char = "Kamisato Ayaka"
     # char_usages(all_players, filename=char, info_char=True, floor=True)
     # comp_usages(all_comps, all_players, filename=char, info_char=True, floor=True)
 
@@ -134,9 +148,12 @@ def comp_usages(comps,
     comp_usages_write(comps_dict, filename, floor, info_char)
 
 def used_comps(players, comps, rooms, phase=RECENT_PHASE, floor=False):
+    # Returns the dictionary of all the comps used and how many times they were used
     comps_dict = {}
+    error_uids = []
     for comp in comps:
         comp_tuple = tuple(comp.characters)
+        # Check if the comp is used in the rooms that are being checked
         if len(comp_tuple) < 4 or comp.room not in rooms:
             continue
         elif comp_tuple not in comps_dict:
@@ -154,22 +171,30 @@ def used_comps(players, comps, rooms, phase=RECENT_PHASE, floor=False):
                         "weapon" : {},
                         "artifacts" : {}
                     }
-                    comps_dict[comp_tuple][comp_tuple[char]]["weapon"][players[phase][comp.player].owned[comp_tuple[char]]["weapon"]] = 1
-                    if players[phase][comp.player].owned[comp_tuple[char]]["artifacts"] != "":
-                        comps_dict[comp_tuple][comp_tuple[char]]["artifacts"][players[phase][comp.player].owned[comp_tuple[char]]["artifacts"]] = 1
+                    try:
+                        comps_dict[comp_tuple][comp_tuple[char]]["weapon"][players[phase][comp.player].owned[comp_tuple[char]]["weapon"]] = 1
+                        if players[phase][comp.player].owned[comp_tuple[char]]["artifacts"] != "":
+                            comps_dict[comp_tuple][comp_tuple[char]]["artifacts"][players[phase][comp.player].owned[comp_tuple[char]]["artifacts"]] = 1
+                    except Exception as e:
+                        if ('{}: {}'.format(comp.player, e)) not in error_uids:
+                            error_uids.append('{}: {}'.format(comp.player, e))
         else:
             comps_dict[comp_tuple]["uses"] +=1
             if floor:
                 for i in range(4):
-                    if players[phase][comp.player].owned[comp_tuple[i]]["weapon"] in comps_dict[comp_tuple][comp_tuple[i]]["weapon"]:
-                        comps_dict[comp_tuple][comp_tuple[i]]["weapon"][players[phase][comp.player].owned[comp_tuple[i]]["weapon"]] += 1
-                    else:
-                        comps_dict[comp_tuple][comp_tuple[i]]["weapon"][players[phase][comp.player].owned[comp_tuple[i]]["weapon"]] = 1
-                    if players[phase][comp.player].owned[comp_tuple[i]]["artifacts"] != "":
-                        if players[phase][comp.player].owned[comp_tuple[i]]["artifacts"] in comps_dict[comp_tuple][comp_tuple[i]]["artifacts"]:
-                            comps_dict[comp_tuple][comp_tuple[i]]["artifacts"][players[phase][comp.player].owned[comp_tuple[i]]["artifacts"]] += 1
+                    try:
+                        if players[phase][comp.player].owned[comp_tuple[i]]["weapon"] in comps_dict[comp_tuple][comp_tuple[i]]["weapon"]:
+                            comps_dict[comp_tuple][comp_tuple[i]]["weapon"][players[phase][comp.player].owned[comp_tuple[i]]["weapon"]] += 1
                         else:
-                            comps_dict[comp_tuple][comp_tuple[i]]["artifacts"][players[phase][comp.player].owned[comp_tuple[i]]["artifacts"]] = 1
+                            comps_dict[comp_tuple][comp_tuple[i]]["weapon"][players[phase][comp.player].owned[comp_tuple[i]]["weapon"]] = 1
+                        if players[phase][comp.player].owned[comp_tuple[i]]["artifacts"] != "":
+                            if players[phase][comp.player].owned[comp_tuple[i]]["artifacts"] in comps_dict[comp_tuple][comp_tuple[i]]["artifacts"]:
+                                comps_dict[comp_tuple][comp_tuple[i]]["artifacts"][players[phase][comp.player].owned[comp_tuple[i]]["artifacts"]] += 1
+                            else:
+                                comps_dict[comp_tuple][comp_tuple[i]]["artifacts"][players[phase][comp.player].owned[comp_tuple[i]]["artifacts"]] = 1
+                    except Exception as e:
+                        if ('{}: {}'.format(comp.player, e)) not in error_uids:
+                            error_uids.append('{}: {}'.format(comp.player, e))
     if floor:
         for comp in comps_dict:
             for char in comp:
@@ -186,15 +211,21 @@ def used_comps(players, comps, rooms, phase=RECENT_PHASE, floor=False):
                     reverse=True
                 ))
                 comps_dict[comp][char]["artifacts"] = {k: v for k, v in sorted_artifacts}
+        # if len(error_uids):
+        #     print('Error with UIDs:')
+        #     print(error_uids)
     return comps_dict
 
 def comp_owned(players, comps_dict, phase=RECENT_PHASE, owns_offset=3):
+    # For every comp that is used, calculate the ownership rate,
+    # i.e. how many players own all four characters in the comp
     for player in players[phase].values():
         for comp in comps_dict:
             if player.chars_owned(comp):
                 comps_dict[comp]["owns"] += owns_offset
 
 def rank_usages(comps_dict, owns_offset=3):
+    # Calculate the usage rate and sort the comps according to it
     rates = []
     for comp in comps_dict:
         rate = int(100.0 * comps_dict[comp]["uses"] / comps_dict[comp]["owns"] * 100 + .5) / 100.0
@@ -208,8 +239,8 @@ def rank_usages(comps_dict, owns_offset=3):
     for comp in comps_dict:
         comps_dict[comp]["usage_rank"] = rates.index(comps_dict[comp]["usage_rate"]) + 1
 
-    # if (rooms == ["12-1-1", "12-1-2", "12-2-1", "12-2-2", "12-3-1", "12-3-2"]):
-    # national_tuple = ("Raiden Shogun", "Bennett", "Xiangling", "Xingqiu")
+    # # To check the list of weapons and artifacts for a comp
+    # national_tuple = ("Raiden Shogun", "Xiangling", "Xingqiu", "Bennett")
     # print("National Team")
     # print("   App: " + str(comps_dict[national_tuple]["app_rate"]))
     # print("   Own: " + str(comps_dict[national_tuple]["own_rate"]))
@@ -236,10 +267,13 @@ def duo_usages(comps,
     duo_write(duos_dict, usage, filename)
 
 def used_duos(players, comps, rooms, usage, phase=RECENT_PHASE):
+    # Returns dictionary of all the duos used and how many times they were used
     duos_dict = {}
     for comp in comps:
         if len(comp.characters) < 2 or comp.room not in rooms:
             continue
+        # Permutate the duos, for example if Ganyu and Xiangling are used,
+        # two duos are used, Ganyu/Xiangling and Xiangling/Ganyu
         duos = list(permutations(comp.characters, 2))
         for duo in duos:
             if duo not in duos_dict:
@@ -257,11 +291,12 @@ def used_duos(players, comps, rooms, usage, phase=RECENT_PHASE):
     sorted_duos = {}
     for duo in duos_dict:
         if usage[phase][duo[0]]["app_flat"] > 0:
+            # Calculate the appearance rate of the duo by dividing the appearance count
+            # of the duo with the appearance count of the first character
             duos_dict[duo] = round (duos_dict[duo] * 100 / usage[phase][duo[0]]["app_flat"], 2)
             if duo[0] not in sorted_duos:
                 sorted_duos[duo[0]] = []
             sorted_duos[duo[0]].append([duo[1], duos_dict[duo]])
-    # print("Xianling, " + str(sorted_duos["Xiangling"]))
 
     return sorted_duos
 
@@ -274,27 +309,33 @@ def char_usages(players,
     own = cu.ownership(players, chambers = rooms)
     app = cu.appearances(players, own, chambers = rooms, offset = offset, info_char = info_char)
     chars_dict = cu.usages(own, app, chambers = rooms, offset = offset)
+    # # Print the list of weapons and artifacts used for a character
     # if floor:
-    #     print(app[RECENT_PHASE]['Kamisato Ayaka'])
+    #     print(app[RECENT_PHASE][filename])
     char_usages_write(chars_dict[RECENT_PHASE], filename, floor)
     return chars_dict
 
 def comp_usages_write(comps_dict, filename, floor, info_char):
     out_json = []
     out_comps = []
+    outvar_comps = []
     var_comps = []
+
+    # Sort the comps according to their usage rate
     comps_dict = dict(sorted(comps_dict.items(), key=lambda t: t[1]["usage_rate"], reverse=True))
+    # A separate dictionary is used for the F2P comps,
+    # which sorts the comps according to their appearance rate
     f2p_comps_dict = dict(sorted(comps_dict.items(), key=lambda t: t[1]["app_rate"], reverse=True))
     if floor and not info_char:
-        exc_comps = []
         f2p_comps = []
         comp_names = []
         for comp in f2p_comps_dict:
             comp_name = f2p_comps_dict[comp]["comp_name"]
+            # Only one variation of each comp name is included
             if (
                 f2p_comps_dict[comp]["5* count"] <= 1
                 and (comp_name not in comp_names or comp_name == "-")
-                and f2p_comps_dict[comp]["app_rate"] > 0.2
+                and f2p_comps_dict[comp]["app_rate"] > 0.1
             ):
                 comp_names.append(comp_name)
                 f2p_comps_append = {
@@ -308,15 +349,21 @@ def comp_usages_write(comps_dict, filename, floor, info_char):
                 j = 1
                 for i in comp:
                     f2p_comps_append["weapon_" + str(j)] = list(f2p_comps_dict[comp][i]["weapon"])[0]
-                    f2p_comps_append["artifact_" + str(j)] = list(f2p_comps_dict[comp][i]["artifacts"])[0]
+                    if len(list(f2p_comps_dict[comp][i]["artifacts"])):
+                        f2p_comps_append["artifact_" + str(j)] = list(f2p_comps_dict[comp][i]["artifacts"])[0]
+                    else:
+                        f2p_comps_append["artifact_" + str(j)] = "-"
                     j += 1
                 f2p_comps.append(f2p_comps_append)
+    exc_comps = []
     comp_names = []
     variations = {}
     for comp in comps_dict:
         if info_char and filename not in comp:
             continue
         comp_name = comps_dict[comp]["comp_name"]
+        # Only one variation of each comp name is included,
+        # unless if it's used for a character's infographic
         if comp_name not in comp_names or comp_name == "-" or info_char:
             if comps_dict[comp]["app_rate"] > 0.3:
                 out_comps_append = {
@@ -333,7 +380,10 @@ def comp_usages_write(comps_dict, filename, floor, info_char):
                 if floor:
                     for i in comp:
                         out_comps_append["weapon_" + str(j)] = list(comps_dict[comp][i]["weapon"])[0]
-                        out_comps_append["artifact_" + str(j)] = list(comps_dict[comp][i]["artifacts"])[0]
+                        if len(list(comps_dict[comp][i]["artifacts"])):
+                            out_comps_append["artifact_" + str(j)] = list(comps_dict[comp][i]["artifacts"])[0]
+                        else:
+                            out_comps_append["artifact_" + str(j)] = "-"
                         j += 1
                 if info_char:
                     if comp_name not in comp_names:
@@ -347,7 +397,7 @@ def comp_usages_write(comps_dict, filename, floor, info_char):
                 else:
                     out_comps.append(out_comps_append)
                 comp_names.append(comp_name)
-            elif floor and not info_char:
+            elif floor:
                 exc_comps_append = {
                     "comp_name": comp_name,
                     "char_1": comp[0],
@@ -359,6 +409,18 @@ def comp_usages_write(comps_dict, filename, floor, info_char):
                     "usage_rate": str(comps_dict[comp]["usage_rate"]) + "%",
                 }
                 exc_comps.append(exc_comps_append)
+        elif comp_name in comp_names:
+            outvar_comps_append = {
+                "comp_name": comp_name,
+                "char_1": comp[0],
+                "char_2": comp[1],
+                "char_3": comp[2],
+                "char_4": comp[3],
+                "app_rate": str(comps_dict[comp]["app_rate"]) + "%",
+                "own_rate": str(comps_dict[comp]["own_rate"]) + "%",
+                "usage_rate": str(comps_dict[comp]["usage_rate"]) + "%"
+            }
+            outvar_comps.append(outvar_comps_append)
         if not info_char:
             out = name_filter(comp, mode="out")
             out_json.append({
@@ -380,7 +442,10 @@ def comp_usages_write(comps_dict, filename, floor, info_char):
         csv_writer = csv.writer(open("../comp_results/f2p_app_" + filename + ".csv", 'w', newline=''))
         for comps in f2p_comps:
             csv_writer.writerow(comps.values())
+        with open("../comp_results/var_" + filename + ".json", "w") as out_file:
+            out_file.write(json.dumps(outvar_comps,indent=4))
 
+    if floor:
         with open("../comp_results/exc_" + filename + ".json", "w") as out_file:
             out_file.write(json.dumps(exc_comps,indent=4))
 
@@ -412,15 +477,15 @@ def duo_write(duos_dict, usage, filename):
 
 def char_usages_write(chars_dict, filename, floor):
     out_chars = []
-    weap_len = 4
-    arti_len = 3
+    weap_len = 8
+    arti_len = 4
     chars_dict = dict(sorted(chars_dict.items(), key=lambda t: t[1]["usage"], reverse=True))
     for char in chars_dict:
         if floor:
             if char == filename:
                 out_chars = []
-                weap_len = 6
-                arti_len = 6
+                weap_len = 8
+                arti_len = 4
             out_chars_append = {
                 "char": char,
                 "usage_rate": str(chars_dict[char]["usage"]) + "%",
@@ -454,6 +519,7 @@ def char_usages_write(chars_dict, filename, floor):
                 out_chars_append["app_" + str(i)] = str(list(list(chars_dict[char]["cons_usage"].values())[i].values())[0]) + "%"
                 if out_chars_append["app_" + str(i)] == "-%":
                     out_chars_append["app_" + str(i)] = "-"
+            out_chars_append["cons_avg"] = chars_dict[char]["cons_avg"]
             out_chars.append(out_chars_append)
             if char == filename:
                 break

@@ -79,6 +79,16 @@
 		"rarity": 4,
 		"availability": "4*"
 	},
+	"Collei": {
+		"weapon": "Bow",
+		"element": "Dendro",
+		"version": 3.0,
+		"phase": "3.0a",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 4,
+		"availability": "4*"
+	},
 	"Diluc": {
 		"weapon": "Claymore",
 		"element": "Pyro",
@@ -229,6 +239,16 @@
         "rarity": 4,
         "availability": "4*"
     },
+	"Kuki Shinobu": {
+		"weapon": "Sword",
+		"element": "Electro",
+		"version": 2.7,
+		"phase": "2.7b",
+        "alt_name": "Shinobu",
+        "out_name": true,
+		"rarity": 4,
+        "availability": "4*"
+	},
 	"Lisa": {
 		"weapon": "Catalyst",
 		"element": "Electro",
@@ -339,6 +359,16 @@
         "rarity": 5,
 		"availability": "Limited 5*"
     },
+    "Shikanoin Heizou": {
+	    "weapon": "Catalyst",
+	    "element": "Anemo",
+	    "version": 2.8,
+        "phase": "2.8a",
+		"alt_name": "Heizou",
+		"out_name": true,
+	    "rarity": 4,
+        "availability": "4*"
+	},
 	"Sucrose": {
 		"weapon": "Catalyst",
 		"element": "Anemo",
@@ -368,6 +398,16 @@
 		"out_name": false,
 		"rarity": 4,
 		"availability": "4*"
+	},
+	"Tighnari": {
+		"weapon": "Bow",
+		"element": "Dendro",
+		"version": 3.0,
+		"phase": "3.0a",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 5,
+		"availability": "Limited 5*"
 	},
 	"Traveler": {
 		"weapon": "Sword",
@@ -404,6 +444,16 @@
 		"element": "Electro",
 		"version": 2.0,
 		"phase": "1.6c",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 4,
+		"availability": "Free"
+	},
+	"Traveler-D": {
+		"weapon": "Sword",
+		"element": "Dendro",
+		"version": 3.0,
+		"phase": "3.0a",
 		"alt_name": null,
 		"out_name": false,
 		"rarity": 4,

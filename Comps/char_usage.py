@@ -1,4 +1,5 @@
 import json
+import pandas as pd
 import operator
 
 ROOMS = ["12-1-1", "12-1-2", "12-2-1", "12-2-2", "12-3-1", "12-3-2"]
@@ -40,7 +41,7 @@ def ownership(players, chambers=ROOMS):
         for char in owns[phase]:
             own_flat = owns[phase][char]["flat"] / 100.0
             if own_flat > 0:
-                if char in {"Traveler-A", "Traveler-G", "Traveler-E"}:
+                if char in {"Traveler-A", "Traveler-G", "Traveler-E", "Traveler-D"}:
                     # Cons usage is only added for floor 12
                     if (chambers == ["12-1-1", "12-1-2", "12-2-1", "12-2-2", "12-3-1", "12-3-2"]):
                         for cons in owns[phase][char]["cons_freq"]:
@@ -74,17 +75,23 @@ def ownership(players, chambers=ROOMS):
 def appearances(players, owns, chambers=ROOMS, offset=3, info_char=False):
     appears = {}
     num_players = {}
+    players_chars = {}
     for phase in players:
         appears[phase] = {}
         num_players[phase] = 0
+        players_chars[phase] = {}
+        comp_error = False
+        error_comps = []
 
         for character in CHARACTERS:
+            players_chars[phase][character] = []
             appears[phase][character] = {
                 "flat": 0,
                 "percent": 0.00,
                 "weap_freq": {},
                 "arti_freq": {},
-                "cons_freq": {}
+                "cons_freq": {},
+                "cons_avg": 0.00
             }
             for i in range (7):
                 appears[phase][character]["cons_freq"][i] = {
@@ -100,12 +107,21 @@ def appearances(players, owns, chambers=ROOMS, offset=3, info_char=False):
                     if player.chambers[chamber] == None:
                         continue
                     if player.chambers[chamber].char_presence[char]:
+                        # # to print the amount of players using a character
+                        # if player.player not in players_chars[phase][char]:
+                        #     players_chars[phase][char].append(player.player)
+
                         char_name = char
                         appears[phase][char_name]["flat"] += 1
-                        # In case of character in comp data missing in character data
-                        # print(str(player.player))
-                        # print(str(player.owned[char]["cons"]))
+                        # In case of character in comp data missing from character data
+                        if not player.owned[char]:
+                            print("Comp data missing from character data: " + str(player.player) + ", " + str(char))
+                            if player.player not in error_comps:
+                                error_comps.append(player.player)
+                            comp_error = True
+                            continue
                         appears[phase][char_name]["cons_freq"][player.owned[char]["cons"]]["flat"] += 1
+                        appears[phase][char_name]["cons_avg"] += player.owned[char]["cons"]
 
                         if player.owned[char]["weapon"] != "":
                             if player.owned[char]["weapon"] in appears[phase][char_name]["weap_freq"]:
@@ -119,8 +135,19 @@ def appearances(players, owns, chambers=ROOMS, offset=3, info_char=False):
                             else:
                                 appears[phase][char_name]["arti_freq"][player.owned[char]["artifacts"]] = 1
 
+        if comp_error:
+            df_char = pd.read_csv('../data/phase_characters.csv')
+            df_spiral = pd.read_csv('../data/compositions.csv')
+            df_char = df_char[~df_char['uid'].isin(error_comps)]
+            df_spiral = df_spiral[~df_spiral['uid'].isin(error_comps)]
+            df_char.to_csv("phase_characters.csv", index=False)
+            df_spiral.to_csv("compositions.csv", index=False)
+            raise ValueError("There are missing comps from character data.")
+
         total = num_players[phase] * offset / 100.0
         for char in appears[phase]:
+            # # to print the amount of players using a character
+            # print(str(char) + ": " + str(len(players_chars[phase][char])))
             appears[phase][char]["percent"] = round(
                 appears[phase][char]["flat"] / total, 2
             )
@@ -128,6 +155,8 @@ def appearances(players, owns, chambers=ROOMS, offset=3, info_char=False):
             if (chambers == ["12-1-1", "12-1-2", "12-2-1", "12-2-2", "12-3-1", "12-3-2"]):
                 # Calculate constellations
                 if owns[phase][char]["flat"] > 0:
+                    if appears[phase][char]["flat"] > 0:
+                        appears[phase][char]["cons_avg"] /= appears[phase][char]["flat"]
                     for cons in appears[phase][char]["cons_freq"]:
                         if owns[phase][char]["cons_freq"][cons]["flat"] > 15:
                             appears[phase][char]["cons_freq"][cons]["percent"] = int(round(
@@ -177,10 +206,10 @@ def appearances(players, owns, chambers=ROOMS, offset=3, info_char=False):
 def usages(owns, appears, chambers=ROOMS, offset=3):
     uses = {}
     past_usage = {
-        "Kaedehara Kazuha": 89.88, "Kamisato Ayaka": 85.57, "Venti": 85.11, "Sangonomiya Kokomi": 83.61, "Kamisato Ayato": 71.93, "Shenhe": 55.28, "Zhongli": 53.11, "Ganyu": 50.75, "Raiden Shogun": 50.34, "Tartaglia": 34.45, "Yae Miko": 24.92, "Hu Tao": 14.27, "Eula": 13.19, "Albedo": 11.33, "Xiao": 11.16, "Arataki Itto": 8.45, "Yoimiya": 4.37, "Klee": 1.70, "Mona": 52.96, "Jean": 13.56, "Keqing": 2.85, "Qiqi": 2.22, "Diluc": 1.00, "Xingqiu": 71.32, "Bennett": 56.07, "Diona": 48.03, "Sucrose": 37.31, "Rosaria": 25.17, "Xiangling": 23.56, "Fischl": 17.20, "Beidou": 11.40, "Barbara": 8.72, "Kaeya": 6.97, "Chongyun": 6.41, "Yun Jin": 3.86, "Kujou Sara": 2.10, "Noelle": 2.06, "Gorou": 1.99, "Sayu": 1.10, "Ningguang": 1.01, "Lisa": 0.77, "Thoma": 0.57, "Traveler-A": 0.56, "Amber": 0.33, "Traveler-G": 0.30, "Yanfei": 0.24, "Traveler-E": 0.23, "Xinyan": 0.16, "Razor": 0.14, "Aloy": 0.09
+        "Bennett": 87.84, "Kaedehara Kazuha": 85.23, "Yelan": 76.17, "Zhongli": 71.41, "Hu Tao": 69.45, "Xingqiu": 69.09, "Xiangling": 65.28, "Raiden Shogun": 60.30, "Yoimiya": 44.60, "Sangonomiya Kokomi": 38.92, "Albedo": 32.10, "Yae Miko": 30.25, "Kamisato Ayaka": 29.12, "Venti": 27.64, "Kamisato Ayato": 27.05, "Shenhe": 23.83, "Tartaglia": 22.77, "Xiao": 20.90, "Fischl": 19.71, "Sucrose": 18.41, "Arataki Itto": 16.56, "Ganyu": 16.26, "Diona": 15.55, "Tighnari": 14.56, "Mona": 14.29, "Klee": 14.21, "Eula": 12.51, "Jean": 11.40, "Diluc": 8.65, "Rosaria": 7.43, "Kujou Sara": 7.40, "Yun Jin": 6.86, "Yanfei": 6.29, "Gorou": 5.78, "Traveler-D": 5.74, "Beidou": 5.28, "Thoma": 5.13, "Kuki Shinobu": 4.25, "Keqing": 3.21, "Collei": 3.16, "Shikanoin Heizou": 3.10, "Ningguang": 1.92, "Noelle": 1.49, "Kaeya": 1.16, "Traveler-G": 1.10, "Lisa": 1.03, "Qiqi": 0.97, "Chongyun": 0.94, "Barbara": 0.93, "Xinyan": 0.91, "Amber": 0.70, "Sayu": 0.63, "Traveler-A": 0.23, "Razor": 0.21, "Traveler-E": 0.19, "Aloy": 0.00
     }
     past_usage_11 = {
-        "Kaedehara Kazuha": 90.30, "Venti": 90.26, "Kamisato Ayaka": 70.19, "Sangonomiya Kokomi": 68.07, "Kamisato Ayato": 59.59, "Zhongli": 51.65, "Raiden Shogun": 50.90, "Ganyu": 48.64, "Shenhe": 47.88, "Xiao": 31.17, "Yae Miko": 26.35, "Tartaglia": 26.32, "Albedo": 25.73, "Hu Tao": 20.19, "Eula": 15.60, "Arataki Itto": 14.95, "Yoimiya": 13.00, "Klee": 4.83, "Mona": 41.64, "Jean": 14.74, "Keqing": 3.07, "Diluc": 2.92, "Qiqi": 2.33, "Bennett": 70.01, "Xingqiu": 54.16, "Sucrose": 50.61, "Diona": 40.51, "Xiangling": 35.83, "Rosaria": 17.23, "Fischl": 15.66, "Beidou": 9.81, "Kujou Sara": 5.27, "Kaeya": 4.49, "Yun Jin": 4.26, "Barbara": 3.97, "Gorou": 3.95, "Chongyun": 2.90, "Noelle": 2.64, "Ningguang": 2.26, "Traveler-G": 1.40, "Thoma": 1.26, "Yanfei": 0.85, "Traveler-A": 0.79, "Sayu": 0.78, "Lisa": 0.63, "Xinyan": 0.42, "Amber": 0.37, "Traveler-E": 0.35, "Razor": 0.33, "Aloy": 0.24
+        "Kaedehara Kazuha": 86.01, "Bennett": 85.46, "Zhongli": 73.63, "Yelan": 70.81, "Yoimiya": 65.37, "Xingqiu": 61.76, "Hu Tao": 57.15, "Xiangling": 56.75, "Venti": 42.86, "Raiden Shogun": 40.33, "Sangonomiya Kokomi": 38.36, "Albedo": 31.75, "Kamisato Ayaka": 30.29, "Ganyu": 26.19, "Xiao": 23.78, "Kamisato Ayato": 23.14, "Tartaglia": 22.95, "Shenhe": 21.62, "Sucrose": 21.25, "Yae Miko": 20.69, "Diona": 20.54, "Mona": 16.85, "Klee": 16.16, "Jean": 14.19, "Fischl": 13.87, "Eula": 13.48, "Arataki Itto": 12.86, "Diluc": 11.06, "Yun Jin": 10.70, "Rosaria": 9.08, "Yanfei": 7.90, "Shikanoin Heizou": 6.05, "Thoma": 5.45, "Kujou Sara": 5.20, "Beidou": 5.12, "Gorou": 4.85, "Tighnari": 4.85, "Ningguang": 3.48, "Kuki Shinobu": 3.17, "Kaeya": 2.69, "Keqing": 2.10, "Traveler-D": 2.00, "Qiqi": 1.87, "Noelle": 1.55, "Chongyun": 1.50, "Amber": 1.30, "Barbara": 1.18, "Xinyan": 1.06, "Collei": 0.95, "Traveler-G": 0.93, "Lisa": 0.91, "Sayu": 0.89, "Traveler-A": 0.31, "Aloy": 0.13, "Razor": 0.13, "Traveler-E": 0.12
     }
     for phase in owns:
         uses[phase] = {}
@@ -200,7 +229,8 @@ def usages(owns, appears, chambers=ROOMS, offset=3):
                     "rarity": CHARACTERS[char]["availability"],
                     "weapons" : {},
                     "artifacts" : {},
-                    "cons_usage": {}
+                    "cons_usage": {},
+                    "cons_avg": appears[phase][char]["cons_avg"]
                 }
 
                 if char in past_usage:
@@ -219,7 +249,7 @@ def usages(owns, appears, chambers=ROOMS, offset=3):
 
                     weapons = list(appears[phase][char]["weap_freq"])
                     i = 0
-                    while i < 6:
+                    while i < 12:
                         if i >= len(weapons):
                             uses[phase][char]["weapons"][i] = "-"
                         else:
@@ -228,7 +258,7 @@ def usages(owns, appears, chambers=ROOMS, offset=3):
 
                     artifacts = list(appears[phase][char]["arti_freq"])
                     i = 0
-                    while i < 6:
+                    while i < 12:
                         if i >= len(artifacts):
                             uses[phase][char]["artifacts"][i] = "-"
                         else:
@@ -239,7 +269,7 @@ def usages(owns, appears, chambers=ROOMS, offset=3):
                         if owns[phase][char]["cons_freq"][i]["flat"] > 15:
                             uses[phase][char]["cons_usage"][i]["app"] = appears[phase][char]["cons_freq"][i]["percent"]
                             uses[phase][char]["cons_usage"][i]["own"] = owns[phase][char]["cons_freq"][i]["percent"]
-                            if char in {"Traveler-A", "Traveler-G", "Traveler-E"}:
+                            if char in {"Traveler-A", "Traveler-G", "Traveler-E", "Traveler-D"}:
                                 uses[phase][char]["cons_usage"][i]["usage"] = round(
                                     appears[phase][char]["cons_freq"][i]["flat"]  / (owns[phase][char]["cons_freq"][i]["flat"] * (
                                             owns[phase][char]["flat"] / owns[phase][char]["cons_freq"][i]["flat"]

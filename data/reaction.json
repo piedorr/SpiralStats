@@ -33,6 +33,11 @@
         "Electro": "Electro Swirl",
         "Cryo": "Cryo Swirl"
     },
+    "Dendro": {
+        "Pyro": "Burning",
+        "Electro": "Spread",
+        "Hydro": "Bloom"
+    },
     "Geo": {   
         "Pyro": "Pyro Crystalize",
         "Hydro": "Hydro Crystalize",
