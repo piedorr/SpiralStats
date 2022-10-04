@@ -75,7 +75,7 @@ class PlayerPhase:
     def chars_owned(self, characters):
         """Takes in an iter of character names, and returns true if the player owned them all."""
         for char in characters:
-            if char in {"Traveler-A", "Traveler-G", "Traveler-E", "Traveler-D"}:
+            if char in {"Traveler-A", "Traveler-G", "Traveler-E", "Traveler-D", "Traveler"}:
                 return True
             elif not self.owned[char]:
                 return False

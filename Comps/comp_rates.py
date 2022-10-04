@@ -75,19 +75,19 @@ def main():
 
             # Change traveler to respective element
             # Need to update in case of new character
-            if line[44] == "1":
+            if line[47] == "1":
                 try:
-                    line[44] = "0"
+                    line[47] = "0"
                     if trav_elements[line[0]] == "Anemo":
-                        line[45] = "1"
+                        line[48] = "1"
                     elif trav_elements[line[0]] == "Geo":
-                        line[46] = "1"
+                        line[49] = "1"
                     elif trav_elements[line[0]] == "Electro":
-                        line[47] = "1"
+                        line[50] = "1"
                     elif trav_elements[line[0]] == "Dendro":
-                        line[48] = "1"
-                    elif trav_elements[line[0]] == "None":
-                        line[48] = "1"
+                        line[51] = "1"
+                    # elif trav_elements[line[0]] == "None":
+                    #     line[49] = "1"
                     else:
                         print(trav_elements[line[0]])
                 except KeyError:
@@ -113,10 +113,18 @@ def main():
 
     # Below are the commands to print CSV files, comment the ones not needed
 
-    # # Char and comp usages for each chamber
+    # # Char usages for each chamber
     # for room in ["12-1-1", "12-1-2", "12-2-1", "12-2-2", "12-3-1", "12-3-2", "11-1-1", "11-1-2", "11-2-1", "11-2-2", "11-3-1", "11-3-2"]:
     #     char_usages(all_players, rooms=[room], filename=room, offset=1)
-    #     comp_usages(all_comps, all_players, rooms=[room], filename=room, offset=1)
+
+    # # Char usages floor 11 & 12
+    # char_usages(all_players, rooms=["11-1-1", "11-1-2", "11-2-1", "11-2-2", "11-3-1", "11-3-2"], filename="11")
+    # usage = char_usages(all_players, filename="12", floor=True)
+    # duo_usages(all_comps, all_players, usage)
+
+    # Comp usages for each chamber
+    for room in ["12-1-1", "12-1-2", "12-2-1", "12-2-2", "12-3-1", "12-3-2", "11-1-1", "11-1-2", "11-2-1", "11-2-2", "11-3-1", "11-3-2"]:
+        comp_usages(all_comps, all_players, rooms=[room], filename=room, offset=1)
 
     # Comp usages floor 11
     comp_usages(all_comps, all_players, rooms=["11-1-2", "11-2-2", "11-3-2"], filename="11 second", floor=True)
@@ -125,11 +133,6 @@ def main():
     # Comp usages floor 12
     comp_usages(all_comps, all_players, rooms=["12-1-2", "12-2-2", "12-3-2"], filename="12 second", floor=True)
     comp_usages(all_comps, all_players, rooms=["12-1-1", "12-2-1", "12-3-1"], filename="12 first", floor=True)
-
-    # # Char usages floor 11 & 12
-    # char_usages(all_players, rooms=["11-1-1", "11-1-2", "11-2-1", "11-2-2", "11-3-1", "11-3-2"], filename="11")
-    # usage = char_usages(all_players, filename="12", floor=True)
-    # duo_usages(all_comps, all_players, usage)
 
     # # Character infographics
     # char_usages(all_players, filename=char, info_char=True, floor=True)

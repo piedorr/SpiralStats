@@ -69,6 +69,16 @@
 		"rarity": 4,
 		"availability": "4*"
 	},
+    "Candace": {
+        "weapon": "Polearm",
+        "element": "Hydro",
+        "version": 3.1,
+        "phase": "3.1a",
+		"alt_name": null,
+		"out_name": false,
+        "rarity": 4,
+		"availability": "4*"
+    },
 	"Chongyun": {
 		"weapon": "Claymore",
 		"element": "Cryo",
@@ -87,8 +97,18 @@
 		"alt_name": null,
 		"out_name": false,
 		"rarity": 4,
-		"availability": "4*"
+		"availability": "Free"
 	},
+    "Cyno": {
+        "weapon": "Polearm",
+        "element": "Electro",
+        "version": 3.1,
+        "phase": "3.1a",
+		"alt_name": null,
+		"out_name": false,
+        "rarity": 5,
+		"availability": "Limited 5*"
+    },
 	"Diluc": {
 		"weapon": "Claymore",
 		"element": "Pyro",
@@ -104,6 +124,16 @@
 		"element": "Cryo",
 		"version": 1.1,
 		"phase": "1.5a",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 4,
+		"availability": "4*"
+	},
+	"Dori": {
+		"weapon": "Claymore",
+		"element": "Electro",
+		"version": 3.0,
+		"phase": "3.0b",
 		"alt_name": null,
 		"out_name": false,
 		"rarity": 4,
@@ -230,7 +260,7 @@
 		"availability": "Limited 5*"
 	},
     "Kujou Sara": {
-        "weapon": "Claymore",
+        "weapon": "Bow",
         "element": "Electro",
         "version": 2.1,
         "phase": "2.1a",
@@ -407,7 +437,7 @@
 		"alt_name": null,
 		"out_name": false,
 		"rarity": 5,
-		"availability": "Limited 5*"
+		"availability": "5*"
 	},
 	"Traveler": {
 		"weapon": "Sword",
