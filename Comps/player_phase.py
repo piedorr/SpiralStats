@@ -56,6 +56,16 @@ class PlayerPhase:
                 artifacts = artifacts.replace(i, "")
                 artifacts = "EM +80, " + artifacts
 
+        physcom = ["Bloodstained Chivalry, ", "Pale Flame, "]
+        physem = [", Bloodstained Chivalry", ", Pale Flame"]
+        for i in physcom:
+            if i in artifacts:
+                artifacts = artifacts.replace(i, "Phys +25%, ")
+        for i in physem:
+            if i in artifacts:
+                artifacts = artifacts.replace(i, "")
+                artifacts = "Phys +25%, " + artifacts
+
         self.owned[name] = {
             "level": int(level),
             "cons": int(cons),

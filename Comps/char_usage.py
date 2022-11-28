@@ -91,7 +91,8 @@ def appearances(players, owns, chambers=ROOMS, offset=3, info_char=False):
                 "weap_freq": {},
                 "arti_freq": {},
                 "cons_freq": {},
-                "cons_avg": 0.00
+                "cons_avg": 0.00,
+                "sample": 0
             }
             for i in range (7):
                 appears[phase][character]["cons_freq"][i] = {
@@ -106,10 +107,29 @@ def appearances(players, owns, chambers=ROOMS, offset=3, info_char=False):
                 for chamber in chambers:
                     if player.chambers[chamber] == None:
                         continue
+                    # foundPyro = False
+                    # foundHydro = False
+                    # foundNilou = False
+                    # pyroChars = ["Bennett","Xiangling","Hu Tao","Thoma","Yoimiya","Yanfei","Xinyan","Diluc","Amber","Klee"]
+                    # hydroChars = ["Mona","Sangonomiya Kokomi","Barbara","Xingqiu","Nilou","Candace","Yelan","Kamisato Ayato","Tartaglia"]
+                    # testChar = 0
+                    # while not foundPyro and testChar < len(pyroChars):
+                    #     if player.chambers[chamber].char_presence[pyroChars[testChar]]:
+                    #         foundPyro = True
+                    #     testChar += 1
+                    # testChar = 0
+                    # while not foundHydro and testChar < len(hydroChars):
+                    #     if player.chambers[chamber].char_presence[hydroChars[testChar]]:
+                    #         foundHydro = True
+                    #     testChar += 1
+                    # if player.chambers[chamber].char_presence["Nilou"]:
+                    #     foundNilou = True
+                    # if player.chambers[chamber].char_presence[char] and not foundPyro and foundHydro:
+                    # if player.chambers[chamber].char_presence[char] and foundNilou:
                     if player.chambers[chamber].char_presence[char]:
-                        # # to print the amount of players using a character
-                        # if player.player not in players_chars[phase][char]:
-                        #     players_chars[phase][char].append(player.player)
+                        # to print the amount of players using a character, for char infographics
+                        if player.player not in players_chars[phase][char]:
+                            players_chars[phase][char].append(player.player)
 
                         char_name = char
                         appears[phase][char_name]["flat"] += 1
@@ -153,6 +173,7 @@ def appearances(players, owns, chambers=ROOMS, offset=3, info_char=False):
             )
 
             if (chambers == ["12-1-1", "12-1-2", "12-2-1", "12-2-2", "12-3-1", "12-3-2"]):
+                appears[phase][char]["sample"] = len(players_chars[phase][char])
                 # Calculate constellations
                 if owns[phase][char]["flat"] > 0:
                     if appears[phase][char]["flat"] > 0:
@@ -206,10 +227,10 @@ def appearances(players, owns, chambers=ROOMS, offset=3, info_char=False):
 def usages(owns, appears, chambers=ROOMS, offset=3):
     uses = {}
     past_usage = {
-        "Kaedehara Kazuha": 84.16, "Bennett": 75.81, "Yelan": 69.61, "Xingqiu": 68.16, "Raiden Shogun": 68.12, "Zhongli": 63.73, "Xiangling": 53.8, "Kamisato Ayaka": 49.37, "Hu Tao": 47.63, "Sangonomiya Kokomi": 47.06, "Shenhe": 41.08, "Yae Miko": 34.08, "Venti": 30.1, "Mona": 26.4, "Albedo": 26.22, "Ganyu": 25.5, "Tighnari": 24.67, "Fischl": 22.64, "Kamisato Ayato": 22.54, "Diona": 22.35, "Yoimiya": 20.23, "Traveler-D": 17.33, "Tartaglia": 17.13, "Eula": 16.87, "Sucrose": 16.82, "Arataki Itto": 16.22, "Rosaria": 11.03, "Xiao": 9.56, "Kujou Sara": 7.86, "Jean": 6.88, "Keqing": 6.18, "Beidou": 6.17, "Gorou": 5.46, "Collei": 4.42, "Kuki Shinobu": 3.73, "Yun Jin": 3.73, "Klee": 3.11, "Thoma": 3.01, "Shikanoin Heizou": 2.18, "Ningguang": 1.92, "Diluc": 1.91, "Kaeya": 1.35, "Qiqi": 1.32, "Barbara": 1.3, "Noelle": 1.27, "Lisa": 1.02, "Dori": 0.99, "Yanfei": 0.99, "Chongyun": 0.97, "Traveler-G": 0.96, "Sayu": 0.61, "Amber": 0.25, "Traveler-E": 0.17, "Xinyan": 0.17, "Aloy": 0.14, "Razor": 0.09, "Traveler-A": 0.0
+        "Kaedehara Kazuha": 74.05, "Raiden Shogun": 71.41, "Bennett": 64.63, "Nahida": 64.1, "Sangonomiya Kokomi": 62.72, "Xingqiu": 58.32, "Yelan": 57.38, "Zhongli": 53.87, "Nilou": 47.38, "Xiangling": 43.83, "Kamisato Ayaka": 39.06, "Yae Miko": 38.2, "Fischl": 30.72, "Shenhe": 30.67, "Kamisato Ayato": 29.48, "Traveler-D": 28.92, "Cyno": 26.48, "Hu Tao": 26.38, "Venti": 25.26, "Ganyu": 22.29, "Albedo": 21.93, "Tartaglia": 21.73, "Mona": 21.67, "Diona": 16.73, "Arataki Itto": 15.78, "Kuki Shinobu": 15.44, "Tighnari": 13.03, "Eula": 12.84, "Yoimiya": 12.13, "Xiao": 11.86, "Collei": 11.33, "Sucrose": 11.08, "Rosaria": 10.25, "Keqing": 8.22, "Kujou Sara": 7.41, "Gorou": 6.52, "Beidou": 6.02, "Jean": 5.31, "Barbara": 4.69, "Klee": 2.53, "Yun Jin": 2.29, "Noelle": 1.9, "Thoma": 1.89, "Kaeya": 1.61, "Shikanoin Heizou": 1.41, "Lisa": 1.33, "Diluc": 1.05, "Chongyun": 1.02, "Candace": 0.74, "Qiqi": 0.73, "Amber": 0.72, "Ningguang": 0.7, "Dori": 0.67, "Sayu": 0.59, "Razor": 0.53, "Yanfei": 0.5, "Traveler-G": 0.29, "Xinyan": 0.26, "Aloy": 0.16, "Traveler-A": 0.1, "Traveler-E": 0.03
     }
     past_usage_11 = {
-        "Kaedehara Kazuha": 81.82, "Bennett": 71.21, "Zhongli": 67.88, "Kamisato Ayaka": 56.3, "Ganyu": 54.51, "Yelan": 51.38, "Sangonomiya Kokomi": 50.36, "Shenhe": 50.17, "Venti": 50.17, "Xingqiu": 48.83, "Raiden Shogun": 44.61, "Xiangling": 43.13, "Tighnari": 41.81, "Hu Tao": 38.82, "Yoimiya": 35.15, "Yae Miko": 33.54, "Diona": 31.58, "Mona": 26.02, "Albedo": 22.0, "Sucrose": 19.93, "Fischl": 19.48, "Kamisato Ayato": 17.75, "Traveler-D": 17.53, "Tartaglia": 15.96, "Arataki Itto": 13.81, "Rosaria": 13.5, "Xiao": 12.98, "Eula": 12.65, "Jean": 7.62, "Keqing": 6.71, "Kuki Shinobu": 6.33, "Klee": 5.56, "Gorou": 4.65, "Yun Jin": 4.63, "Collei": 4.51, "Diluc": 4.45, "Kujou Sara": 4.35, "Beidou": 4.08, "Thoma": 3.61, "Kaeya": 2.46, "Yanfei": 2.39, "Shikanoin Heizou": 2.0, "Ningguang": 1.7, "Chongyun": 1.54, "Noelle": 1.52, "Qiqi": 1.39, "Barbara": 1.1, "Dori": 0.85, "Lisa": 0.59, "Traveler-G": 0.59, "Amber": 0.51, "Xinyan": 0.42, "Sayu": 0.38, "Traveler-E": 0.25, "Aloy": 0.17, "Razor": 0.09, "Traveler-A": 0.0
+        "Kaedehara Kazuha": 77.14, "Bennett": 63.64, "Raiden Shogun": 62.64, "Sangonomiya Kokomi": 61.28, "Yelan": 55.01, "Zhongli": 54.34, "Xingqiu": 51.03, "Venti": 45.91, "Yae Miko": 41.66, "Nahida": 39.75, "Nilou": 38.86, "Kamisato Ayaka": 37.68, "Cyno": 35.54, "Xiangling": 35.09, "Shenhe": 32.56, "Kamisato Ayato": 31.6, "Fischl": 29.89, "Traveler-D": 29.88, "Ganyu": 26.42, "Hu Tao": 26.15, "Albedo": 22.85, "Mona": 21.55, "Tartaglia": 20.77, "Diona": 17.51, "Yoimiya": 17.1, "Sucrose": 17.06, "Xiao": 13.43, "Eula": 13.23, "Tighnari": 12.97, "Kuki Shinobu": 12.9, "Arataki Itto": 12.07, "Collei": 11.06, "Rosaria": 10.44, "Kujou Sara": 9.73, "Keqing": 9.49, "Beidou": 8.09, "Jean": 6.51, "Barbara": 4.82, "Gorou": 4.54, "Yun Jin": 3.45, "Klee": 3.44, "Kaeya": 2.15, "Diluc": 1.72, "Thoma": 1.71, "Shikanoin Heizou": 1.7, "Noelle": 1.4, "Yanfei": 1.31, "Ningguang": 1.27, "Lisa": 1.13, "Qiqi": 0.95, "Dori": 0.86, "Chongyun": 0.85, "Razor": 0.77, "Sayu": 0.77, "Amber": 0.72, "Candace": 0.55, "Xinyan": 0.55, "Traveler-G": 0.46, "Aloy": 0.27, "Traveler-A": 0.15, "Traveler-E": 0.1
     }
     for phase in owns:
         uses[phase] = {}
@@ -230,7 +251,8 @@ def usages(owns, appears, chambers=ROOMS, offset=3):
                     "weapons" : {},
                     "artifacts" : {},
                     "cons_usage": {},
-                    "cons_avg": appears[phase][char]["cons_avg"]
+                    "cons_avg": appears[phase][char]["cons_avg"],
+                    "sample": appears[phase][char]["sample"]
                 }
 
                 if char in past_usage:
@@ -249,7 +271,7 @@ def usages(owns, appears, chambers=ROOMS, offset=3):
 
                     weapons = list(appears[phase][char]["weap_freq"])
                     i = 0
-                    while i < 12:
+                    while i < 20:
                         if i >= len(weapons):
                             uses[phase][char]["weapons"][i] = "-"
                         else:
@@ -258,7 +280,7 @@ def usages(owns, appears, chambers=ROOMS, offset=3):
 
                     artifacts = list(appears[phase][char]["arti_freq"])
                     i = 0
-                    while i < 12:
+                    while i < 20:
                         if i >= len(artifacts):
                             uses[phase][char]["artifacts"][i] = "-"
                         else:

@@ -2,19 +2,19 @@ In case of new ATK 18% arti:
     update player_phase.py line 39
 In case of new character:
     Add new characters to characters.json
-    Change indexes at comp_rates.py lines 75 to 82 for the travelers
+    Change indexes at comp_rates.py lines 84 to 96 for the travelers (CAREFUL with how many you should add the indexes!)
     Add comp role at composition.py line 61
     If new char is traveler, update comp_rates.py, char_usage.py, and player_phase.py
 
 (update ver in char_csv_filterer.py, csv_filterer.py, and comp_rates)
-(Update previous char usage at line 168 on comps/char_usage.py, take it from previous infographics)
+Update previous char usage at line 168 on comps/char_usage.py, take it from jsons
 delete old phase_characters.csv and compositions.csv
 Run char_csv_filterer.py and csv_filterer.py
 Run comp_rates.py thrice:
-    Once while commenting the write commands, to check the UIDs
-    Second with the commands uncommented
-    Third onward for the comp names, comment the chars usage
+    Once with only the character write commands uncommented, to check the UIDs
+    Second with the comp write commands uncommented, comment the chars usage
+    Third onward for the comp names
 In case of error when running comp_rates:
     Run with only the char usages write uncommented
     New compositions.csv and phase_characters.csv should be created, cut them to the raw data folder
-    Optional, run with python comp_rates.py > E:\OUTPUT.txt
+    (Optional, run with: "python comp_rates.py > E:\OUTPUT.txt")
