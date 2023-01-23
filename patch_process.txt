@@ -1,12 +1,13 @@
-In case of new ATK 18% arti:
+In case of new arti with one of these substats:
+    atk, anemo, burst, cryo, def, dendro, em, electro, electro res, er, geo, heal, hp, hydro, phys, pyro, pyro res, shield
     update player_phase.py line 39
 In case of new character:
     Add new characters to characters.json
-    Change indexes at comp_rates.py lines 84 to 96 for the travelers (CAREFUL with how many you should add the indexes!)
+    Change indexes at comp_rates.py lines 84 to 96 for the travelers
+
     Add comp role at composition.py line 61
     If new char is traveler, update comp_rates.py, char_usage.py, and player_phase.py
 
-(update ver in char_csv_filterer.py, csv_filterer.py, and comp_rates)
 Update previous char usage at line 168 on comps/char_usage.py, take it from jsons
 delete old phase_characters.csv and compositions.csv
 Run char_csv_filterer.py and csv_filterer.py

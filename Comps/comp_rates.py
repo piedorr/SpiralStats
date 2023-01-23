@@ -13,11 +13,13 @@ with open('../data/characters.json') as char_file:
 
 def main():
     char = "Hu Tao"
+    # threshold for comps, not inclusive
     global app_rate_threshold
     global f2p_app_rate_threshold
+    app_rate_threshold = 0.3
+    f2p_app_rate_threshold = 0.2
+    # threshold for comps in character infographics
     global char_app_rate_threshold
-    app_rate_threshold = 0.2
-    f2p_app_rate_threshold = 0.15
     char_app_rate_threshold = 0.2
     # Sample size will be needed to calculate the comp app and own rate
     global sample_size
@@ -81,17 +83,17 @@ def main():
 
             # Change traveler to respective element
             # Need to update in case of new character
-            if line[50] == "1":
+            if line[52] == "1":
                 try:
-                    line[50] = "0"
+                    line[52] = "0"
                     if trav_elements[line[0]] == "Anemo":
-                        line[51] = "1"
-                    elif trav_elements[line[0]] == "Geo":
-                        line[52] = "1"
-                    elif trav_elements[line[0]] == "Electro":
                         line[53] = "1"
-                    elif trav_elements[line[0]] == "Dendro":
+                    elif trav_elements[line[0]] == "Geo":
                         line[54] = "1"
+                    elif trav_elements[line[0]] == "Electro":
+                        line[55] = "1"
+                    elif trav_elements[line[0]] == "Dendro":
+                        line[56] = "1"
                     # elif trav_elements[line[0]] == "None":
                     #     line[49] = "1"
                     else:
@@ -118,35 +120,35 @@ def main():
     all_players = form_players(player_table, all_comps, [RECENT_PHASE])
 
     # Below are the commands to print CSV files, comment the ones not needed
-
-    # Char usages floor 11 & 12
     global usage
     usage = char_usages(all_players, filename="12", floor=True)
+
+    # # Char usages floor 11 & 12
     # char_usages(all_players, rooms=["11-1-1", "11-1-2", "11-2-1", "11-2-2", "11-3-1", "11-3-2"], filename="11")
     # duo_usages(all_comps, all_players, usage)
 
-    # # Comp usages floor 12
-    # comp_usages(all_comps, all_players, rooms=["12-1-2", "12-2-2", "12-3-2"], filename="12 second", floor=True)
-    # comp_usages(all_comps, all_players, rooms=["12-1-1", "12-2-1", "12-3-1"], filename="12 first", floor=True)
+    # Comp usages floor 12
+    comp_usages(all_comps, all_players, rooms=["12-1-2", "12-2-2", "12-3-2"], filename="12 second", floor=True)
+    comp_usages(all_comps, all_players, rooms=["12-1-1", "12-2-1", "12-3-1"], filename="12 first", floor=True)
 
     # # Comp usages floor 11
     # comp_usages(all_comps, all_players, rooms=["11-1-2", "11-2-2", "11-3-2"], filename="11 second", floor=True)
     # comp_usages(all_comps, all_players, rooms=["11-1-1", "11-2-1", "11-3-1"], filename="11 first", floor=True)
 
-    # Character infographics
-    char_usages(all_players, filename="12 build", info_char=True, floor=True)
-    comp_usages(all_comps, all_players, filename=char, info_char=True, floor=True)
+    # # Character specific infographics
+    # char_usages(all_players, filename="12 build", info_char=True, floor=True)
+    # comp_usages(all_comps, all_players, filename=char, info_char=True, floor=True)
 
-    # # Comp usage for json
+    # # Comp usage floor 12 overall
     # comp_usages(all_comps, all_players, rooms=["12-1-2", "12-2-2", "12-3-2", "12-1-1", "12-2-1", "12-3-1"], filename="12", floor=True)
 
     # # Char usages for each chamber
     # for room in ["12-1-1", "12-1-2", "12-2-1", "12-2-2", "12-3-1", "12-3-2", "11-1-1", "11-1-2", "11-2-1", "11-2-2", "11-3-1", "11-3-2"]:
     #     char_usages(all_players, rooms=[room], filename=room, offset=1)
 
-    # # Comp usages for each chamber
-    # for room in ["12-1-1", "12-1-2", "12-2-1", "12-2-2", "12-3-1", "12-3-2", "11-1-1", "11-1-2", "11-2-1", "11-2-2", "11-3-1", "11-3-2"]:
-    #     comp_usages(all_comps, all_players, rooms=[room], filename=room, offset=1)
+    # Comp usages for each chamber
+    for room in ["12-1-1", "12-1-2", "12-2-1", "12-2-2", "12-3-1", "12-3-2", "11-1-1", "11-1-2", "11-2-1", "11-2-2", "11-3-1", "11-3-2"]:
+        comp_usages(all_comps, all_players, rooms=[room], filename=room, offset=1)
 
 def comp_usages(comps, 
                 players, 

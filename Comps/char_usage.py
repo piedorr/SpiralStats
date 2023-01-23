@@ -3,6 +3,8 @@ import pandas as pd
 import operator
 
 ROOMS = ["12-1-1", "12-1-2", "12-2-1", "12-2-2", "12-3-1", "12-3-2"]
+global gear_app_threshold
+gear_app_threshold = 0
 with open('../data/characters.json') as char_file:
     CHARACTERS = json.load(char_file)
 
@@ -198,13 +200,15 @@ def appearances(players, owns, chambers=ROOMS, offset=3, info_char=False):
                     # If a gear appears >15 times, include it
                     # Because there might be 1* gears
                     # If it's for character infographic, include all gears
-                    if appears[phase][char]["weap_freq"][weapon] > 15 or info_char:
+                    if appears[phase][char]["weap_freq"][weapon] > gear_app_threshold or info_char:
                         appears[phase][char]["weap_freq"][weapon] = round(
                             appears[phase][char]["weap_freq"][weapon] / app_flat, 2
                         )
                     else:
                         appears[phase][char]["weap_freq"][weapon] = "-"
 
+                # Remove flex artifacts
+                appears[phase][char]["arti_freq"]["Flex"] = 0
                 # Calculate artifacts
                 sorted_arti = (sorted(
                     appears[phase][char]["arti_freq"].items(),
@@ -216,7 +220,7 @@ def appearances(players, owns, chambers=ROOMS, offset=3, info_char=False):
                     # If a gear appears >15 times, include it
                     # Because there might be 1* gears
                     # If it's for character infographic, include all gears
-                    if appears[phase][char]["arti_freq"][arti] > 15 or info_char:
+                    if (appears[phase][char]["arti_freq"][arti] > gear_app_threshold or info_char) and arti != "Flex":
                         appears[phase][char]["arti_freq"][arti] = round(
                             appears[phase][char]["arti_freq"][arti] / app_flat, 2
                         )

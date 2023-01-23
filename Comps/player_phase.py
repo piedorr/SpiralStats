@@ -46,8 +46,8 @@ class PlayerPhase:
                 artifacts = artifacts.replace(i, "")
                 artifacts = "ATK +18%, " + artifacts
 
-        emcom = ["Wanderer's Troupe, ", "Gilded Dreams, "]
-        comem = [", Wanderer's Troupe", ", Gilded Dreams"]
+        emcom = ["Wanderer's Troupe, ", "Gilded Dreams, ", "Flower of Paradise Lost, "]
+        comem = [", Wanderer's Troupe", ", Gilded Dreams", ", Flower of Paradise Lost"]
         for i in emcom:
             if i in artifacts:
                 artifacts = artifacts.replace(i, "EM +80, ")
@@ -57,14 +57,34 @@ class PlayerPhase:
                 artifacts = "EM +80, " + artifacts
 
         physcom = ["Bloodstained Chivalry, ", "Pale Flame, "]
-        physem = [", Bloodstained Chivalry", ", Pale Flame"]
+        comphys = [", Bloodstained Chivalry", ", Pale Flame"]
         for i in physcom:
             if i in artifacts:
                 artifacts = artifacts.replace(i, "Phys +25%, ")
-        for i in physem:
+        for i in comphys:
             if i in artifacts:
                 artifacts = artifacts.replace(i, "")
                 artifacts = "Phys +25%, " + artifacts
+
+        anemocom = ["Desert Pavilion Chronicle, ", "Viridescent Venerer, "]
+        comanemo = [", Desert Pavilion Chronicle", ", Viridescent Venerer"]
+        for i in anemocom:
+            if i in artifacts:
+                artifacts = artifacts.replace(i, "Anemo +15%, ")
+        for i in comanemo:
+            if i in artifacts:
+                artifacts = artifacts.replace(i, "")
+                artifacts = "Anemo +15%, " + artifacts
+
+        healcom = ["Ocean-Hued Clam, ", "Maiden Beloved, "]
+        comheal = [", Ocean-Hued Clam", ", Maiden Beloved"]
+        for i in healcom:
+            if i in artifacts:
+                artifacts = artifacts.replace(i, "Heal +15%, ")
+        for i in comheal:
+            if i in artifacts:
+                artifacts = artifacts.replace(i, "")
+                artifacts = "Heal +15%, " + artifacts
 
         self.owned[name] = {
             "level": int(level),
