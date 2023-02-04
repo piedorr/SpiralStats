@@ -12,15 +12,15 @@ with open('../data/characters.json') as char_file:
     CHARACTERS = json.load(char_file)
 
 def main():
-    char = "Hu Tao"
+    char = "Layla"
     # threshold for comps, not inclusive
     global app_rate_threshold
     global f2p_app_rate_threshold
-    app_rate_threshold = 0.3
-    f2p_app_rate_threshold = 0.2
+    app_rate_threshold = 0.2
+    f2p_app_rate_threshold = 0.15
     # threshold for comps in character infographics
     global char_app_rate_threshold
-    char_app_rate_threshold = 0.2
+    char_app_rate_threshold = 0.15
     # Sample size will be needed to calculate the comp app and own rate
     global sample_size
     sample_size = 0
@@ -122,33 +122,33 @@ def main():
     # Below are the commands to print CSV files, comment the ones not needed
     global usage
     usage = char_usages(all_players, filename="12", floor=True)
+    char_usages(all_players, filename="12 build", info_char=True, floor=True)
 
-    # # Char usages floor 11 & 12
-    # char_usages(all_players, rooms=["11-1-1", "11-1-2", "11-2-1", "11-2-2", "11-3-1", "11-3-2"], filename="11")
-    # duo_usages(all_comps, all_players, usage)
+    # Char usages floor 11 & 12
+    char_usages(all_players, rooms=["11-1-1", "11-1-2", "11-2-1", "11-2-2", "11-3-1", "11-3-2"], filename="11")
+    duo_usages(all_comps, all_players, usage)
 
     # Comp usages floor 12
     comp_usages(all_comps, all_players, rooms=["12-1-2", "12-2-2", "12-3-2"], filename="12 second", floor=True)
     comp_usages(all_comps, all_players, rooms=["12-1-1", "12-2-1", "12-3-1"], filename="12 first", floor=True)
 
-    # # Comp usages floor 11
-    # comp_usages(all_comps, all_players, rooms=["11-1-2", "11-2-2", "11-3-2"], filename="11 second", floor=True)
-    # comp_usages(all_comps, all_players, rooms=["11-1-1", "11-2-1", "11-3-1"], filename="11 first", floor=True)
+    # Comp usages floor 11
+    comp_usages(all_comps, all_players, rooms=["11-1-2", "11-2-2", "11-3-2"], filename="11 second", floor=True)
+    comp_usages(all_comps, all_players, rooms=["11-1-1", "11-2-1", "11-3-1"], filename="11 first", floor=True)
 
     # # Character specific infographics
-    # char_usages(all_players, filename="12 build", info_char=True, floor=True)
     # comp_usages(all_comps, all_players, filename=char, info_char=True, floor=True)
 
-    # # Comp usage floor 12 overall
-    # comp_usages(all_comps, all_players, rooms=["12-1-2", "12-2-2", "12-3-2", "12-1-1", "12-2-1", "12-3-1"], filename="12", floor=True)
-
-    # # Char usages for each chamber
-    # for room in ["12-1-1", "12-1-2", "12-2-1", "12-2-2", "12-3-1", "12-3-2", "11-1-1", "11-1-2", "11-2-1", "11-2-2", "11-3-1", "11-3-2"]:
-    #     char_usages(all_players, rooms=[room], filename=room, offset=1)
+    # Comp usage floor 12 overall
+    comp_usages(all_comps, all_players, rooms=["12-1-2", "12-2-2", "12-3-2", "12-1-1", "12-2-1", "12-3-1"], filename="12", floor=True)
 
     # Comp usages for each chamber
     for room in ["12-1-1", "12-1-2", "12-2-1", "12-2-2", "12-3-1", "12-3-2", "11-1-1", "11-1-2", "11-2-1", "11-2-2", "11-3-1", "11-3-2"]:
         comp_usages(all_comps, all_players, rooms=[room], filename=room, offset=1)
+
+    # # Char usages for each chamber
+    # for room in ["12-1-1", "12-1-2", "12-2-1", "12-2-2", "12-3-1", "12-3-2", "11-1-1", "11-1-2", "11-2-1", "11-2-2", "11-3-1", "11-3-2"]:
+    #     char_usages(all_players, rooms=[room], filename=room, offset=1)
 
 def comp_usages(comps, 
                 players, 
