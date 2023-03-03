@@ -9,6 +9,16 @@
 		"rarity": 5,
 		"availability": "Limited 5*"
 	},
+	"Alhaitham": {
+		"weapon": "Sword",
+		"element": "Dendro",
+		"version": 3.4,
+		"phase": "3.4a",
+		"alt_name": "Alhatham",
+		"out_name": false,
+		"rarity": 5,
+		"availability": "Limited 5*"
+	},
     "Aloy": {
         "weapon": "Bow",
         "element": "Cryo",
@@ -109,6 +119,16 @@
         "rarity": 5,
 		"availability": "Limited 5*"
     },
+	"Dehya": {
+		"weapon": "Claymore",
+		"element": "Pyro",
+		"version": 3.5,
+		"phase": "3.5a",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 5,
+		"availability": "Limited 5*"
+	},
 	"Diluc": {
 		"weapon": "Claymore",
 		"element": "Pyro",
@@ -148,6 +168,16 @@
 		"out_name": false,
 		"rarity": 5,
 		"availability": "Limited 5*"
+	},
+	"Faruzan": {
+		"weapon": "Bow",
+		"element": "Anemo",
+		"version": 3.3,
+		"phase": "3.3a",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 4,
+		"availability": "4*"
 	},
 	"Fischl": {
 		"weapon": "Bow",
@@ -279,6 +309,16 @@
 		"rarity": 4,
         "availability": "4*"
 	},
+	"Layla": {
+		"weapon": "Sword",
+		"element": "Cryo",
+		"version": 3.2,
+		"phase": "3.2b",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 4,
+		"availability": "4*"
+	},
 	"Lisa": {
 		"weapon": "Catalyst",
 		"element": "Electro",
@@ -299,6 +339,26 @@
 		"rarity": 5,
 		"availability": "5*"
 	},
+    "Nahida": {
+		"weapon": "Catalyst",
+		"element": "Dendro",
+		"version": 3.2,
+		"phase": "3.2a",
+		"alt_name": "Nahida",
+		"out_name": false,
+		"rarity": 5,
+		"availability": "Limited 5*"
+    },
+    "Nilou": {
+		"weapon": "Sword",
+		"element": "Hydro",
+		"version": 3.1,
+		"phase": "3.1b",
+		"alt_name": "Nilou",
+		"out_name": false,
+		"rarity": 5,
+		"availability": "Limited 5*"
+    },
 	"Ningguang": {
 		"weapon": "Catalyst",
 		"element": "Geo",
@@ -499,6 +559,16 @@
 		"rarity": 5,
 		"availability": "Limited 5*"
 	},
+	"Wanderer": {
+		"weapon": "Catalyst",
+		"element": "Anemo",
+		"version": 3.3,
+		"phase": "3.3a",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 5,
+		"availability": "Limited 5*"
+	},
 	"Xiangling": {
 		"weapon": "Spear",
 		"element": "Pyro",
@@ -559,6 +629,16 @@
 		"rarity": 4,
 		"availability": "4*"
 	},
+    "Yaoyao": {
+        "weapon": "Polearm",
+        "element": "Dendro",
+        "version": 3.4,
+        "phase": "3.4a",
+		"alt_name": null,
+		"out_name": false,
+        "rarity": 4,
+		"availability": "4*"
+    },
 	"Yelan": {
 		"weapon": "Bow",
 		"element": "Hydro",
