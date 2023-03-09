@@ -8,6 +8,7 @@ In case of new character:
     Add comp role at composition.py line 61
     If new char is traveler, update comp_rates.py, char_usage.py, and player_phase.py
 
+
 Rename CSV files in 'data/raw_csvs' from 'ver.csv' and 'ver_char.csv' to '2.2b.csv' and '2.2b_char.csv'
 Update previous char usage at line 168 on comps/char_usage.py, take it from jsons
 delete old phase_characters.csv and compositions.csv
