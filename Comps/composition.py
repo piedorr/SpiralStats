@@ -164,9 +164,18 @@ class Composition:
                 dps.append(character)
                 temp_remove.append(character)
                 continue
-        if "Nahida" in sub and not(dps):
-            sub.remove("Nahida")
-            dps.append("Nahida")
+        if "Nahida" in sub:
+            if not(dps):
+                sub.remove("Nahida")
+                dps.append("Nahida")
+            elif "Raiden Shogun" in dps and ("Yae Miko" in dps or len(dps) == 1):
+                sub.remove("Nahida")
+                dps.insert(0, "Nahida")
+                dps.remove("Raiden Shogun")
+                sub.insert(0, "Raiden Shogun")
+                if "Kamisato Ayato" in sub:
+                    sub.remove("Kamisato Ayato")
+                    dps.insert(0, "Kamisato Ayato")
         for character in temp_remove:
             temp.remove(character)
         temp_remove = []
@@ -255,35 +264,23 @@ class Composition:
                 ["Ningguang","Nahida","Sangonomiya Kokomi","Kuki Shinobu"]
             ],
             "Quickbloom Kokomi": [
-                ["Sangonomiya Kokomi","Traveler-D","Fischl","Kaedehara Kazuha"],
-                ["Sangonomiya Kokomi","Traveler-D","Fischl","Sucrose"],
-                ["Sangonomiya Kokomi","Traveler-D","Collei","Kuki Shinobu"],
-                ["Sangonomiya Kokomi","Nahida","Fischl","Kaedehara Kazuha"],
-                ["Sangonomiya Kokomi","Nahida","Fischl","Sucrose"],
-                ["Sangonomiya Kokomi","Nahida","Collei","Kuki Shinobu"]
-            ],
-            "Quickbloom Yae": [
-                ["Yae Miko","Fischl","Sangonomiya Kokomi","Venti"],
-                ["Yae Miko","Traveler-D","Sangonomiya Kokomi","Kaedehara Kazuha"],
-                ["Yae Miko","Nahida","Sangonomiya Kokomi","Kaedehara Kazuha"]
-            ],
-            "Quickbloom Raiden": [
+                # Alt: Quickbloom Raiden, Yae
+                ["Raiden Shogun","Traveler-D","Fischl","Sangonomiya Kokomi"],
                 ["Raiden Shogun","Traveler-D","Sangonomiya Kokomi","Zhongli"],
                 ["Raiden Shogun","Traveler-D","Sangonomiya Kokomi","Kaedehara Kazuha"],
                 ["Raiden Shogun","Traveler-D","Sangonomiya Kokomi","Venti"],
-                ["Raiden Shogun","Traveler-D","Fischl","Sangonomiya Kokomi"],
-                ["Raiden Shogun","Traveler-D","Nahida","Sangonomiya Kokomi"],
                 ["Raiden Shogun","Yae Miko","Traveler-D","Sangonomiya Kokomi"],
-                ["Raiden Shogun","Yae Miko","Nahida","Sangonomiya Kokomi"],
-                ["Raiden Shogun","Nahida","Sangonomiya Kokomi","Kaedehara Kazuha"],
-                ["Raiden Shogun","Nahida","Sangonomiya Kokomi","Venti"],
-                ["Raiden Shogun","Nahida","Sangonomiya Kokomi","Zhongli"],
-                ["Raiden Shogun","Nahida","Fischl","Sangonomiya Kokomi"],
-                ["Raiden Shogun","Nahida","Kaedehara Kazuha","Barbara"],
-                ["Raiden Shogun","Ningguang","Nahida","Sangonomiya Kokomi"]
+                ["Sangonomiya Kokomi","Traveler-D","Sucrose","Kuki Shinobu"],
+                ["Sangonomiya Kokomi","Traveler-D","Fischl","Kaedehara Kazuha"],
+                ["Sangonomiya Kokomi","Traveler-D","Fischl","Sucrose"],
+                ["Sangonomiya Kokomi","Traveler-D","Collei","Kuki Shinobu"],
+                ["Yae Miko","Fischl","Sangonomiya Kokomi","Venti"],
+                ["Yae Miko","Traveler-D","Sangonomiya Kokomi","Kaedehara Kazuha"]
             ],
             "Quickbloom Tighnari": [
+                ["Tighnari","Raiden Shogun","Nahida","Sangonomiya Kokomi"],
                 ["Tighnari","Fischl","Sangonomiya Kokomi","Kaedehara Kazuha"],
+                ["Tighnari","Yae Miko","Nahida","Sangonomiya Kokomi"],
                 ["Tighnari","Yae Miko","Sangonomiya Kokomi","Kaedehara Kazuha"]
             ],
             "Quickbloom Alhaitham": [
@@ -302,6 +299,13 @@ class Composition:
                 ["Keqing","Nahida","Sangonomiya Kokomi","Kaedehara Kazuha"]
             ],
             "Quickbloom Nahida": [
+                ["Nahida","Raiden Shogun","Sangonomiya Kokomi","Kaedehara Kazuha"],
+                ["Nahida","Raiden Shogun","Traveler-D","Sangonomiya Kokomi"],
+                ["Nahida","Raiden Shogun","Sangonomiya Kokomi","Venti"],
+                ["Nahida","Raiden Shogun","Sangonomiya Kokomi","Zhongli"],
+                ["Nahida","Raiden Shogun","Fischl","Sangonomiya Kokomi"],
+                ["Nahida","Raiden Shogun","Kaedehara Kazuha","Barbara"],
+                ["Nahida","Raiden Shogun","Ningguang","Sangonomiya Kokomi"],
                 ["Nahida","Yun Jin","Sangonomiya Kokomi","Kuki Shinobu"],
                 ["Nahida","Sangonomiya Kokomi","Zhongli","Kuki Shinobu"],
                 ["Nahida","Sangonomiya Kokomi","Venti","Kuki Shinobu"],
@@ -310,6 +314,7 @@ class Composition:
                 ["Nahida","Fischl","Sangonomiya Kokomi","Sucrose"],
                 ["Nahida","Fischl","Sangonomiya Kokomi","Kaedehara Kazuha"],
                 ["Nahida","Fischl","Beidou","Sangonomiya Kokomi"],
+                ["Nahida","Yae Miko","Raiden Shogun","Sangonomiya Kokomi"],
                 ["Nahida","Yae Miko","Sangonomiya Kokomi","Venti"],
                 ["Nahida","Yae Miko","Sangonomiya Kokomi","Kaedehara Kazuha"],
                 ["Nahida","Yae Miko","Sangonomiya Kokomi","Zhongli"],
@@ -317,17 +322,42 @@ class Composition:
             ],
 
             # Hyperbloom: Quick hydro app (must be Xingqiu/Yelan/Ayato, not Kokomi NAs), dendro, electro, flex
-            "Hyperbloom Sucrose": [
+            # With pyro: Unless it's Raiden/Cyno/Kuki, put in Curry
+            "Hyperbloom Dehya": [
+                ["Dehya","Raiden Shogun","Nahida","Sangonomiya Kokomi"]
+            ],
+            "Hyperbloom Hu Tao": [
+                ["Hu Tao","Xingqiu","Nahida","Kuki Shinobu"]
+            ],
+            "Hyperbloom Wanderer": [
+                ["Wanderer","Xingqiu","Nahida","Kuki Shinobu"]
+            ],
+            "Hyperbloom Quickswap": [
+                # Alt: Hyperbloom Raiden
+                ["Raiden Shogun","Xingqiu","Traveler-D","Bennett"],
+                ["Raiden Shogun","Xingqiu","Traveler-D","Zhongli"],
+                ["Raiden Shogun","Xingqiu","Traveler-D","Fischl"],
+                ["Raiden Shogun","Xingqiu","Traveler-D","Kuki Shinobu"],
+                ["Raiden Shogun","Xingqiu","Traveler-D","Kaedehara Kazuha"],
+                ["Raiden Shogun","Xingqiu","Traveler-D","Jean"],
+                ["Raiden Shogun","Xingqiu","Traveler-D","Yaoyao"],
+                ["Raiden Shogun","Xingqiu","Collei","Bennett"],
+                ["Raiden Shogun","Yelan","Traveler-D","Bennett"],
+                ["Raiden Shogun","Yelan","Traveler-D","Zhongli"],
+                ["Raiden Shogun","Yelan","Xingqiu","Traveler-D"],
+                ["Raiden Shogun","Yelan","Xingqiu","Yaoyao"],
+                ["Raiden Shogun","Yelan","Traveler-D","Sangonomiya Kokomi"],
+                ["Lisa","Xingqiu","Traveler-D","Fischl"],
+                ["Lisa","Xingqiu","Nahida","Fischl"],
                 ["Sucrose","Xingqiu","Traveler-D","Fischl"],
                 ["Sucrose","Xingqiu","Traveler-D","Kuki Shinobu"],
                 ["Sucrose","Xingqiu","Fischl","Collei"],
                 ["Sucrose","Xingqiu","Nahida","Fischl"],
-                ["Sucrose","Xingqiu","Nahida","Kuki Shinobu"]
-            ],
-            "Hyperbloom Wanderer": [["Wanderer","Xingqiu","Nahida","Kuki Shinobu"]],
-            "Hyperbloom Quickswap": [
+                ["Sucrose","Xingqiu","Nahida","Kuki Shinobu"],
                 ["Sucrose","Xingqiu","Fischl","Yaoyao"],
+                ["Sucrose","Yelan","Traveler-D","Kuki Shinobu"],
                 ["Xingqiu","Traveler-D","Fischl","Kaedehara Kazuha"],
+                ["Xingqiu","Traveler-D","Fischl","Kuki Shinobu"],
                 ["Xingqiu","Traveler-D","Collei","Kuki Shinobu"],
                 ["Xingqiu","Traveler-D","Zhongli","Kuki Shinobu"],
                 ["Yelan","Xingqiu","Kuki Shinobu","Yaoyao"],
@@ -338,81 +368,40 @@ class Composition:
                 ["Ningguang","Yelan","Nahida","Kuki Shinobu"]
             ],
             "Hyperbloom Noelle": [
+                ["Noelle","Raiden Shogun","Xingqiu","Nahida"],
                 ["Noelle","Xingqiu","Nahida","Fischl"]
-            ],
-            "Hyperbloom Raiden": [
-                ["Raiden Shogun","Xingqiu","Traveler-A","Yaoyao"],
-                ["Raiden Shogun","Xingqiu","Traveler-D","Bennett"],
-                ["Raiden Shogun","Xingqiu","Traveler-D","Zhongli"],
-                ["Raiden Shogun","Xingqiu","Traveler-D","Fischl"],
-                ["Raiden Shogun","Xingqiu","Traveler-D","Kuki Shinobu"],
-                ["Raiden Shogun","Xingqiu","Traveler-D","Kaedehara Kazuha"],
-                ["Raiden Shogun","Xingqiu","Traveler-D","Jean"],
-                ["Raiden Shogun","Xingqiu","Traveler-D","Yaoyao"],
-                ["Raiden Shogun","Xingqiu","Nahida","Yaoyao"],
-                ["Raiden Shogun","Xingqiu","Nahida","Qiqi"],
-                ["Raiden Shogun","Xingqiu","Nahida","Barbara"],
-                ["Raiden Shogun","Xingqiu","Nahida","Bennett"],
-                ["Raiden Shogun","Xingqiu","Nahida","Zhongli"],
-                ["Raiden Shogun","Xingqiu","Nahida","Fischl"],
-                ["Raiden Shogun","Xingqiu","Nahida","Kuki Shinobu"],
-                ["Raiden Shogun","Xingqiu","Nahida","Kaedehara Kazuha"],
-                ["Raiden Shogun","Xingqiu","Nahida","Jean"],
-                ["Raiden Shogun","Xingqiu","Nahida","Venti"],
-                ["Raiden Shogun","Xingqiu","Nahida","Beidou"],
-                ["Raiden Shogun","Xingqiu","Nahida","Sangonomiya Kokomi"],
-                ["Raiden Shogun","Xingqiu","Collei","Bennett"],
-                ["Raiden Shogun","Yelan","Traveler-D","Bennett"],
-                ["Raiden Shogun","Yelan","Traveler-D","Zhongli"],
-                ["Raiden Shogun","Yelan","Traveler-D","Sangonomiya Kokomi"],
-                ["Raiden Shogun","Yelan","Nahida","Bennett"],
-                ["Raiden Shogun","Yelan","Nahida","Zhongli"],
-                ["Raiden Shogun","Yelan","Nahida","Venti"],
-                ["Raiden Shogun","Yelan","Nahida","Kaedehara Kazuha"],
-                ["Raiden Shogun","Yelan","Nahida","Sangonomiya Kokomi"],
-                ["Raiden Shogun","Yelan","Nahida","Jean"],
-                ["Raiden Shogun","Yelan","Nahida","Yaoyao"],
-                ["Raiden Shogun","Yelan","Nahida","Diona"],
-                ["Raiden Shogun","Yelan","Xingqiu","Traveler-D"],
-                ["Raiden Shogun","Yelan","Xingqiu","Nahida"],
-                ["Raiden Shogun","Yelan","Xingqiu","Yaoyao"],
-                ["Raiden Shogun","Yae Miko","Xingqiu","Nahida"],
-                ["Raiden Shogun","Kamisato Ayato","Nahida","Yaoyao"],
-                ["Raiden Shogun","Kamisato Ayato","Kaedehara Kazuha","Yaoyao"],
-                ["Raiden Shogun","Kamisato Ayato","Nahida","Zhongli"]
-            ],
-            "Hyperbloom Lisa": [
-                ["Lisa","Xingqiu","Traveler-D","Fischl"],
-                ["Lisa","Xingqiu","Nahida","Fischl"]
             ],
             "Hyperbloom Cyno": [
                 ["Cyno","Xingqiu","Traveler-D","Beidou"],
                 ["Cyno","Xingqiu","Traveler-D","Kuki Shinobu"],
                 ["Cyno","Xingqiu","Traveler-D","Fischl"],
+                ["Cyno","Xingqiu","Nahida","Bennett"],
                 ["Cyno","Xingqiu","Nahida","Kuki Shinobu"],
                 ["Cyno","Xingqiu","Nahida","Zhongli"],
                 ["Cyno","Xingqiu","Nahida","Beidou"],
-                ["Cyno","Xingqiu","Nahida","Bennett"],
                 ["Cyno","Xingqiu","Nahida","Yaoyao"],
+                ["Cyno","Yelan","Xingqiu","Nahida"],
                 ["Cyno","Yelan","Traveler-D","Kuki Shinobu"],
                 ["Cyno","Yelan","Traveler-D","Zhongli"],
+                ["Cyno","Yelan","Nahida","Yaoyao"],
                 ["Cyno","Yelan","Nahida","Kuki Shinobu"],
                 ["Cyno","Yelan","Nahida","Zhongli"]
             ],
             "Hyperbloom Keqing": [
                 ["Keqing","Yelan","Nahida","Zhongli"]
             ],
-            "Hyperbloom Razor": [
-                ["Razor","Xingqiu","Traveler-D","Bennett"],
-                ["Razor","Xingqiu","Nahida","Bennett"]
-            ],
             "Hyperbloom Ayato": [
+                ["Raiden Shogun","Kamisato Ayato","Kaedehara Kazuha","Yaoyao"],
                 ["Kamisato Ayato","Xingqiu","Nahida","Kuki Shinobu"],
+                ["Kamisato Ayato","Xingqiu","Traveler-D","Kuki Shinobu"],
                 ["Kamisato Ayato","Yelan","Nahida","Kuki Shinobu"],
+                ["Kamisato Ayato","Yelan","Traveler-D","Kuki Shinobu"],
                 ["Kamisato Ayato","Yun Jin","Nahida","Kuki Shinobu"],
                 ["Kamisato Ayato","Collei","Kaedehara Kazuha","Kuki Shinobu"],
                 ["Kamisato Ayato","Traveler-D","Fischl","Kaedehara Kazuha"],
                 ["Kamisato Ayato","Traveler-D","Venti","Kuki Shinobu"],
+                ["Kamisato Ayato","Nahida","Raiden Shogun","Yaoyao"],
+                ["Kamisato Ayato","Nahida","Raiden Shogun","Zhongli"],
                 ["Kamisato Ayato","Nahida","Beidou","Kuki Shinobu"],
                 ["Kamisato Ayato","Nahida","Zhongli","Kuki Shinobu"],
                 ["Kamisato Ayato","Nahida","Fischl","Kuki Shinobu"],
@@ -420,14 +409,42 @@ class Composition:
                 ["Kamisato Ayato","Nahida","Kaedehara Kazuha","Kuki Shinobu"],
                 ["Kamisato Ayato","Nahida","Venti","Kuki Shinobu"]
             ],
-            "Hyperbloom Childe": [["Tartaglia","Nahida","Kaedehara Kazuha","Kuki Shinobu"]],
+            "Hyperbloom Childe": [
+                ["Tartaglia","Nahida","Kaedehara Kazuha","Kuki Shinobu"]
+            ],
             "Hyperbloom Nahida": [
+                ["Nahida","Raiden Shogun","Xingqiu","Bennett"],
+                ["Nahida","Raiden Shogun","Xingqiu","Yaoyao"],
+                ["Nahida","Raiden Shogun","Xingqiu","Qiqi"],
+                ["Nahida","Raiden Shogun","Xingqiu","Barbara"],
+                ["Nahida","Raiden Shogun","Xingqiu","Zhongli"],
+                ["Nahida","Raiden Shogun","Xingqiu","Fischl"],
+                ["Nahida","Raiden Shogun","Xingqiu","Kuki Shinobu"],
+                ["Nahida","Raiden Shogun","Xingqiu","Kaedehara Kazuha"],
+                ["Nahida","Raiden Shogun","Xingqiu","Jean"],
+                ["Nahida","Raiden Shogun","Xingqiu","Venti"],
+                ["Nahida","Raiden Shogun","Xingqiu","Beidou"],
+                ["Nahida","Raiden Shogun","Xingqiu","Sangonomiya Kokomi"],
+                ["Nahida","Raiden Shogun","Yelan","Kuki Shinobu"],
+                ["Nahida","Raiden Shogun","Yelan","Bennett"],
+                ["Nahida","Raiden Shogun","Yelan","Barbara"],
+                ["Nahida","Raiden Shogun","Yelan","Zhongli"],
+                ["Nahida","Raiden Shogun","Yelan","Venti"],
+                ["Nahida","Raiden Shogun","Yelan","Kaedehara Kazuha"],
+                ["Nahida","Raiden Shogun","Yelan","Sangonomiya Kokomi"],
+                ["Nahida","Raiden Shogun","Yelan","Jean"],
+                ["Nahida","Raiden Shogun","Yelan","Yaoyao"],
+                ["Nahida","Raiden Shogun","Yelan","Diona"],
+                ["Nahida","Raiden Shogun","Yelan","Xingqiu"],
+                ["Nahida","Raiden Shogun","Yae Miko","Xingqiu"],
                 ["Nahida","Yelan","Xingqiu","Kuki Shinobu"],
                 ["Nahida","Yelan","Xingqiu","Fischl"],
+                ["Nahida","Yelan","Yae Miko","Venti"],
                 ["Nahida","Yelan","Yae Miko","Kuki Shinobu"],
                 ["Nahida","Yelan","Yae Miko","Sangonomiya Kokomi"],
                 ["Nahida","Yelan","Yae Miko","Zhongli"],
                 ["Nahida","Yelan","Yae Miko","Diona"],
+                ["Nahida","Yelan","Beidou","Kuki Shinobu"],
                 ["Nahida","Yelan","Fischl","Kuki Shinobu"],
                 ["Nahida","Yelan","Fischl","Sangonomiya Kokomi"],
                 ["Nahida","Yelan","Sucrose","Kuki Shinobu"],
@@ -435,8 +452,6 @@ class Composition:
                 ["Nahida","Yelan","Zhongli","Kuki Shinobu"],
                 ["Nahida","Yelan","Sangonomiya Kokomi","Kuki Shinobu"],
                 ["Nahida","Yelan","Traveler-D","Kuki Shinobu"],
-                ["Nahida","Xingqiu","Kaeya","Kuki Shinobu"],
-                ["Nahida","Xingqiu","Thoma","Kuki Shinobu"],
                 ["Nahida","Xingqiu","Venti","Kuki Shinobu"],
                 ["Nahida","Xingqiu","Diona","Kuki Shinobu"],
                 ["Nahida","Xingqiu","Traveler-D","Kuki Shinobu"],
@@ -450,7 +465,6 @@ class Composition:
                 ["Nahida","Xingqiu","Fischl","Kuki Shinobu"],
                 ["Nahida","Xingqiu","Fischl","Kaedehara Kazuha"],
                 ["Nahida","Xingqiu","Fischl","Sucrose"],
-                ["Nahida","Xingqiu","Fischl","Bennett"],
                 ["Nahida","Xingqiu","Fischl","Beidou"],
                 ["Nahida","Xingqiu","Kuki Shinobu","Yaoyao"],
                 ["Nahida","Barbara","Nilou","Kuki Shinobu"],
@@ -459,10 +473,12 @@ class Composition:
                 ["Nahida","Yae Miko","Xingqiu","Fischl"]
             ],
             "Hyperbloom Alhaitham": [
+                ["Alhaitham","Yelan","Zhongli","Kuki Shinobu"],
                 ["Alhaitham","Yelan","Kuki Shinobu","Yaoyao"],
                 ["Alhaitham","Yelan","Traveler-D","Kuki Shinobu"],
                 ["Alhaitham","Yelan","Xingqiu","Kuki Shinobu"],
                 ["Alhaitham","Yelan","Fischl","Zhongli"],
+                ["Alhaitham","Xingqiu","Fischl","Yaoyao"],
                 ["Alhaitham","Yelan","Nahida","Kuki Shinobu"],
                 ["Alhaitham","Xingqiu","Kaedehara Kazuha","Kuki Shinobu"],
                 ["Alhaitham","Xingqiu","Zhongli","Kuki Shinobu"],
@@ -480,22 +496,47 @@ class Composition:
             "Hyperbloom Eula": [
                 ["Eula","Xingqiu","Nahida","Kuki Shinobu"]
             ],
-            "Hyperbloom Ayaka": [
+
+            # Hyperfridge: Hyperbloom with cryo
+            "Hyperfridge Ayaka": [
+                ["Kamisato Ayaka","Raiden Shogun","Xingqiu","Nahida"],
                 ["Kamisato Ayaka","Xingqiu","Nahida","Kuki Shinobu"]
+            ],
+            "Hyperfridge Nahida": [
+                ["Nahida","Xingqiu","Kaeya","Kuki Shinobu"]
+            ],
+
+            # Curry: Pyro, electro, dendro, hydro, like soup but with vegetables
+            # Raiden/Kuki doesn't work, only Fischl/Beidou
+            "Thundering Furry": [
+                ["Razor","Xingqiu","Traveler-D","Bennett"],
+                ["Razor","Xingqiu","Nahida","Bennett"]
+            ],
+            "Nahida Curry": [
+                ["Nahida","Xingqiu","Fischl","Bennett"],
+                ["Nahida","Xingqiu","Thoma","Kuki Shinobu"]
             ],
 
             # Bloom: Dendro, anemo and hydro only
+            # Alt: Burgeon/Bloom with Bennett as the only pyro, bloom with other on-field chars
             "Bloom Nilou": [
+                ["Kamisato Ayato","Traveler-D","Kaedehara Kazuha","Bennett"],
                 ["Kamisato Ayato","Nahida","Nilou","Yaoyao"],
+                ["Kamisato Ayato","Nahida","Kaedehara Kazuha","Bennett"],
+                ["Tartaglia","Nahida","Kaedehara Kazuha","Bennett"],
+                ["Alhaitham","Nahida","Nilou","Sangonomiya Kokomi"],
+                ["Tighnari","Nilou","Nahida","Sangonomiya Kokomi"],
+                ["Tighnari","Nilou","Traveler-D","Sangonomiya Kokomi"],
+                ["Nilou","Alhaitham","Xingqiu","Yaoyao"],
                 ["Nilou","Traveler-D","Collei","Sangonomiya Kokomi"],
                 ["Nilou","Traveler-D","Collei","Barbara"],
                 ["Nilou","Traveler-D","Sangonomiya Kokomi","Yaoyao"],
                 ["Nilou","Collei","Traveler-A","Barbara"],
                 ["Nilou","Collei","Sangonomiya Kokomi","Traveler-A"],
-                ["Nilou","Xingqiu","Traveler-D","Collei"]
-            ],
-            "Bloom Nahida/Nilou": [
-                ["Alhaitham","Nahida","Nilou","Sangonomiya Kokomi"],
+                ["Nilou","Yelan","Traveler-D","Sangonomiya Kokomi"],
+                ["Nilou","Yelan","Traveler-D","Barbara"],
+                ["Nilou","Xingqiu","Traveler-D","Sangonomiya Kokomi"],
+                ["Nilou","Xingqiu","Traveler-D","Collei"],
                 ["Nahida","Yelan","Nilou","Sangonomiya Kokomi"],
                 ["Nahida","Yelan","Nilou","Barbara"],
                 ["Nahida","Yelan","Nilou","Yaoyao"],
@@ -514,34 +555,46 @@ class Composition:
                 ["Nahida","Collei","Nilou","Sangonomiya Kokomi"],
                 ["Nahida","Collei","Nilou","Barbara"]
             ],
-            "Triple Hydro Nilou": [
-                ["Nilou","Yelan","Traveler-D","Sangonomiya Kokomi"],
-                ["Nilou","Xingqiu","Traveler-D","Sangonomiya Kokomi"],
-                ["Nilou","Yelan","Traveler-D","Barbara"]
-            ],
-            "Reverse Vape Nilou": [["Nilou","Xiangling","Kaedehara Kazuha","Bennett"]],
-            "Bloom Tighnari": [
-                ["Tighnari","Nilou","Traveler-D","Sangonomiya Kokomi"],
-                ["Tighnari","Nilou","Nahida","Sangonomiya Kokomi"]
+            "Reverse Vape Nilou": [
+                ["Nilou","Xiangling","Kaedehara Kazuha","Bennett"]
             ],
 
-            # Burgeon: Dendro, Pyro, flex no hydro
-            "Burning Nahida": [["Nahida","Xiangling","Kaedehara Kazuha","Bennett"]],
+            # Burning: Dendro, Pyro, flex no hydro
+            # Alternate: Overburn
+            "Burning Quickswap": [
+                ["Raiden Shogun","Xiangling","Traveler-D","Bennett"],
+                ["Raiden Shogun","Xiangling","Collei","Bennett"]
+            ],
+            "Burning Nahida": [
+                ["Nahida","Xiangling","Raiden Shogun","Bennett"],
+                ["Nahida","Kaedehara Kazuha","Venti","Bennett"],
+                ["Nahida","Xiangling","Kaedehara Kazuha","Bennett"]
+            ],
+            "Burning Dehya": [
+                ["Dehya","Nahida","Kaedehara Kazuha","Bennett"]
+            ],
 
-            # Burgeon: Dendro, Hydro, Pyro, Anemo, no electro
+            # Burgeon: Dendro, Hydro, Pyro, flex no electro/pyro/cryo
             "Burgeon Quickswap": [
                 ["Xingqiu","Traveler-D","Kaedehara Kazuha","Bennett"]
             ],
             "Burgeon Hu Tao": [
                 ["Hu Tao","Xingqiu","Nahida","Zhongli"],
+                ["Hu Tao","Xingqiu","Nahida","Diona"],
                 ["Hu Tao","Xingqiu","Collei","Zhongli"],
                 ["Hu Tao","Xingqiu","Traveler-D","Zhongli"],
+                ["Hu Tao","Yelan","Xingqiu","Nahida"],
                 ["Hu Tao","Yelan","Nahida","Zhongli"]
             ],
             "Burgeon Klee": [
                 ["Klee","Xingqiu","Nahida","Zhongli"]
             ],
-            "Burgeon Diluc": [["Diluc","Xingqiu","Nahida","Zhongli"]],
+            "Burgeon Diluc": [
+                ["Diluc","Xingqiu","Nahida","Zhongli"]
+            ],
+            "Burgeon Dehya": [
+                ["Dehya","Yelan","Nahida","Sangonomiya Kokomi"]
+            ],
             "Burgeon Yoimiya": [
                 ["Yoimiya","Yelan","Nahida","Zhongli"],
                 ["Yoimiya","Xingqiu","Nahida","Zhongli"]
@@ -552,23 +605,16 @@ class Composition:
                 ["Nahida","Xiangling","Xingqiu","Bennett"],
                 ["Nahida","Xiangling","Xingqiu","Zhongli"]
             ],
-            "Burgeon Ayato": [
-                ["Kamisato Ayato","Traveler-D","Kaedehara Kazuha","Bennett"],
-                ["Kamisato Ayato","Nahida","Kaedehara Kazuha","Bennett"]
-            ],
-            "Burgeon Childe": [["Tartaglia","Nahida","Kaedehara Kazuha","Bennett"]],
-
-            "Burning Raiden": [
-                ["Raiden Shogun","Xiangling","Traveler-D","Bennett"],
-                ["Raiden Shogun","Xiangling","Nahida","Bennett"],
-                ["Raiden Shogun","Xiangling","Collei","Bennett"]
-            ],
 
             # Spread: Dendro main, electro, no hydro
             "Spread Tighnari": [
+                ["Tighnari","Traveler-D","Fischl","Zhongli"],
+                ["Tighnari","Yae Miko","Fischl","Kaedehara Kazuha"],
                 ["Tighnari","Yae Miko","Fischl","Yaoyao"],
                 ["Tighnari","Yae Miko","Fischl","Zhongli"],
                 ["Tighnari","Yae Miko","Kaedehara Kazuha","Zhongli"],
+                ["Tighnari","Yae Miko","Nahida","Kuki Shinobu"],
+                ["Tighnari","Yae Miko","Nahida","Fischl"],
                 ["Tighnari","Yae Miko","Nahida","Zhongli"],
                 ["Tighnari","Raiden Shogun","Nahida","Zhongli"],
                 ["Tighnari","Raiden Shogun","Yae Miko","Zhongli"],
@@ -588,11 +634,17 @@ class Composition:
                 ["Alhaitham","Nahida","Fischl","Kuki Shinobu"],
                 ["Alhaitham","Nahida","Fischl","Zhongli"],
                 ["Alhaitham","Raiden Shogun","Nahida","Zhongli"],
+                ["Alhaitham","Raiden Shogun","Nahida","Kuki Shinobu"],
+                ["Alhaitham","Raiden Shogun","Yae Miko","Zhongli"],
+                ["Alhaitham","Raiden Shogun","Traveler-D","Zhongli"],
                 ["Alhaitham","Fischl","Zhongli","Yaoyao"],
                 ["Alhaitham","Fischl","Collei","Zhongli"],
                 ["Alhaitham","Fischl","Beidou","Yaoyao"],
+                ["Alhaitham","Yae Miko","Kaedehara Kazuha","Zhongli"],
                 ["Alhaitham","Yae Miko","Zhongli","Yaoyao"],
                 ["Alhaitham","Yae Miko","Fischl","Yaoyao"],
+                ["Alhaitham","Yae Miko","Nahida","Diona"],
+                ["Alhaitham","Yae Miko","Nahida","Yaoyao"],
                 ["Alhaitham","Yae Miko","Nahida","Zhongli"],
                 ["Alhaitham","Yae Miko","Nahida","Fischl"],
                 ["Alhaitham","Yae Miko","Nahida","Kuki Shinobu"]
@@ -605,12 +657,39 @@ class Composition:
                 ["Nahida","Fischl","Lisa","Kaedehara Kazuha"],
                 ["Nahida","Fischl","Kaedehara Kazuha","Bennett"],
                 ["Nahida","Fischl","Kaedehara Kazuha","Kuki Shinobu"],
+                ["Nahida","Raiden Shogun","Venti","Zhongli"],
+                ["Nahida","Raiden Shogun","Venti","Bennett"],
+                ["Nahida","Raiden Shogun","Venti","Kuki Shinobu"],
+                ["Nahida","Raiden Shogun","Venti","Yaoyao"],
+                ["Nahida","Raiden Shogun","Kaedehara Kazuha","Kuki Shinobu"],
+                ["Nahida","Raiden Shogun","Kaedehara Kazuha","Zhongli"],
+                ["Nahida","Raiden Shogun","Kaedehara Kazuha","Bennett"],
+                ["Nahida","Raiden Shogun","Kaedehara Kazuha","Diona"],
+                ["Nahida","Raiden Shogun","Fischl","Zhongli"],
+                ["Nahida","Raiden Shogun","Fischl","Venti"],
+                ["Nahida","Raiden Shogun","Fischl","Bennett"],
+                ["Nahida","Raiden Shogun","Fischl","Kaedehara Kazuha"],
+                ["Nahida","Raiden Shogun","Fischl","Jean"],
+                ["Nahida","Raiden Shogun","Fischl","Sucrose"],
+                ["Nahida","Raiden Shogun","Kujou Sara","Zhongli"],
+                ["Nahida","Raiden Shogun","Kujou Sara","Kaedehara Kazuha"],
+                ["Nahida","Raiden Shogun","Kujou Sara","Bennett"],
+                ["Nahida","Raiden Shogun","Kujou Sara","Jean"],
+                ["Nahida","Raiden Shogun","Zhongli","Bennett"],
+                ["Nahida","Yae Miko","Raiden Shogun","Zhongli"],
+                ["Nahida","Yae Miko","Raiden Shogun","Bennett"],
+                ["Nahida","Yae Miko","Raiden Shogun","Sucrose"],
+                ["Nahida","Yae Miko","Raiden Shogun","Jean"],
+                ["Nahida","Yae Miko","Raiden Shogun","Kaedehara Kazuha"],
+                ["Nahida","Yae Miko","Raiden Shogun","Venti"],
+                ["Nahida","Yae Miko","Raiden Shogun","Yaoyao"],
                 ["Nahida","Yae Miko","Fischl","Yaoyao"],
                 ["Nahida","Yae Miko","Fischl","Zhongli"],
                 ["Nahida","Yae Miko","Fischl","Kaedehara Kazuha"],
                 ["Nahida","Yae Miko","Fischl","Jean"],
                 ["Nahida","Yae Miko","Fischl","Sucrose"],
                 ["Nahida","Yae Miko","Fischl","Bennett"],
+                ["Nahida","Yae Miko","Kaedehara Kazuha","Yaoyao"],
                 ["Nahida","Yae Miko","Kaedehara Kazuha","Kuki Shinobu"],
                 ["Nahida","Yae Miko","Kaedehara Kazuha","Bennett"],
                 ["Nahida","Yae Miko","Kaedehara Kazuha","Zhongli"],
@@ -621,14 +700,27 @@ class Composition:
             ],
 
             # Aggravate: electro main, dendro, no hydro
-            "Aggravate Heizou": [["Shikanoin Heizou","Yae Miko","Fischl","Collei"]],
-            "Aggravate Sucrose": [
-                ["Sucrose","Fischl","Beidou","Yaoyao"],
-                ["Sucrose","Traveler-D","Fischl","Beidou"]
-            ],
             "Aggravate Quickswap": [
+                # Alt: Aggravate Raiden, Sucrose
+                ["Sucrose","Fischl","Beidou","Yaoyao"],
+                ["Sucrose","Traveler-D","Fischl","Beidou"],
+                ["Raiden Shogun","Traveler-D","Sucrose","Yaoyao"],
+                ["Raiden Shogun","Traveler-D","Zhongli","Bennett"],
+                ["Raiden Shogun","Traveler-D","Kaedehara Kazuha","Bennett"],
+                ["Raiden Shogun","Traveler-D","Fischl","Zhongli"],
+                ["Raiden Shogun","Traveler-D","Fischl","Venti"],
+                ["Raiden Shogun","Traveler-D","Kujou Sara","Bennett"],
+                ["Raiden Shogun","Kujou Sara","Kaedehara Kazuha","Yaoyao"],
+                ["Raiden Shogun","Collei","Kaedehara Kazuha","Bennett"],
                 ["Traveler-D","Fischl","Beidou","Kaedehara Kazuha"],
                 ["Traveler-D","Fischl","Kaedehara Kazuha","Bennett"]
+            ],
+            "Aggravate Heizou": [
+                ["Shikanoin Heizou","Yae Miko","Fischl","Collei"]
+            ],
+            "Aggravate Lisa": [
+                ["Lisa","Traveler-D","Fischl","Sucrose"],
+                ["Lisa","Nahida","Fischl","Sucrose"]
             ],
             "Aggravate Keqing": [
                 ["Keqing","Traveler-D","Fischl","Jean"],
@@ -645,6 +737,7 @@ class Composition:
                 ["Keqing","Nahida","Fischl","Venti"],
                 ["Keqing","Nahida","Fischl","Kuki Shinobu"],
                 ["Keqing","Nahida","Fischl","Jean"],
+                ["Keqing","Nahida","Fischl","Yaoyao"],
                 ["Keqing","Nahida","Venti","Bennett"],
                 ["Keqing","Nahida","Kaedehara Kazuha","Zhongli"],
                 ["Keqing","Nahida","Kaedehara Kazuha","Bennett"],
@@ -660,12 +753,14 @@ class Composition:
                 ["Keqing","Fischl","Collei","Sucrose"],
                 ["Keqing","Fischl","Collei","Zhongli"]
             ],
-            "Aggravate Lisa": [
-                ["Lisa","Traveler-D","Fischl","Sucrose"],
-                ["Lisa","Nahida","Fischl","Sucrose"]
-            ],
             "Aggravate Yae": [
+                ["Raiden Shogun","Yae Miko","Venti","Yaoyao"],
+                ["Raiden Shogun","Yae Miko","Kaedehara Kazuha","Yaoyao"],
+                ["Raiden Shogun","Yae Miko","Traveler-D","Zhongli"],
+                ["Raiden Shogun","Yae Miko","Traveler-D","Bennett"],
+                ["Raiden Shogun","Yae Miko","Traveler-D","Kaedehara Kazuha"],
                 ["Yae Miko","Fischl","Kaedehara Kazuha","Yaoyao"],
+                ["Yae Miko","Fischl","Sucrose","Yaoyao"],
                 ["Yae Miko","Traveler-D","Fischl","Zhongli"],
                 ["Yae Miko","Traveler-D","Fischl","Sucrose"],
                 ["Yae Miko","Traveler-D","Fischl","Kaedehara Kazuha"],
@@ -675,44 +770,6 @@ class Composition:
                 ["Yae Miko","Nahida","Fischl","Kaedehara Kazuha"],
                 ["Yae Miko","Nahida","Sucrose","Bennett"],
                 ["Yae Miko","Nahida","Kaedehara Kazuha","Kuki Shinobu"]
-            ],
-            "Aggravate Raiden": [
-                ["Raiden Shogun","Traveler-D","Zhongli","Bennett"],
-                ["Raiden Shogun","Traveler-D","Kaedehara Kazuha","Bennett"],
-                ["Raiden Shogun","Traveler-D","Fischl","Zhongli"],
-                ["Raiden Shogun","Traveler-D","Fischl","Venti"],
-                ["Raiden Shogun","Traveler-D","Kujou Sara","Bennett"],
-                ["Raiden Shogun","Nahida","Venti","Zhongli"],
-                ["Raiden Shogun","Nahida","Venti","Bennett"],
-                ["Raiden Shogun","Nahida","Venti","Kuki Shinobu"],
-                ["Raiden Shogun","Nahida","Venti","Yaoyao"],
-                ["Raiden Shogun","Nahida","Kaedehara Kazuha","Kuki Shinobu"],
-                ["Raiden Shogun","Nahida","Kaedehara Kazuha","Zhongli"],
-                ["Raiden Shogun","Nahida","Kaedehara Kazuha","Bennett"],
-                ["Raiden Shogun","Nahida","Kaedehara Kazuha","Diona"],
-                ["Raiden Shogun","Nahida","Fischl","Zhongli"],
-                ["Raiden Shogun","Nahida","Fischl","Venti"],
-                ["Raiden Shogun","Nahida","Fischl","Bennett"],
-                ["Raiden Shogun","Nahida","Fischl","Kaedehara Kazuha"],
-                ["Raiden Shogun","Nahida","Fischl","Jean"],
-                ["Raiden Shogun","Nahida","Fischl","Sucrose"],
-                ["Raiden Shogun","Nahida","Kujou Sara","Zhongli"],
-                ["Raiden Shogun","Nahida","Kujou Sara","Kaedehara Kazuha"],
-                ["Raiden Shogun","Nahida","Kujou Sara","Bennett"],
-                ["Raiden Shogun","Nahida","Kujou Sara","Jean"],
-                ["Raiden Shogun","Yae Miko","Venti","Yaoyao"],
-                ["Raiden Shogun","Yae Miko","Traveler-D","Zhongli"],
-                ["Raiden Shogun","Yae Miko","Traveler-D","Bennett"],
-                ["Raiden Shogun","Yae Miko","Traveler-D","Kaedehara Kazuha"],
-                ["Raiden Shogun","Yae Miko","Nahida","Zhongli"],
-                ["Raiden Shogun","Yae Miko","Nahida","Bennett"],
-                ["Raiden Shogun","Yae Miko","Nahida","Sucrose"],
-                ["Raiden Shogun","Yae Miko","Nahida","Jean"],
-                ["Raiden Shogun","Yae Miko","Nahida","Kaedehara Kazuha"],
-                ["Raiden Shogun","Yae Miko","Nahida","Venti"],
-                ["Raiden Shogun","Yae Miko","Nahida","Yaoyao"],
-                ["Raiden Shogun","Kujou Sara","Kaedehara Kazuha","Yaoyao"],
-                ["Raiden Shogun","Collei","Kaedehara Kazuha","Bennett"]
             ],
             "Aggravate Cyno": [
                 ["Cyno","Nahida","Beidou","Zhongli"],
@@ -732,8 +789,8 @@ class Composition:
                 ["Cyno","Yae Miko","Nahida","Zhongli"]
             ],
 
-            "Morgana": [
-            # Ganyu and Diona/Zhongli/Layla, no Shenhe/Rosaria/Ayaka
+            "Freeze Ganyu": [
+            # Alt: Morgana
                 ["Ganyu","Mona","Venti","Layla"],
                 ["Ganyu","Mona","Venti","Diona"],
                 ["Ganyu","Mona","Kaedehara Kazuha","Diona"],
@@ -744,45 +801,10 @@ class Composition:
                 ["Ganyu","Kamisato Ayato","Kaedehara Kazuha","Diona"],
                 ["Ganyu","Sangonomiya Kokomi","Venti","Diona"],
                 ["Ganyu","Sangonomiya Kokomi","Kaedehara Kazuha","Zhongli"],
-                ["Ganyu","Sangonomiya Kokomi","Kaedehara Kazuha","Diona"]
-            ],
-            "Moryana": [
-            # Ayaka and Diona/Zhongli/Layla, no Shenhe/Rosaria/Ganyu
-                ["Kamisato Ayaka","Mona","Venti","Diona"],
-                ["Kamisato Ayaka","Mona","Kaedehara Kazuha","Diona"],
-                ["Kamisato Ayaka","Mona","Sucrose","Diona"],
-                ["Kamisato Ayaka","Mona","Zhongli","Diona"],
-                ["Kamisato Ayaka","Mona","Venti","Zhongli"],
-                ["Kamisato Ayaka","Xingqiu","Kaedehara Kazuha","Diona"],
-                ["Kamisato Ayaka","Xingqiu","Venti","Diona"],
-                ["Kamisato Ayaka","Xingqiu","Sucrose","Diona"],
-                ["Kamisato Ayaka","Yelan","Kaedehara Kazuha","Diona"],
-                ["Kamisato Ayaka","Yelan","Venti","Diona"],
-                ["Kamisato Ayaka","Yelan","Sucrose","Diona"],
-                ["Kamisato Ayaka","Sangonomiya Kokomi","Kaedehara Kazuha","Diona"],
-                ["Kamisato Ayaka","Sangonomiya Kokomi","Kaedehara Kazuha","Zhongli"],
-                ["Kamisato Ayaka","Sangonomiya Kokomi","Kaedehara Kazuha","Layla"],
-                ["Kamisato Ayaka","Sangonomiya Kokomi","Venti","Diona"],
-                ["Kamisato Ayaka","Kamisato Ayato","Venti","Diona"],
-                ["Kamisato Ayaka","Kamisato Ayato","Kaedehara Kazuha","Diona"],
-                ["Kamisato Ayaka","Kamisato Ayato","Sucrose","Diona"]
-            ],
-            "Freeze Ayaka/Ganyu": [
-            # Ayaka and Ganyu, no Rosaria/Shenhe
-                ["Kamisato Ayaka","Yelan","Ganyu","Sangonomiya Kokomi"],
-                ["Kamisato Ayaka","Ganyu","Sangonomiya Kokomi","Venti"],
-                ["Kamisato Ayaka","Ganyu","Sangonomiya Kokomi","Sucrose"],
-                ["Kamisato Ayaka","Ganyu","Sangonomiya Kokomi","Kaedehara Kazuha"],
-                ["Kamisato Ayaka","Ganyu","Sangonomiya Kokomi","Zhongli"],
-                ["Kamisato Ayaka","Ganyu","Mona","Venti"],
-                ["Kamisato Ayaka","Ganyu","Mona","Sucrose"],
-                ["Kamisato Ayaka","Ganyu","Mona","Kaedehara Kazuha"],
-                ["Kamisato Ayaka","Ganyu","Mona","Zhongli"]
-            ],
-            "Freeze Ganyu": [
-            # Ganyu and Rosaria/Shenhe, no Ayaka
+                ["Ganyu","Sangonomiya Kokomi","Kaedehara Kazuha","Diona"],
                 ["Ganyu","Shenhe","Mona","Venti"],
                 ["Ganyu","Shenhe","Mona","Kaedehara Kazuha"],
+                ["Ganyu","Shenhe","Mona","Diona"],
                 ["Ganyu","Shenhe","Sangonomiya Kokomi","Venti"],
                 ["Ganyu","Shenhe","Sangonomiya Kokomi","Kaedehara Kazuha"],
                 ["Ganyu","Kaeya","Sangonomiya Kokomi","Venti"],
@@ -793,18 +815,29 @@ class Composition:
                 ["Ganyu","Rosaria","Kaedehara Kazuha","Zhongli"],
                 ["Ganyu","Ningguang","Sangonomiya Kokomi","Kaedehara Kazuha"]
             ],
-            "Ayaka Fridge": [
-                ["Kamisato Ayaka","Collei","Sangonomiya Kokomi","Kaedehara Kazuha"]
-            ],
-            "Ganyu Fridge": [
-                ["Ganyu","Nahida","Sangonomiya Kokomi","Venti"]
-            ],
             "Freeze Ayaka": [
-            # Ayaka and Rosaria/Shenhe, no Ganyu
+            # Alt: Moryana, Freeze Ayaka/Ayato, Ayaka/Ganyu
+                ["Kamisato Ayaka","Sangonomiya Kokomi","Kaedehara Kazuha","Diona"],
+                ["Kamisato Ayaka","Sangonomiya Kokomi","Kaedehara Kazuha","Zhongli"],
+                ["Kamisato Ayaka","Sangonomiya Kokomi","Venti","Diona"],
+                ["Kamisato Ayaka","Kamisato Ayato","Venti","Diona"],
+                ["Kamisato Ayaka","Kamisato Ayato","Kaedehara Kazuha","Diona"],
+                ["Kamisato Ayaka","Kamisato Ayato","Sucrose","Diona"],
+                ["Kamisato Ayaka","Ganyu","Shenhe","Sangonomiya Kokomi"],
+                ["Kamisato Ayaka","Ganyu","Sangonomiya Kokomi","Venti"],
+                ["Kamisato Ayaka","Ganyu","Sangonomiya Kokomi","Sucrose"],
+                ["Kamisato Ayaka","Ganyu","Sangonomiya Kokomi","Kaedehara Kazuha"],
+                ["Kamisato Ayaka","Ganyu","Sangonomiya Kokomi","Zhongli"],
+                ["Kamisato Ayaka","Ganyu","Mona","Venti"],
+                ["Kamisato Ayaka","Ganyu","Mona","Sucrose"],
+                ["Kamisato Ayaka","Ganyu","Mona","Kaedehara Kazuha"],
+                ["Kamisato Ayaka","Ganyu","Mona","Zhongli"],
+                ["Kamisato Ayaka","Shenhe","Sangonomiya Kokomi","Diona"],
                 ["Kamisato Ayaka","Shenhe","Sangonomiya Kokomi","Kaedehara Kazuha"],
                 ["Kamisato Ayaka","Shenhe","Sangonomiya Kokomi","Venti"],
                 ["Kamisato Ayaka","Shenhe","Sangonomiya Kokomi","Sucrose"],
                 ["Kamisato Ayaka","Shenhe","Sangonomiya Kokomi","Zhongli"],
+                ["Kamisato Ayaka","Shenhe","Mona","Diona"],
                 ["Kamisato Ayaka","Shenhe","Mona","Venti"],
                 ["Kamisato Ayaka","Shenhe","Mona","Sucrose"],
                 ["Kamisato Ayaka","Shenhe","Mona","Zhongli"],
@@ -815,59 +848,53 @@ class Composition:
                 ["Kamisato Ayaka","Rosaria","Sangonomiya Kokomi","Venti"],
                 ["Kamisato Ayaka","Rosaria","Sangonomiya Kokomi","Kaedehara Kazuha"],
                 ["Kamisato Ayaka","Rosaria","Sangonomiya Kokomi","Zhongli"],
+                ["Kamisato Ayaka","Rosaria","Mona","Diona"],
                 ["Kamisato Ayaka","Rosaria","Mona","Venti"],
                 ["Kamisato Ayaka","Rosaria","Mona","Kaedehara Kazuha"],
+                ["Kamisato Ayaka","Mona","Venti","Diona"],
+                ["Kamisato Ayaka","Mona","Kaedehara Kazuha","Diona"],
+                ["Kamisato Ayaka","Mona","Sucrose","Diona"],
+                ["Kamisato Ayaka","Mona","Zhongli","Diona"],
+                ["Kamisato Ayaka","Mona","Venti","Zhongli"],
+                ["Kamisato Ayaka","Xingqiu","Kaedehara Kazuha","Diona"],
                 ["Kamisato Ayaka","Xingqiu","Shenhe","Zhongli"],
                 ["Kamisato Ayaka","Xingqiu","Rosaria","Zhongli"],
+                ["Kamisato Ayaka","Yelan","Ganyu","Sangonomiya Kokomi"],
+                ["Kamisato Ayaka","Yelan","Xingqiu","Shenhe"],
+                ["Kamisato Ayaka","Yelan","Kaedehara Kazuha","Diona"],
+                ["Kamisato Ayaka","Yelan","Kaedehara Kazuha","Layla"],
                 ["Kamisato Ayaka","Yelan","Shenhe","Zhongli"],
                 ["Kamisato Ayaka","Yelan","Shenhe","Venti"],
                 ["Kamisato Ayaka","Yelan","Shenhe","Sangonomiya Kokomi"],
                 ["Kamisato Ayaka","Yelan","Shenhe","Kaedehara Kazuha"],
                 ["Kamisato Ayaka","Yelan","Shenhe","Jean"],
-                ["Kamisato Ayaka","Yelan","Rosaria","Zhongli"]
+                ["Kamisato Ayaka","Yelan","Rosaria","Kaedehara Kazuha"],
+                ["Kamisato Ayaka","Yelan","Rosaria","Zhongli"],
+                ["Kamisato Ayaka","Barbara","Kaedehara Kazuha","Diona"]
             ],
-            "Triple Cryo": [
-            # 3 cryo and hydro, no anemo
-                ["Kamisato Ayaka","Shenhe","Mona","Diona"],
-                ["Kamisato Ayaka","Shenhe","Sangonomiya Kokomi","Diona"],
-                ["Kamisato Ayaka","Rosaria","Mona","Diona"],
-                ["Kamisato Ayaka","Ganyu","Shenhe","Sangonomiya Kokomi"],
-                ["Ganyu","Shenhe","Mona","Diona"]
+            "Ayaka Fridge": [
+                ["Kamisato Ayaka","Collei","Sangonomiya Kokomi","Kaedehara Kazuha"]
+            ],
+            "Ganyu Fridge": [
+                ["Ganyu","Nahida","Sangonomiya Kokomi","Venti"]
             ],
             "Mono Cryo": [
-            # 3 cryo, anemo
+            # Alt: 3 cryo and flex no anemo/hydro, Ganyu Double Geo, 2 cryo, freeze kokomi
+                ["Kamisato Ayaka","Ganyu","Shenhe","Kaedehara Kazuha"],
+                ["Kamisato Ayaka","Ganyu","Shenhe","Diona"],
+                ["Kamisato Ayaka","Ganyu","Shenhe","Zhongli"],
+                ["Kamisato Ayaka","Ganyu","Kaedehara Kazuha","Diona"],
+                ["Kamisato Ayaka","Shenhe","Kaedehara Kazuha","Diona"],
                 ["Ganyu","Kaedehara Kazuha","Albedo","Zhongli"],
                 ["Ganyu","Shenhe","Kaedehara Kazuha","Zhongli"],
                 ["Kamisato Ayaka","Rosaria","Kaedehara Kazuha","Zhongli"],
-                ["Kamisato Ayaka","Ganyu","Shenhe","Zhongli"],
+                ["Kamisato Ayaka","Rosaria","Kaedehara Kazuha","Diona"],
                 ["Kamisato Ayaka","Ganyu","Kaedehara Kazuha","Zhongli"],
-                ["Kamisato Ayaka","Shenhe","Kaedehara Kazuha","Diona"],
-                ["Kamisato Ayaka","Shenhe","Kaedehara Kazuha","Bennett"]
-            ],
-
-            "Tapu Koko": [
-            # Kokomi, electro
-                ["Sangonomiya Kokomi","Yelan","Fischl","Sucrose"],
-                ["Sangonomiya Kokomi","Yae Miko","Fischl","Sucrose"],
-                ["Sangonomiya Kokomi","Fischl","Beidou","Sucrose"],
-                ["Sangonomiya Kokomi","Fischl","Beidou","Venti"],
-                ["Sangonomiya Kokomi","Fischl","Beidou","Kaedehara Kazuha"],
-                ["Yae Miko","Fischl","Sangonomiya Kokomi","Kaedehara Kazuha"],
-                ["Raiden Shogun","Yae Miko","Yelan","Sangonomiya Kokomi"],
-                ["Raiden Shogun","Yae Miko","Sangonomiya Kokomi","Sucrose"],
-                ["Raiden Shogun","Yae Miko","Sangonomiya Kokomi","Kaedehara Kazuha"],
-                ["Raiden Shogun","Yae Miko","Xingqiu","Sangonomiya Kokomi"],
-                ["Raiden Shogun","Kujou Sara","Sangonomiya Kokomi","Kaedehara Kazuha"],
-                ["Raiden Shogun","Fischl","Sangonomiya Kokomi","Kaedehara Kazuha"]
-            ],
-            "Sucrose Taser": [
-                ["Sucrose","Xingqiu","Fischl","Beidou"],
-                ["Sucrose","Yelan","Fischl","Beidou"],
-                ["Sucrose","Yelan","Xingqiu","Fischl"],
-                ["Sucrose","Fischl","Beidou","Barbara"]
+                ["Sangonomiya Kokomi","Shenhe","Rosaria","Kaedehara Kazuha"]
             ],
 
             "Raiden National Team": [
+            # Alt: Vape Kokomi
                 ["Xiangling","Xingqiu","Kaedehara Kazuha","Bennett"],
                 ["Xiangling","Xingqiu","Sucrose","Bennett"],
                 ["Xiangling","Xingqiu","Venti","Bennett"],
@@ -888,14 +915,21 @@ class Composition:
                 ["Ningguang","Xiangling","Xingqiu","Bennett"],
                 ["Xiangling","Xingqiu","Albedo","Bennett"],
                 ["Kamisato Ayaka","Xiangling","Xingqiu","Bennett"],
+                ["Sangonomiya Kokomi","Xiangling","Kaedehara Kazuha","Bennett"],
                 ["Wanderer","Xiangling","Xingqiu","Bennett"]
             ],
             "Raiden Soup": [
             # Raiden, hydro, anemo, pyro
+            # Alt: double hydro
+                ["Raiden Shogun","Kamisato Ayato","Venti","Bennett"],
+                ["Raiden Shogun","Kamisato Ayato","Kaedehara Kazuha","Bennett"],
+                ["Raiden Shogun","Kamisato Ayato","Sucrose","Bennett"],
                 ["Raiden Shogun","Sangonomiya Kokomi","Kaedehara Kazuha","Bennett"],
                 ["Raiden Shogun","Xingqiu","Venti","Bennett"],
                 ["Raiden Shogun","Xingqiu","Kaedehara Kazuha","Bennett"],
                 ["Raiden Shogun","Xingqiu","Sucrose","Bennett"],
+                ["Raiden Shogun","Xingqiu","Jean","Bennett"],
+                ["Raiden Shogun","Yelan","Jean","Bennett"],
                 ["Raiden Shogun","Yelan","Venti","Bennett"],
                 ["Raiden Shogun","Yelan","Kaedehara Kazuha","Bennett"],
                 ["Raiden Shogun","Yelan","Sucrose","Bennett"],
@@ -909,21 +943,17 @@ class Composition:
             # Raiden, Sara, anemo, Bennett
                 ["Raiden Shogun","Kujou Sara","Kaedehara Kazuha","Bennett"],
                 ["Raiden Shogun","Kujou Sara","Sucrose","Bennett"],
-                ["Raiden Shogun","Kujou Sara","Venti","Bennett"]
-            ],
-            "Raiden Sunfire": [
+                ["Raiden Shogun","Kujou Sara","Venti","Bennett"],
                 ["Raiden Shogun","Kujou Sara","Jean","Bennett"],
-                ["Raiden Shogun","Xingqiu","Jean","Bennett"]
-            ],
-            "Raikou": [
-            # Raiden, Yae, anemo, Bennett
-                ["Raiden Shogun","Yae Miko","Kaedehara Kazuha","Bennett"],
-                ["Raiden Shogun","Yae Miko","Sucrose","Bennett"],
-                ["Raiden Shogun","Yae Miko","Venti","Bennett"]
+                ["Raiden Shogun","Kujou Sara","Zhongli","Bennett"],
+                ["Raiden Shogun","Fischl","Kaedehara Kazuha","Bennett"],
+                ["Raiden Shogun","Venti","Zhongli","Bennett"],
+                ["Raiden Shogun","Kaedehara Kazuha","Zhongli","Bennett"]
             ],
             "Raiden Taser": [
-            # Raiden, hydro, no other suitable comps (dendro, sunfire, anemo+pyro, 2 hydro)
+            # Raiden, hydro, no other suitable comps (dendro, sunfire, anemo+pyro)
             # If there's Kokomi, put in Tapu Koko
+            # Alt: Double Hydro
                 ["Raiden Shogun","Yae Miko","Xingqiu","Sucrose"],
                 ["Raiden Shogun","Yae Miko","Xingqiu","Venti"],
                 ["Raiden Shogun","Yae Miko","Xingqiu","Bennett"],
@@ -935,10 +965,13 @@ class Composition:
                 ["Raiden Shogun","Xingqiu","Fischl","Bennett"],
                 ["Raiden Shogun","Xingqiu","Kujou Sara","Kaedehara Kazuha"],
                 ["Raiden Shogun","Xingqiu","Kujou Sara","Bennett"],
-                ["Raiden Shogun","Xingqiu","Sucrose","Barbara"],
                 ["Raiden Shogun","Xingqiu","Kaedehara Kazuha","Zhongli"],
                 ["Raiden Shogun","Xingqiu","Venti","Zhongli"],
+                ["Raiden Shogun","Xingqiu","Venti","Barbara"],
+                ["Raiden Shogun","Xingqiu","Sucrose","Barbara"],
                 ["Raiden Shogun","Xingqiu","Traveler-A","Zhongli"],
+                ["Raiden Shogun","Xingqiu","Mona","Bennett"],
+                ["Raiden Shogun","Xingqiu","Kamisato Ayato","Bennett"],
                 ["Raiden Shogun","Yelan","Fischl","Sucrose"],
                 ["Raiden Shogun","Yelan","Fischl","Bennett"],
                 ["Raiden Shogun","Yelan","Kujou Sara","Bennett"],
@@ -946,38 +979,23 @@ class Composition:
                 ["Raiden Shogun","Yelan","Kujou Sara","Kaedehara Kazuha"],
                 ["Raiden Shogun","Yelan","Kujou Sara","Venti"],
                 ["Raiden Shogun","Yelan","Kaedehara Kazuha","Zhongli"],
+                ["Raiden Shogun","Yelan","Kaedehara Kazuha","Diona"],
                 ["Raiden Shogun","Yelan","Sucrose","Barbara"],
                 ["Raiden Shogun","Yelan","Venti","Zhongli"],
-                ["Raiden Shogun","Yelan","Jean","Kaedehara Kazuha"],
-            ],
-            # Yae Taser: if there's kokomi, choose tapu koko instead
-            "Double Hydro Raiden": [
-            # Raiden, 2 hydro
-                ["Raiden Shogun","Xingqiu","Mona","Bennett"],
-                ["Raiden Shogun","Xingqiu","Sangonomiya Kokomi","Venti"],
-                ["Raiden Shogun","Xingqiu","Kamisato Ayato","Bennett"],
-                ["Raiden Shogun","Xingqiu","Venti","Barbara"],
-                ["Raiden Shogun","Xingqiu","Sucrose","Barbara"],
-                ["Raiden Shogun","Yelan","Mona","Bennett"],
-                ["Raiden Shogun","Yelan","Sangonomiya Kokomi","Venti"],
-                ["Raiden Shogun","Yelan","Sangonomiya Kokomi","Kaedehara Kazuha"],
-                ["Raiden Shogun","Yelan","Kamisato Ayato","Bennett"],
                 ["Raiden Shogun","Yelan","Venti","Barbara"],
                 ["Raiden Shogun","Yelan","Sucrose","Barbara"],
+                ["Raiden Shogun","Yelan","Jean","Kaedehara Kazuha"],
+                ["Raiden Shogun","Yelan","Mona","Bennett"],
+                ["Raiden Shogun","Yelan","Kamisato Ayato","Bennett"],
                 ["Raiden Shogun","Yelan","Xingqiu","Jean"],
                 ["Raiden Shogun","Yelan","Xingqiu","Venti"],
                 ["Raiden Shogun","Yelan","Xingqiu","Zhongli"],
                 ["Raiden Shogun","Yelan","Xingqiu","Kaedehara Kazuha"],
                 ["Raiden Shogun","Yelan","Xingqiu","Bennett"]
             ],
+            # Yae Taser: if there's kokomi, choose tapu koko instead
             "Overvape Raiden/Ayato": [
                 ["Raiden Shogun","Kamisato Ayato","Xiangling","Bennett"]
-            ],
-            "PosEidon": [
-            # Raiden, Ayato, anemo, Bennett
-                ["Raiden Shogun","Kamisato Ayato","Venti","Bennett"],
-                ["Raiden Shogun","Kamisato Ayato","Kaedehara Kazuha","Bennett"],
-                ["Raiden Shogun","Kamisato Ayato","Sucrose","Bennett"]
             ],
             "Overload Raiden": [
             # Raiden, Xiangling, Bennett, no hydro
@@ -989,18 +1007,19 @@ class Composition:
                 ["Raiden Shogun","Xiangling","Kujou Sara","Bennett"],
                 ["Raiden Shogun","Xiangling","Zhongli","Bennett"]
             ],
+            "Raikou": [
+            # Raiden, Yae, anemo, Bennett
+                ["Raiden Shogun","Yae Miko","Kaedehara Kazuha","Bennett"],
+                ["Raiden Shogun","Yae Miko","Sucrose","Bennett"],
+                ["Raiden Shogun","Yae Miko","Venti","Bennett"]
+            ],
             "Mono Electro": [
             # electro and anemo only
                 ["Raiden Shogun","Yae Miko","Jean","Venti"],
                 ["Raiden Shogun","Yae Miko","Kujou Sara","Jean"],
                 ["Raiden Shogun","Yae Miko","Kujou Sara","Kaedehara Kazuha"],
                 ["Raiden Shogun","Yae Miko","Kaedehara Kazuha","Zhongli"],
-                ["Raiden Shogun","Yae Miko","Venti","Zhongli"],
-                ["Raiden Shogun","Fischl","Kaedehara Kazuha","Bennett"],
-                ["Raiden Shogun","Kujou Sara","Zhongli","Bennett"],
-                ["Raiden Shogun","Venti","Albedo","Zhongli"],
-                ["Raiden Shogun","Venti","Zhongli","Bennett"],
-                ["Raiden Shogun","Kaedehara Kazuha","Zhongli","Bennett"]
+                ["Raiden Shogun","Yae Miko","Venti","Zhongli"]
             ],
             "Wanderer Hypercarry": [
                 # No reactions
@@ -1020,6 +1039,7 @@ class Composition:
                 ["Wanderer","Kaedehara Kazuha","Zhongli","Bennett"],
                 ["Wanderer","Yelan","Zhongli","Bennett"],
                 ["Wanderer","Xiangling","Zhongli","Bennett"],
+                ["Wanderer","Venti","Zhongli","Bennett"],
                 ["Wanderer","Venti","Albedo","Zhongli"]
             ],
             "Double Geo Xiao": [
@@ -1029,12 +1049,16 @@ class Composition:
                 ["Xiao","Venti","Albedo","Zhongli"],
                 ["Xiao","Albedo","Zhongli","Bennett"]
             ],
-            "Xiao Succ Benny Dong": [
+            "Xiao Hypercarry": [
+            # Alt: xiao succ benny dong, sunfire, 3 anemo
                 ["Xiao","Faruzan","Bennett","Zhongli"],
                 ["Xiao","Sucrose","Bennett","Zhongli"],
                 ["Xiao","Kaedehara Kazuha","Bennett","Zhongli"],
                 ["Xiao","Venti","Bennett","Zhongli"],
-                ["Xiao","Jean","Bennett","Zhongli"]
+                ["Xiao","Jean","Bennett","Zhongli"],
+                ["Xiao","Faruzan","Kaedehara Kazuha","Bennett"],
+                ["Xiao","Faruzan","Jean","Bennett"],
+                ["Xiao","Faruzan","Jean","Zhongli"]
             ],
             "Double Pyro Xiao": [
                 ["Xiao","Sucrose","Xiangling","Bennett"],
@@ -1042,21 +1066,19 @@ class Composition:
                 ["Xiao","Xiangling","Venti","Bennett"],
                 ["Xiao","Xiangling","Kaedehara Kazuha","Bennett"]
             ],
-            "Triple Anemo Xiao": [
-                ["Xiao","Faruzan","Kaedehara Kazuha","Bennett"],
-                ["Xiao","Faruzan","Jean","Zhongli"]
+            "Xiao/Raiden Dual Carry": [
+                ["Xiao","Raiden Shogun","Xiangling","Bennett"],
+                ["Xiao","Raiden Shogun","Zhongli","Bennett"]
             ],
-            "Xiao/Raiden Dual Carry": [["Xiao","Raiden Shogun","Zhongli","Bennett"]],
             "Cyno/Raiden Dual Carry": [
                 ["Cyno","Raiden Shogun","Traveler-D","Zhongli"],
                 ["Cyno","Raiden Shogun","Nahida","Zhongli"]
             ],
             "Mono Geo Itto": [
+            # Alt: 3 geo
                 ["Arataki Itto","Gorou","Albedo","Zhongli"],
                 ["Arataki Itto","Traveler-G","Gorou","Zhongli"],
-                ["Arataki Itto","Ningguang","Gorou","Zhongli"]
-            ],
-            "Triple Geo Itto": [
+                ["Arataki Itto","Ningguang","Gorou","Zhongli"],
                 ["Arataki Itto","Albedo","Zhongli","Bennett"],
                 ["Arataki Itto","Ningguang","Gorou","Qiqi"],
                 ["Arataki Itto","Gorou","Kaedehara Kazuha","Zhongli"],
@@ -1070,17 +1092,21 @@ class Composition:
                 ["Arataki Itto","Gorou","Sangonomiya Kokomi","Zhongli"]
             ],
             "Mono Geo Noelle": [
+            # Alt: 3 geo
                 ["Noelle","Gorou","Albedo","Zhongli"],
-                ["Noelle","Yun Jin","Gorou","Albedo"]
-            ],
-            "Triple Geo Noelle": [
+                ["Noelle","Yun Jin","Gorou","Albedo"],
                 ["Noelle","Yun Jin","Gorou","Fischl"],
                 ["Noelle","Yelan","Gorou","Albedo"],
                 ["Noelle","Yelan","Yun Jin","Gorou"],
+                ["Noelle","Gorou","Albedo","Sucrose"],
                 ["Noelle","Gorou","Fischl","Albedo"]
             ],
-            "Triple Geo Ningguang": [["Ningguang","Albedo","Zhongli","Bennett"]],
-            "Double Geo Double Pyro": [["Ningguang","Xiangling","Zhongli","Bennett"]],
+            "Triple Geo Ningguang": [
+                ["Ningguang","Albedo","Zhongli","Bennett"]
+            ],
+            "Double Geo Double Pyro": [
+                ["Ningguang","Xiangling","Zhongli","Bennett"]
+            ],
             "Double Geo Hu Tao": [
                 ["Hu Tao","Xingqiu","Albedo","Zhongli"],
                 ["Hu Tao","Xingqiu","Ningguang","Zhongli"],
@@ -1089,6 +1115,7 @@ class Composition:
                 ["Hu Tao","Yelan","Ningguang","Zhongli"]
             ],
             "Double Hydro Hu Tao": [
+                ["Hu Tao","Yelan","Xingqiu","Yanfei"],
                 ["Hu Tao","Yelan","Xingqiu","Jean"],
                 ["Hu Tao","Yelan","Xingqiu","Kaedehara Kazuha"],
                 ["Hu Tao","Yelan","Xingqiu","Sucrose"],
@@ -1116,44 +1143,47 @@ class Composition:
                 ["Hu Tao","Yelan","Rosaria","Diona"],
                 ["Hu Tao","Yelan","Rosaria","Zhongli"]
             ],
-            "VV Vape Hu Tao": [
-            # Hu Tao, Xingqiu, anemo, pyro
-                ["Hu Tao","Xingqiu","Sucrose","Bennett"],
-                ["Hu Tao","Xingqiu","Sucrose","Thoma"],
-                ["Hu Tao","Xingqiu","Sucrose","Yanfei"],
-                ["Hu Tao","Xingqiu","Kaedehara Kazuha","Thoma"],
-                ["Hu Tao","Xingqiu","Amber","Kaedehara Kazuha"],
-                ["Hu Tao","Yelan","Sucrose","Bennett"],
-                ["Hu Tao","Yelan","Sucrose","Thoma"]
-            ],
             "Vape Hu Tao": [
             # Hu Tao, Xingqiu, no other suitable comps
-                ["Hu Tao","Xingqiu","Sucrose","Zhongli"],
-                ["Hu Tao","Xingqiu","Sucrose","Diona"],
-                ["Hu Tao","Xingqiu","Kaedehara Kazuha","Zhongli"],
-                ["Hu Tao","Xingqiu","Kaedehara Kazuha","Bennett"],
-                ["Hu Tao","Xingqiu","Kaedehara Kazuha","Diona"],
+            # Alt: double/triple pyro, vv vape
                 ["Hu Tao","Xingqiu","Albedo","Diona"],
                 ["Hu Tao","Xingqiu","Venti","Zhongli"],
                 ["Hu Tao","Xingqiu","Zhongli","Bennett"],
                 ["Hu Tao","Xingqiu","Yun Jin","Zhongli"],
+                ["Hu Tao","Xingqiu","Sucrose","Zhongli"],
+                ["Hu Tao","Xingqiu","Sucrose","Diona"],
+                ["Hu Tao","Xingqiu","Sucrose","Bennett"],
+                ["Hu Tao","Xingqiu","Sucrose","Thoma"],
+                ["Hu Tao","Xingqiu","Sucrose","Yanfei"],
+                ["Hu Tao","Xingqiu","Kaedehara Kazuha","Zhongli"],
+                ["Hu Tao","Xingqiu","Kaedehara Kazuha","Bennett"],
+                ["Hu Tao","Xingqiu","Kaedehara Kazuha","Diona"],
+                ["Hu Tao","Xingqiu","Kaedehara Kazuha","Thoma"],
+                ["Hu Tao","Xingqiu","Amber","Kaedehara Kazuha"],
+                ["Hu Tao","Yelan","Sucrose","Bennett"],
+                ["Hu Tao","Yelan","Sucrose","Thoma"],
                 ["Hu Tao","Yelan","Sucrose","Zhongli"],
                 ["Hu Tao","Yelan","Kaedehara Kazuha","Zhongli"],
                 ["Hu Tao","Yelan","Venti","Zhongli"],
                 ["Hu Tao","Yelan","Chongyun","Zhongli"],
                 ["Hu Tao","Yelan","Zhongli","Bennett"],
                 ["Hu Tao","Yelan","Sucrose","Diona"],
-                ["Hu Tao","Mona","Kaedehara Kazuha","Bennett"]
-            ],
-            "Melt Hu Tao": [["Hu Tao","Rosaria","Sucrose","Bennett"]],
-            "Mono Pyro Hu Tao": [
-                ["Hu Tao","Xiangling","Kaedehara Kazuha","Bennett"],
-                ["Hu Tao","Xiangling","Sucrose","Bennett"],
+                ["Hu Tao","Mona","Kaedehara Kazuha","Bennett"],
                 ["Hu Tao","Xiangling","Xingqiu","Zhongli"],
                 ["Hu Tao","Xiangling","Xingqiu","Diona"],
                 ["Hu Tao","Xiangling","Xingqiu","Bennett"]
             ],
-            "Funerational": [["Hu Tao","Xiangling","Yelan","Xingqiu"]],
+            "Melt Hu Tao": [
+                ["Hu Tao","Rosaria","Sucrose","Bennett"]
+            ],
+            "Mono Pyro Hu Tao": [
+                ["Hu Tao","Xiangling","Zhongli","Bennett"],
+                ["Hu Tao","Xiangling","Kaedehara Kazuha","Bennett"],
+                ["Hu Tao","Xiangling","Sucrose","Bennett"]
+            ],
+            "Funerational": [
+                ["Hu Tao","Xiangling","Yelan","Xingqiu"]
+            ],
             "Overvape Hu Tao": [
                 ["Hu Tao","Xingqiu","Fischl","Zhongli"],
                 ["Hu Tao","Xingqiu","Fischl","Diona"],
@@ -1166,25 +1196,35 @@ class Composition:
                 ["Hu Tao","Raiden Shogun","Xingqiu","Bennett"],
                 ["Hu Tao","Raiden Shogun","Xingqiu","Zhongli"]
             ],
-            "Melt Ayaka/Hu Tao": [
-                ["Kamisato Ayaka","Hu Tao","Xingqiu","Zhongli"],
-                ["Kamisato Ayaka","Hu Tao","Yelan","Zhongli"],
-                ["Kamisato Ayaka","Hu Tao","Xingqiu","Diona"]
-            ],
             "Melt Ayaka": [
+            # Alt: melt ayaka/hu tao
+                ["Kamisato Ayaka","Ganyu","Kaedehara Kazuha","Bennett"],
+                ["Kamisato Ayaka","Shenhe","Kaedehara Kazuha","Bennett"],
                 ["Kamisato Ayaka","Rosaria","Kaedehara Kazuha","Bennett"],
                 ["Kamisato Ayaka","Dehya","Kaedehara Kazuha","Bennett"],
                 ["Kamisato Ayaka","Xiangling","Shenhe","Bennett"],
                 ["Kamisato Ayaka","Xiangling","Rosaria","Bennett"],
                 ["Kamisato Ayaka","Xiangling","Kaedehara Kazuha","Bennett"],
-                ["Kamisato Ayaka","Xiangling","Zhongli","Bennett"]
+                ["Kamisato Ayaka","Xiangling","Zhongli","Bennett"],
+                ["Kamisato Ayaka","Hu Tao","Yelan","Xingqiu"],
+                ["Kamisato Ayaka","Hu Tao","Xingqiu","Zhongli"],
+                ["Kamisato Ayaka","Hu Tao","Yelan","Zhongli"],
+                ["Kamisato Ayaka","Hu Tao","Xingqiu","Diona"]
             ],
             "Ayato Hypercarry": [
             # Ayato, Yun Jin, anemo, Bennett
+            # Alt: 2 hydro, mono hydro
                 ["Kamisato Ayato","Yun Jin","Kaedehara Kazuha","Bennett"],
                 ["Kamisato Ayato","Yun Jin","Venti","Bennett"],
                 ["Kamisato Ayato","Yelan","Kaedehara Kazuha","Zhongli"],
-                ["Kamisato Ayato","Yelan","Xingqiu","Kaedehara Kazuha"]
+                ["Kamisato Ayato","Yelan","Xingqiu","Kaedehara Kazuha"],
+                ["Kamisato Ayato","Yelan","Sangonomiya Kokomi","Kaedehara Kazuha"],
+                ["Kamisato Ayato","Yelan","Venti","Bennett"],
+                ["Kamisato Ayato","Yelan","Sucrose","Bennett"],
+                ["Kamisato Ayato","Yelan","Kaedehara Kazuha","Bennett"],
+                ["Kamisato Ayato","Xingqiu","Venti","Bennett"],
+                ["Kamisato Ayato","Xingqiu","Sucrose","Bennett"],
+                ["Kamisato Ayato","Xingqiu","Kaedehara Kazuha","Bennett"]
             ],
             "Reverse Vape Ayato": [
             # Ayato, Xiangling, Bennett
@@ -1196,28 +1236,23 @@ class Composition:
                 ["Kamisato Ayato","Xiangling","Xingqiu","Bennett"],
                 ["Kamisato Ayato","Xiangling","Yelan","Bennett"]
             ],
-            "Overvape Ayato": [["Kamisato Ayato","Xiangling","Fischl","Bennett"]],
-            "Double Hydro Ayato": [
-            # 2 hydro, anemo, Bennett
-                ["Kamisato Ayato","Xingqiu","Venti","Bennett"],
-                ["Kamisato Ayato","Xingqiu","Sucrose","Bennett"],
-                ["Kamisato Ayato","Xingqiu","Kaedehara Kazuha","Bennett"],
-                ["Kamisato Ayato","Yelan","Venti","Bennett"],
-                ["Kamisato Ayato","Yelan","Sucrose","Bennett"],
-                ["Kamisato Ayato","Yelan","Kaedehara Kazuha","Bennett"]
+            "Overvape Ayato": [
+                ["Kamisato Ayato","Xiangling","Fischl","Bennett"]
             ],
-            "Mono Hydro Ayato": [
-                ["Kamisato Ayato","Yelan","Sangonomiya Kokomi","Kaedehara Kazuha"]
+            "Ayato Soup": [
+                ["Kamisato Ayato","Fischl","Kaedehara Kazuha","Bennett"]
             ],
-            "Ayato Soup": [["Kamisato Ayato","Fischl","Kaedehara Kazuha","Bennett"]],
             # Ayato, electro, anemo, pyro
             "Ayato Taser": [
             # Ayato, electro, anemo, no pyro
+                ["Kamisato Ayato","Fischl","Beidou","Venti"],
                 ["Kamisato Ayato","Fischl","Beidou","Sucrose"],
                 ["Kamisato Ayato","Fischl","Beidou","Jean"]
             ],
             "International Childe": [
             # Childe, Xiangling, flex, Bennett
+            # Alt: rev vape childe
+                ["Tartaglia","Kaedehara Kazuha","Thoma","Bennett"],
                 ["Tartaglia","Xiangling","Kaedehara Kazuha","Bennett"],
                 ["Tartaglia","Xiangling","Sucrose","Bennett"],
                 ["Tartaglia","Xiangling","Venti","Bennett"],
@@ -1225,47 +1260,46 @@ class Composition:
                 ["Tartaglia","Xiangling","Jean","Bennett"]
             ],
             "Double Hydro Childe": [
-            # Childe, Xingqiu, anemo, Bennett
+            # Alt: Childe taser, mono hydro, double pyro double hydro, double hydro quickswap
                 ["Tartaglia","Xingqiu","Venti","Bennett"],
                 ["Tartaglia","Xingqiu","Sucrose","Bennett"],
+                ["Tartaglia","Xingqiu","Xiangling","Bennett"],
+                ["Tartaglia","Xingqiu","Fischl","Beidou"],
                 ["Tartaglia","Yelan","Venti","Bennett"],
                 ["Tartaglia","Yelan","Sucrose","Bennett"],
-                ["Tartaglia","Mona","Kaedehara Kazuha","Bennett"]
-            ],
-            "Double Hydro Double Pyro": [
-                ["Tartaglia","Xingqiu","Xiangling","Bennett"],
-                ["Tartaglia","Yelan","Xiangling","Bennett"]
-            ],
-            "Double Hydro Quickswap": [
+                ["Tartaglia","Yelan","Xingqiu","Mona"],
+                ["Tartaglia","Mona","Kaedehara Kazuha","Bennett"],
+                ["Tartaglia","Yelan","Xiangling","Bennett"],
                 ["Xiangling","Yelan","Xingqiu","Bennett"],
                 ["Xiangling","Yelan","Xingqiu","Zhongli"],
                 ["Yelan","Xingqiu","Kaedehara Kazuha","Bennett"]
             ],
-            "Double Electro Quickswap": [
-                ["Xingqiu","Fischl","Beidou","Kaedehara Kazuha"]
+            "Fireworks Childe": [
+                ["Tartaglia","Fischl","Beidou","Bennett"]
             ],
-            "Fireworks Childe": [["Tartaglia","Fischl","Beidou","Bennett"]],
-            "Childe/Raiden Dual Carry": [["Tartaglia","Raiden Shogun","Xiangling","Bennett"]],
-            "Mono Hydro Childe": [["Tartaglia","Yelan","Xingqiu","Mona"]],
-            "Childe Taser": [["Tartaglia","Xingqiu","Fischl","Beidou"]],
+            "Childe/Raiden Dual Carry": [
+                ["Tartaglia","Raiden Shogun","Xiangling","Bennett"]
+            ],
             "Melt Ganyu": [
+                ["Hu Tao","Ganyu","Nahida","Zhongli"],
                 ["Ganyu","Venti","Zhongli","Bennett"],
+                ["Ganyu","Xiangling","Shenhe","Bennett"],
                 ["Ganyu","Xiangling","Zhongli","Bennett"],
                 ["Ganyu","Xiangling","Venti","Bennett"],
                 ["Ganyu","Xiangling","Bennett","Diona"],
+                ["Ganyu","Xiangling","Kaedehara Kazuha","Zhongli"],
                 ["Ganyu","Xiangling","Kaedehara Kazuha","Bennett"],
-                ["Ganyu","Xiangling","Sucrose","Bennett"]
+                ["Ganyu","Xiangling","Sucrose","Bennett"],
+                ["Ganyu","Dehya","Kaedehara Kazuha","Bennett"],
+                ["Ganyu","Shenhe","Kaedehara Kazuha","Bennett"],
+                ["Ganyu","Kaedehara Kazuha","Zhongli","Bennett"]
             ],
-            "Melt Ganyu/Nahida": [
+            "Burnmelt Ganyu": [
+                ["Ganyu","Xiangling","Nahida","Zhongli"],
                 ["Ganyu","Nahida","Venti","Bennett"],
                 ["Ganyu","Dehya","Nahida","Bennett"],
                 ["Ganyu","Nahida","Kaedehara Kazuha","Bennett"],
                 ["Ganyu","Nahida","Zhongli","Bennett"]
-            ],
-            "Melt Ganyu/Kazuha": [
-                ["Ganyu","Dehya","Kaedehara Kazuha","Bennett"],
-                ["Ganyu","Shenhe","Kaedehara Kazuha","Bennett"],
-                ["Ganyu","Kaedehara Kazuha","Zhongli","Bennett"]
             ],
             "Eula/Raiden Dual Carry": [
                 ["Eula","Raiden Shogun","Zhongli","Bennett"],
@@ -1275,21 +1309,25 @@ class Composition:
                 ["Eula","Raiden Shogun","Yelan","Zhongli"],
                 ["Eula","Raiden Shogun","Nahida","Zhongli"],
                 ["Eula","Raiden Shogun","Mona","Bennett"],
+                ["Eula","Raiden Shogun","Kujou Sara","Jean"],
                 ["Eula","Raiden Shogun","Rosaria","Bennett"],
                 ["Eula","Raiden Shogun","Rosaria","Jean"],
                 ["Eula","Raiden Shogun","Rosaria","Zhongli"]
             ],
-            "Double Electro Eula": [["Eula","Fischl","Beidou","Diona"]],
+            "Double Electro Eula": [
+                ["Eula","Rosaria","Fischl","Kuki Shinobu"],
+                ["Eula","Fischl","Beidou","Diona"]
+            ],
             "Triple Cryo Eula": [
+            # Alt: mono cryo, Eula/Rosaria/Fischl/Zhongli
                 ["Eula","Rosaria","Fischl","Diona"],
-                ["Eula","Raiden Shogun","Rosaria","Diona"]
-            ],
-            "Mono Cryo Eula": [
+                ["Eula","Raiden Shogun","Rosaria","Diona"],
                 ["Eula","Ganyu","Kaedehara Kazuha","Zhongli"],
-                ["Eula","Rosaria","Jean","Zhongli"]
+                ["Eula","Rosaria","Jean","Zhongli"],
+                ["Eula","Rosaria","Fischl","Zhongli"]
             ],
-            "Eula/Rosaria/Fischl/Zhongli": [["Eula","Rosaria","Fischl","Zhongli"]],
             "Vape Yoimiya": [
+            # Alt: vv vape, double/triple pyro
                 ["Yoimiya","Yelan","Zhongli","Bennett"],
                 ["Yoimiya","Yelan","Yun Jin","Zhongli"],
                 ["Yoimiya","Yelan","Yun Jin","Bennett"],
@@ -1297,12 +1335,13 @@ class Composition:
                 ["Yoimiya","Yelan","Yun Jin","Thoma"],
                 ["Yoimiya","Xingqiu","Zhongli","Bennett"],
                 ["Yoimiya","Xingqiu","Yun Jin","Bennett"],
-                ["Yoimiya","Xingqiu","Yun Jin","Zhongli"]
-            ],
-            "VV Vape Yoimiya": [
+                ["Yoimiya","Xingqiu","Yun Jin","Zhongli"],
                 ["Yoimiya","Xingqiu","Kaedehara Kazuha","Bennett"],
                 ["Yoimiya","Xingqiu","Sucrose","Bennett"],
-                ["Yoimiya","Yelan","Kaedehara Kazuha","Bennett"]
+                ["Yoimiya","Yelan","Kaedehara Kazuha","Bennett"],
+                ["Yoimiya","Xiangling","Xingqiu","Zhongli"],
+                ["Yoimiya","Xiangling","Xingqiu","Bennett"],
+                ["Yoimiya","Hu Tao","Xingqiu","Zhongli"]
             ],
             "VapeMelt Yoimiya": [
                 ["Yoimiya","Xingqiu","Rosaria","Zhongli"]
@@ -1325,85 +1364,267 @@ class Composition:
                 ["Yoimiya","Xingqiu","Albedo","Zhongli"],
                 ["Yoimiya","Yelan","Albedo","Zhongli"]
             ],
+            "Double Electro Yoimiya": [
+                ["Yoimiya","Fischl","Beidou","Diona"],
+                ["Yoimiya","Xingqiu","Fischl","Beidou"]
+            ],
             "Mono Pyro Yoimiya": [
+            # Alt: Yoi Hyper
+                ["Yoimiya","Xiangling","Zhongli","Bennett"],
                 ["Yoimiya","Xiangling","Kaedehara Kazuha","Bennett"],
                 ["Yoimiya","Kaedehara Kazuha","Zhongli","Bennett"],
                 ["Yoimiya","Yun Jin","Zhongli","Bennett"],
-                ["Yoimiya","Yun Jin","Kaedehara Kazuha","Bennett"],
-                ["Yoimiya","Xiangling","Xingqiu","Zhongli"],
-                ["Yoimiya","Xiangling","Xingqiu","Bennett"]
+                ["Yoimiya","Yun Jin","Kaedehara Kazuha","Bennett"]
             ],
             "Yoimiya/Raiden Dual Carry": [
+                ["Yoimiya","Raiden Shogun","Yelan","Jean"],
                 ["Yoimiya","Raiden Shogun","Yelan","Zhongli"],
                 ["Yoimiya","Raiden Shogun","Xingqiu","Bennett"],
                 ["Yoimiya","Raiden Shogun","Xingqiu","Zhongli"]
             ],
-            "Yoimiya/Hu Tao Dual Carry": [["Yoimiya","Hu Tao","Xingqiu","Zhongli"]],
             "Vape Diluc": [
+            # Alt: triple pyro
+                ["Diluc","Xingqiu","Venti","Bennett"],
                 ["Diluc","Xingqiu","Zhongli","Bennett"],
                 ["Diluc","Xingqiu","Kaedehara Kazuha","Bennett"],
                 ["Diluc","Xingqiu","Sucrose","Bennett"],
                 ["Diluc","Yelan","Zhongli","Bennett"],
                 ["Diluc","Yelan","Kaedehara Kazuha","Bennett"],
-                ["Diluc","Yelan","Sucrose","Bennett"]
+                ["Diluc","Yelan","Sucrose","Bennett"],
+                ["Diluc","Xiangling","Xingqiu","Bennett"]
             ],
-            "Double Geo Diluc": [["Diluc","Xingqiu","Albedo","Zhongli"]],
-            "Double Hydro Diluc": [["Diluc","Yelan","Xingqiu","Zhongli"]],
+            "Double Geo Diluc": [
+                ["Diluc","Xingqiu","Albedo","Zhongli"]
+            ],
+            "Double Hydro Diluc": [
+                ["Diluc","Yelan","Xingqiu","Zhongli"]
+            ],
             "Mono Pyro Diluc": [
                 ["Diluc","Xiangling","Kaedehara Kazuha","Bennett"],
-                ["Diluc","Xiangling","Sucrose","Bennett"],
-                ["Diluc","Xiangling","Xingqiu","Bennett"]
+                ["Diluc","Xiangling","Sucrose","Bennett"]
+            ],
+            "Vape Dehya": [
+                ["Dehya","Mona","Kaedehara Kazuha","Bennett"]
             ],
             "Mono Pyro Dehya": [
                 ["Dehya","Xiangling","Kaedehara Kazuha","Bennett"]
             ],
-            "Burning Dehya": [["Dehya","Nahida","Kaedehara Kazuha","Bennett"]],
+            "Dehya/Raiden Dual Carry": [
+                ["Dehya","Raiden Shogun","Kaedehara Kazuha","Bennett"]
+            ],
+            "Dehya/Hu Tao Dual Carry": [
+                ["Hu Tao","Dehya","Yelan","Xingqiu"]
+            ],
             "Vape Yanfei": [
+                ["Yanfei","Xingqiu","Kaedehara Kazuha","Bennett"],
                 ["Yanfei","Xingqiu","Zhongli","Bennett"],
                 ["Yanfei","Xingqiu","Sucrose","Bennett"]
             ],
             "Double Hydro Yanfei": [
                 ["Yanfei","Yelan","Xingqiu","Bennett"]
             ],
-            "Mono Pyro Klee": [
-                ["Klee","Xiangling","Kaedehara Kazuha","Bennett"],
-                ["Klee","Xiangling","Sucrose","Bennett"]
-            ],
             "Mono Pyro Yanfei": [
                 ["Yanfei","Xiangling","Kaedehara Kazuha","Bennett"],
                 ["Yanfei","Xiangling","Sucrose","Bennett"]
             ],
-            "Keqing Soup": [["Keqing","Xingqiu","Sucrose","Bennett"]],
-            "Keqing Taser": [["Keqing","Fischl","Sangonomiya Kokomi","Kaedehara Kazuha"]],
-            "Sukokomon": [["Sangonomiya Kokomi","Sucrose","Xiangling","Fischl"]],
-            "Mono Hydro Kokomi": [["Sangonomiya Kokomi","Yelan","Xingqiu","Kaedehara Kazuha"]],
-            "Freeze Kokomi": [["Sangonomiya Kokomi","Shenhe","Rosaria","Kaedehara Kazuha"]],
+            "Mono Pyro Klee": [
+                ["Klee","Xiangling","Kaedehara Kazuha","Bennett"],
+                ["Klee","Xiangling","Sucrose","Bennett"]
+            ],
+            "Keqing Soup": [
+                ["Keqing","Xingqiu","Sucrose","Bennett"]
+            ],
+            "Keqing Taser": [
+                ["Keqing","Fischl","Sangonomiya Kokomi","Kaedehara Kazuha"]
+            ],
+
+
+            "Tapu Koko": [
+            # Kokomi, electro
+            # Alt: taser quickswap, sucrose taser
+                ["Sangonomiya Kokomi","Yelan","Fischl","Sucrose"],
+                ["Sangonomiya Kokomi","Yae Miko","Fischl","Sucrose"],
+                ["Sangonomiya Kokomi","Fischl","Beidou","Sucrose"],
+                ["Sangonomiya Kokomi","Fischl","Beidou","Venti"],
+                ["Sangonomiya Kokomi","Fischl","Beidou","Kaedehara Kazuha"],
+                ["Yae Miko","Fischl","Sangonomiya Kokomi","Kaedehara Kazuha"],
+                ["Raiden Shogun","Yae Miko","Yelan","Sangonomiya Kokomi"],
+                ["Raiden Shogun","Yae Miko","Sangonomiya Kokomi","Sucrose"],
+                ["Raiden Shogun","Yae Miko","Sangonomiya Kokomi","Kaedehara Kazuha"],
+                ["Raiden Shogun","Yae Miko","Xingqiu","Sangonomiya Kokomi"],
+                ["Raiden Shogun","Kujou Sara","Sangonomiya Kokomi","Kaedehara Kazuha"],
+                ["Raiden Shogun","Fischl","Sangonomiya Kokomi","Kaedehara Kazuha"],
+                ["Raiden Shogun","Xingqiu","Sangonomiya Kokomi","Venti"],
+                ["Raiden Shogun","Yelan","Sangonomiya Kokomi","Venti"],
+                ["Raiden Shogun","Yelan","Sangonomiya Kokomi","Kaedehara Kazuha"],
+                ["Yelan","Xingqiu","Fischl","Beidou"],
+                ["Xingqiu","Fischl","Beidou","Kaedehara Kazuha"],
+                ["Sucrose","Xingqiu","Fischl","Beidou"],
+                ["Sucrose","Yelan","Fischl","Beidou"],
+                ["Sucrose","Yelan","Xingqiu","Fischl"],
+                ["Sucrose","Fischl","Beidou","Barbara"]
+            ],
+            "Sukokomon": [
+                ["Sangonomiya Kokomi","Sucrose","Xiangling","Fischl"]
+            ],
+            "Mono Hydro Kokomi": [
+                ["Sangonomiya Kokomi","Yelan","Xingqiu","Kaedehara Kazuha"]
+            ],
+
             "Reverse Melt Rosaria": [
+            # alt: rev melt chong/kaeya
                 ["Xiangling","Rosaria","Kaedehara Kazuha","Bennett"],
                 ["Xiangling","Rosaria","Kaeya","Bennett"],
                 ["Xiangling","Rosaria","Chongyun","Bennett"],
                 ["Xiangling","Rosaria","Sucrose","Bennett"],
                 ["Xiangling","Rosaria","Bennett","Diona"],
+                ["Xiangling","Chongyun","Kaedehara Kazuha","Bennett"],
+                ["Xiangling","Kaeya","Kaedehara Kazuha","Bennett"],
+                ["Xiangling","Kaeya","Amber","Bennett"],
                 ["Dehya","Rosaria","Kaedehara Kazuha","Bennett"]
             ],
-            "Reverse Melt Kaeya": [
-                ["Xiangling","Kaeya","Kaedehara Kazuha","Bennett"],
-                ["Xiangling","Kaeya","Amber","Bennett"]
+            "Double Electro Kaeya": [
+                ["Xingqiu","Lisa","Kaeya","Fischl"]
             ],
             "Mono Pyro Xiangling": [
+            # Alt: overload xiangling
+                ["Xiangling","Kaedehara Kazuha","Bennett","Layla"],
                 ["Xiangling","Kaedehara Kazuha","Zhongli","Bennett"],
                 ["Xiangling","Amber","Traveler-A","Bennett"],
-                ["Xiangling","Xinyan","Kaedehara Kazuha","Bennett"]
+                ["Xiangling","Xinyan","Kaedehara Kazuha","Bennett"],
+                ["Xiangling","Fischl","Kaedehara Kazuha","Bennett"]
             ],
-            "Overload Xiangling": [["Xiangling","Fischl","Kaedehara Kazuha","Bennett"]],
             "Double Pyro Heizou": [
                 ["Shikanoin Heizou","Xiangling","Kaedehara Kazuha","Bennett"]
             ],
-            "Double Electro Heizou": [["Shikanoin Heizou","Xingqiu","Fischl","Beidou"]],
-            "Double Cryo Heizou": [["Shikanoin Heizou","Xingqiu","Rosaria","Kaeya"]],
-            "Double Electro Kaeya": [["Xingqiu","Lisa","Kaeya","Fischl"]]
+            "Double Electro Heizou": [
+                ["Shikanoin Heizou","Xingqiu","Fischl","Beidou"]
+            ],
+            "Double Cryo Heizou": [
+                ["Shikanoin Heizou","Xingqiu","Rosaria","Kaeya"]
+            ]
         }
         alt_comp_names = {
+            "Quickbloom Raiden": [
+                ["Raiden Shogun","Traveler-D","Fischl","Sangonomiya Kokomi"],
+                ["Raiden Shogun","Traveler-D","Sangonomiya Kokomi","Zhongli"],
+                ["Raiden Shogun","Traveler-D","Sangonomiya Kokomi","Kaedehara Kazuha"],
+                ["Raiden Shogun","Traveler-D","Sangonomiya Kokomi","Venti"],
+                ["Raiden Shogun","Yae Miko","Traveler-D","Sangonomiya Kokomi"]
+            ],
+            "Quickbloom Yae": [
+                ["Yae Miko","Fischl","Sangonomiya Kokomi","Venti"],
+                ["Yae Miko","Traveler-D","Sangonomiya Kokomi","Kaedehara Kazuha"]
+            ],
+            "Hyperbloom Raiden": [
+                ["Raiden Shogun","Xingqiu","Traveler-D","Bennett"],
+                ["Raiden Shogun","Xingqiu","Traveler-D","Zhongli"],
+                ["Raiden Shogun","Xingqiu","Traveler-D","Fischl"],
+                ["Raiden Shogun","Xingqiu","Traveler-D","Kuki Shinobu"],
+                ["Raiden Shogun","Xingqiu","Traveler-D","Kaedehara Kazuha"],
+                ["Raiden Shogun","Xingqiu","Traveler-D","Jean"],
+                ["Raiden Shogun","Xingqiu","Traveler-D","Yaoyao"],
+                ["Raiden Shogun","Xingqiu","Collei","Bennett"],
+                ["Raiden Shogun","Yelan","Traveler-D","Bennett"],
+                ["Raiden Shogun","Yelan","Traveler-D","Zhongli"],
+                ["Raiden Shogun","Yelan","Xingqiu","Traveler-D"],
+                ["Raiden Shogun","Yelan","Xingqiu","Yaoyao"],
+                ["Raiden Shogun","Yelan","Traveler-D","Sangonomiya Kokomi"]
+            ],
+            "Overburn Raiden": [
+                ["Raiden Shogun","Xiangling","Traveler-D","Bennett"],
+                ["Raiden Shogun","Xiangling","Collei","Bennett"]
+            ],
+            "Aggravate Raiden": [
+                ["Raiden Shogun","Traveler-D","Sucrose","Yaoyao"],
+                ["Raiden Shogun","Traveler-D","Zhongli","Bennett"],
+                ["Raiden Shogun","Traveler-D","Kaedehara Kazuha","Bennett"],
+                ["Raiden Shogun","Traveler-D","Fischl","Zhongli"],
+                ["Raiden Shogun","Traveler-D","Fischl","Venti"],
+                ["Raiden Shogun","Traveler-D","Kujou Sara","Bennett"],
+                ["Raiden Shogun","Kujou Sara","Kaedehara Kazuha","Yaoyao"],
+                ["Raiden Shogun","Collei","Kaedehara Kazuha","Bennett"],
+                ["Raiden Shogun","Yae Miko","Venti","Yaoyao"],
+                ["Raiden Shogun","Yae Miko","Traveler-D","Zhongli"],
+                ["Raiden Shogun","Yae Miko","Traveler-D","Bennett"],
+                ["Raiden Shogun","Yae Miko","Traveler-D","Kaedehara Kazuha"]
+            ],
+            "Aggravate Sucrose": [
+                ["Sucrose","Fischl","Beidou","Yaoyao"],
+                ["Sucrose","Traveler-D","Fischl","Beidou"]
+            ],
+            "Overburn Nahida": [
+                ["Nahida","Xiangling","Raiden Shogun","Bennett"]
+            ],
+            "Bloom Alhaitham": [
+                ["Alhaitham","Nahida","Nilou","Sangonomiya Kokomi"]
+            ],
+            "Bloom Ayato": [
+                ["Kamisato Ayato","Nahida","Nilou","Yaoyao"]
+            ],
+            "Bloom Tighnari": [
+                ["Tighnari","Nilou","Traveler-D","Sangonomiya Kokomi"],
+                ["Tighnari","Nilou","Nahida","Sangonomiya Kokomi"]
+            ],
+            "Burgeon Ayato": [
+                ["Kamisato Ayato","Traveler-D","Kaedehara Kazuha","Bennett"],
+                ["Kamisato Ayato","Nahida","Kaedehara Kazuha","Bennett"]
+            ],
+            "Bloom Childe": [
+                ["Tartaglia","Nahida","Kaedehara Kazuha","Bennett"]
+            ],
+            "Morgana": [
+                ["Ganyu","Mona","Venti","Layla"],
+                ["Ganyu","Mona","Venti","Diona"],
+                ["Ganyu","Mona","Kaedehara Kazuha","Diona"],
+                ["Ganyu","Mona","Kaedehara Kazuha","Venti"],
+                ["Ganyu","Mona","Sucrose","Diona"],
+                ["Ganyu","Mona","Venti","Zhongli"]
+            ],
+            "Moryana": [
+                ["Kamisato Ayaka","Rosaria","Mona","Venti"],
+                ["Kamisato Ayaka","Rosaria","Mona","Kaedehara Kazuha"],
+                ["Kamisato Ayaka","Mona","Venti","Diona"],
+                ["Kamisato Ayaka","Mona","Kaedehara Kazuha","Diona"],
+                ["Kamisato Ayaka","Mona","Sucrose","Diona"],
+                ["Kamisato Ayaka","Mona","Zhongli","Diona"],
+                ["Kamisato Ayaka","Mona","Venti","Zhongli"]
+            ],
+            "Freeze Ayaka/Ayato": [
+                ["Kamisato Ayaka","Kamisato Ayato","Venti","Diona"],
+                ["Kamisato Ayaka","Kamisato Ayato","Kaedehara Kazuha","Diona"],
+                ["Kamisato Ayaka","Kamisato Ayato","Sucrose","Diona"]
+            ],
+            "Freeze Ayaka/Ganyu": [
+                ["Kamisato Ayaka","Yelan","Ganyu","Sangonomiya Kokomi"],
+                ["Kamisato Ayaka","Ganyu","Sangonomiya Kokomi","Venti"],
+                ["Kamisato Ayaka","Ganyu","Sangonomiya Kokomi","Sucrose"],
+                ["Kamisato Ayaka","Ganyu","Sangonomiya Kokomi","Kaedehara Kazuha"],
+                ["Kamisato Ayaka","Ganyu","Sangonomiya Kokomi","Zhongli"],
+                ["Kamisato Ayaka","Ganyu","Mona","Venti"],
+                ["Kamisato Ayaka","Ganyu","Mona","Sucrose"],
+                ["Kamisato Ayaka","Ganyu","Mona","Kaedehara Kazuha"],
+                ["Kamisato Ayaka","Ganyu","Mona","Zhongli"]
+            ],
+            "Triple Cryo": [
+                ["Kamisato Ayaka","Ganyu","Kaedehara Kazuha","Diona"],
+                ["Kamisato Ayaka","Rosaria","Kaedehara Kazuha","Diona"],
+                ["Kamisato Ayaka","Ganyu","Shenhe","Zhongli"]
+            ],
+            "Ganyu Double Geo": [
+                ["Ganyu","Kaedehara Kazuha","Albedo","Zhongli"],
+            ],
+            "Double Cryo": [
+                ["Ganyu","Shenhe","Kaedehara Kazuha","Zhongli"],
+                ["Kamisato Ayaka","Rosaria","Kaedehara Kazuha","Zhongli"],
+                ["Kamisato Ayaka","Ganyu","Kaedehara Kazuha","Zhongli"]
+            ],
+            "Freeze Kokomi": [
+                ["Sangonomiya Kokomi","Shenhe","Rosaria","Kaedehara Kazuha"]
+            ],
+            "Vape Kokomi": [
+                ["Sangonomiya Kokomi","Xiangling","Kaedehara Kazuha","Bennett"]
+            ],
             "Kazuha National Team": [
                 ["Xiangling","Xingqiu","Kaedehara Kazuha","Bennett"],
                 ["Xiangling","Yelan","Kaedehara Kazuha","Bennett"]
@@ -1439,20 +1660,123 @@ class Composition:
             "Ningguang National Team": [
                 ["Ningguang","Xiangling","Xingqiu","Bennett"]
             ],
-            "Zhongli National Team": [["Xiangling","Xingqiu","Zhongli","Bennett"]],
-            "Wanderer National Team": [["Wanderer","Xiangling","Xingqiu","Bennett"]],
+            "Zhongli National Team": [
+                ["Xiangling","Xingqiu","Zhongli","Bennett"]
+            ],
+            "Wanderer National Team": [
+                ["Wanderer","Xiangling","Xingqiu","Bennett"]
+            ],
             "Albedo National Team": [
                 ["Xiangling","Xingqiu","Albedo","Bennett"]
             ],
+            "Double Hydro Raiden": [
+                ["Raiden Shogun","Xingqiu","Venti","Barbara"],
+                ["Raiden Shogun","Xingqiu","Sucrose","Barbara"],
+                ["Raiden Shogun","Xingqiu","Mona","Bennett"],
+                ["Raiden Shogun","Xingqiu","Kamisato Ayato","Bennett"],
+                ["Raiden Shogun","Yelan","Sucrose","Barbara"],
+                ["Raiden Shogun","Yelan","Venti","Barbara"],
+                ["Raiden Shogun","Yelan","Sucrose","Barbara"],
+                ["Raiden Shogun","Yelan","Mona","Bennett"],
+                ["Raiden Shogun","Yelan","Kamisato Ayato","Bennett"],
+                ["Raiden Shogun","Yelan","Xingqiu","Jean"],
+                ["Raiden Shogun","Yelan","Xingqiu","Venti"],
+                ["Raiden Shogun","Yelan","Xingqiu","Zhongli"],
+                ["Raiden Shogun","Yelan","Xingqiu","Kaedehara Kazuha"],
+                ["Raiden Shogun","Yelan","Xingqiu","Bennett"]
+            ],
+            "Xiao Succ Benny Dong": [
+                ["Xiao","Sucrose","Bennett","Zhongli"],
+                ["Xiao","Venti","Bennett","Zhongli"]
+            ],
+            "Xiao Sunfire": [
+                ["Xiao","Jean","Bennett","Zhongli"]
+            ],
+            "Triple Anemo Xiao": [
+                ["Xiao","Faruzan","Kaedehara Kazuha","Bennett"],
+                ["Xiao","Faruzan","Jean","Bennett"],
+                ["Xiao","Faruzan","Jean","Zhongli"]
+            ],
+            "Triple Geo Itto": [
+                ["Arataki Itto","Albedo","Zhongli","Bennett"],
+                ["Arataki Itto","Ningguang","Gorou","Qiqi"],
+                ["Arataki Itto","Gorou","Kaedehara Kazuha","Zhongli"],
+                ["Arataki Itto","Gorou","Zhongli","Bennett"],
+                ["Arataki Itto","Gorou","Albedo","Bennett"],
+                ["Arataki Itto","Gorou","Albedo","Kuki Shinobu"],
+                ["Arataki Itto","Gorou","Albedo","Diona"],
+                ["Arataki Itto","Gorou","Fischl","Zhongli"],
+                ["Arataki Itto","Gorou","Albedo","Sangonomiya Kokomi"],
+                ["Arataki Itto","Gorou","Jean","Zhongli"],
+                ["Arataki Itto","Gorou","Sangonomiya Kokomi","Zhongli"]
+            ],
+            "Triple Geo Noelle": [
+                ["Noelle","Yun Jin","Gorou","Fischl"],
+                ["Noelle","Yelan","Gorou","Albedo"],
+                ["Noelle","Yelan","Yun Jin","Gorou"],
+                ["Noelle","Gorou","Albedo","Sucrose"],
+                ["Noelle","Gorou","Fischl","Albedo"]
+            ],
+            "Double Hydro Ayato": [
+                ["Kamisato Ayato","Xingqiu","Venti","Bennett"],
+                ["Kamisato Ayato","Xingqiu","Sucrose","Bennett"],
+                ["Kamisato Ayato","Xingqiu","Kaedehara Kazuha","Bennett"],
+                ["Kamisato Ayato","Yelan","Venti","Bennett"],
+                ["Kamisato Ayato","Yelan","Sucrose","Bennett"],
+                ["Kamisato Ayato","Yelan","Kaedehara Kazuha","Zhongli"],
+                ["Kamisato Ayato","Yelan","Kaedehara Kazuha","Bennett"]
+            ],
+            "Mono Hydro Ayato": [
+                ["Kamisato Ayato","Yelan","Xingqiu","Kaedehara Kazuha"],
+                ["Kamisato Ayato","Yelan","Sangonomiya Kokomi","Kaedehara Kazuha"]
+            ],
             "Reverse Vape Childe": [
-            # Childe, Xiangling, flex, Bennett
+                ["Tartaglia","Kaedehara Kazuha","Thoma","Bennett"],
                 ["Tartaglia","Xiangling","Sucrose","Bennett"],
                 ["Tartaglia","Xiangling","Venti","Bennett"],
                 ["Tartaglia","Xiangling","Zhongli","Bennett"],
                 ["Tartaglia","Xiangling","Jean","Bennett"]
             ],
+            "Childe Taser": [
+                ["Tartaglia","Xingqiu","Fischl","Beidou"]
+            ],
+            "Mono Hydro Childe": [
+                ["Tartaglia","Yelan","Xingqiu","Mona"]
+            ],
+            "Double Hydro Double Pyro": [
+                ["Xiangling","Yelan","Xingqiu","Bennett"],
+                ["Tartaglia","Xingqiu","Xiangling","Bennett"],
+                ["Tartaglia","Yelan","Xiangling","Bennett"]
+            ],
+            "Double Hydro Quickswap": [
+                ["Xiangling","Yelan","Xingqiu","Zhongli"],
+                ["Yelan","Xingqiu","Kaedehara Kazuha","Bennett"]
+            ],
+            "Mono Cryo Eula": [
+                ["Eula","Ganyu","Kaedehara Kazuha","Zhongli"],
+                ["Eula","Rosaria","Jean","Zhongli"]
+            ],
+            "Eula/Rosaria/Fischl/Zhongli": [
+                ["Eula","Rosaria","Fischl","Zhongli"]
+            ],
+            "Yoimiya Hypercarry": [
+                ["Yoimiya","Kaedehara Kazuha","Zhongli","Bennett"],
+                ["Yoimiya","Yun Jin","Zhongli","Bennett"],
+                ["Yoimiya","Yun Jin","Kaedehara Kazuha","Bennett"]
+            ],
+            "VV Vape Yoimiya": [
+                ["Yoimiya","Xingqiu","Kaedehara Kazuha","Bennett"],
+                ["Yoimiya","Xingqiu","Sucrose","Bennett"],
+                ["Yoimiya","Yelan","Kaedehara Kazuha","Bennett"]
+            ],
+            "Yoimiya/Hu Tao Dual Carry": [
+                ["Yoimiya","Hu Tao","Xingqiu","Zhongli"]
+            ],
             "Double Pyro Yoimiya": [
                 ["Yoimiya","Xiangling","Xingqiu","Zhongli"]
+            ],
+            "Triple Pyro Yoimiya": [
+                ["Yoimiya","Xiangling","Xingqiu","Bennett"]
             ],
             "Double Pyro Hu Tao": [
                 ["Hu Tao","Xiangling","Xingqiu","Zhongli"],
@@ -1462,11 +1786,44 @@ class Composition:
             "Triple Pyro Hu Tao": [
                 ["Hu Tao","Xiangling","Xingqiu","Bennett"]
             ],
+            "VV Vape Hu Tao": [
+            # Hu Tao, Xingqiu, anemo, pyro
+                ["Hu Tao","Xingqiu","Sucrose","Bennett"],
+                ["Hu Tao","Xingqiu","Sucrose","Thoma"],
+                ["Hu Tao","Xingqiu","Sucrose","Yanfei"],
+                ["Hu Tao","Xingqiu","Kaedehara Kazuha","Thoma"],
+                ["Hu Tao","Xingqiu","Amber","Kaedehara Kazuha"],
+                ["Hu Tao","Yelan","Sucrose","Bennett"],
+                ["Hu Tao","Yelan","Sucrose","Thoma"]
+            ],
+            "Melt Ayaka/Hu Tao": [
+                ["Kamisato Ayaka","Hu Tao","Yelan","Xingqiu"],
+                ["Kamisato Ayaka","Hu Tao","Xingqiu","Zhongli"],
+                ["Kamisato Ayaka","Hu Tao","Yelan","Zhongli"],
+                ["Kamisato Ayaka","Hu Tao","Xingqiu","Diona"]
+            ],
             "Triple Pyro Diluc": [
                 ["Diluc","Xiangling","Xingqiu","Bennett"]
             ],
-            "Triple Pyro Yoimiya": [
-                ["Yoimiya","Xiangling","Xingqiu","Bennett"]
+            "Taser Quickswap": [
+                ["Yelan","Xingqiu","Fischl","Beidou"],
+                ["Xingqiu","Fischl","Beidou","Kaedehara Kazuha"]
+            ],
+            "Sucrose Taser": [
+                ["Sucrose","Xingqiu","Fischl","Beidou"],
+                ["Sucrose","Yelan","Fischl","Beidou"],
+                ["Sucrose","Yelan","Xingqiu","Fischl"],
+                ["Sucrose","Fischl","Beidou","Barbara"]
+            ],
+            "Overload Xiangling": [
+                ["Xiangling","Fischl","Kaedehara Kazuha","Bennett"]
+            ],
+            "Reverse Melt Chongyun": [
+                ["Xiangling","Chongyun","Kaedehara Kazuha","Bennett"]
+            ],
+            "Reverse Melt Kaeya": [
+                ["Xiangling","Kaeya","Kaedehara Kazuha","Bennett"],
+                ["Xiangling","Kaeya","Amber","Bennett"]
             ]
         }
         self.comp_name = "-"
