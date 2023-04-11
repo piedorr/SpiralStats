@@ -127,7 +127,7 @@
 		"alt_name": null,
 		"out_name": false,
 		"rarity": 5,
-		"availability": "Limited 5*"
+		"availability": "5*"
 	},
 	"Diluc": {
 		"weapon": "Claymore",
@@ -328,6 +328,16 @@
 		"out_name": false,
 		"rarity": 4,
 		"availability": "Free"
+	},
+	"Mika": {
+		"weapon": "Polearm",
+		"element": "Cryo",
+		"version": 3.5,
+		"phase": "3.5b",
+		"alt_name": null,
+		"out_name": false,
+		"rarity": 4,
+		"availability": "4*"
 	},
 	"Mona": {
 		"weapon": "Catalyst",

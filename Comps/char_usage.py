@@ -78,6 +78,10 @@ def appearances(players, owns, chambers=ROOMS, offset=3, info_char=False):
     appears = {}
     num_players = {}
     players_chars = {}
+    pyroChars = ["Bennett","Xiangling","Hu Tao","Thoma","Yoimiya","Yanfei","Xinyan","Diluc","Amber","Klee"]
+    hydroChars = ["Mona","Sangonomiya Kokomi","Barbara","Xingqiu","Nilou","Candace","Yelan","Kamisato Ayato","Tartaglia"]
+    onField = ["Alhaitham", "Arataki Itto", "Cyno", "Dehya", "Diluc", "Eula", "Ganyu", "Hu Tao", "Kamisato Ayaka", "Kamisato Ayato", "Keqing", "Klee", "Ningguang", "Noelle", "Razor", "Shikanoin Heizou", "Tartaglia", "Tighnari", "Wanderer", "Xiao", "Yanfei", "Yoimiya"]
+
     for phase in players:
         appears[phase] = {}
         num_players[phase] = 0
@@ -109,25 +113,35 @@ def appearances(players, owns, chambers=ROOMS, offset=3, info_char=False):
                 for chamber in chambers:
                     if player.chambers[chamber] == None:
                         continue
+
                     # foundPyro = False
                     # foundHydro = False
                     # foundNilou = False
-                    # pyroChars = ["Bennett","Xiangling","Hu Tao","Thoma","Yoimiya","Yanfei","Xinyan","Diluc","Amber","Klee"]
-                    # hydroChars = ["Mona","Sangonomiya Kokomi","Barbara","Xingqiu","Nilou","Candace","Yelan","Kamisato Ayato","Tartaglia"]
+                    # foundOnField = False
+
                     # testChar = 0
                     # while not foundPyro and testChar < len(pyroChars):
                     #     if player.chambers[chamber].char_presence[pyroChars[testChar]]:
                     #         foundPyro = True
                     #     testChar += 1
+
                     # testChar = 0
                     # while not foundHydro and testChar < len(hydroChars):
                     #     if player.chambers[chamber].char_presence[hydroChars[testChar]]:
                     #         foundHydro = True
                     #     testChar += 1
+
+                    # testChar = 0
+                    # while not foundOnField and testChar < len(onField):
+                    #     if player.chambers[chamber].char_presence[onField[testChar]]:
+                    #         foundOnField = True
+                    #     testChar += 1
+
                     # if player.chambers[chamber].char_presence["Nilou"]:
                     #     foundNilou = True
+
                     # if player.chambers[chamber].char_presence[char] and not foundPyro and foundHydro:
-                    # if player.chambers[chamber].char_presence[char] and foundNilou:
+                    # if player.chambers[chamber].char_presence[char] and not foundOnField and not foundNilou:
                     if player.chambers[chamber].char_presence[char]:
                         # to print the amount of players using a character, for char infographics
                         if player.player not in players_chars[phase][char]:
@@ -231,10 +245,10 @@ def appearances(players, owns, chambers=ROOMS, offset=3, info_char=False):
 def usages(owns, appears, chambers=ROOMS, offset=3):
     uses = {}
     past_usage = {
-        "Nahida": 85.47, "Kaedehara Kazuha": 72.46, "Yelan": 69.52, "Bennett": 65.99, "Xingqiu": 64.77, "Zhongli": 64.49, "Raiden Shogun": 64.24, "Alhaitham": 55.44, "Sangonomiya Kokomi": 53.08, "Xiangling": 39.89, "Kuki Shinobu": 34.45, "Hu Tao": 33.79, "Yae Miko": 32.33, "Dehya": 30.73, "Nilou": 29.24, "Kamisato Ayato": 27.29, "Fischl": 21.37, "Tartaglia": 21.20, "Kamisato Ayaka": 19.00, "Yaoyao": 15.50, "Shenhe": 15.06, "Ganyu": 13.46, "Cyno": 13.43, "Albedo": 12.85, "Traveler-D": 11.93, "Xiao": 10.94, "Tighnari": 10.77, "Diona": 9.50, "Arataki Itto": 9.31, "Wanderer": 8.51, "Yoimiya": 8.46, "Eula": 7.87, "Mona": 7.72, "Jean": 7.33, "Keqing": 7.31, "Kujou Sara": 7.27, "Sucrose": 7.24, "Faruzan": 6.94, "Venti": 5.74, "Beidou": 4.39, "Gorou": 3.84, "Thoma": 3.35, "Klee": 2.96, "Collei": 2.63, "Yun Jin": 2.19, "Noelle": 1.92, "Diluc": 1.31, "Kaeya": 1.13, "Rosaria": 3.80, "Layla": 2.69, "Barbara": 2.52, "Lisa": 1.02, "Yanfei": 1.00, "Qiqi": 0.73, "Chongyun": 0.70, "Razor": 0.57, "Shikanoin Heizou": 0.53, "Ningguang": 0.34, "Sayu": 0.34, "Xinyan": 0.20, "Amber": 0.17, "Dori": 0.64, "Candace": 0.30, "Traveler-A": 0.17, "Aloy": 0.10, "Traveler-G": 0.08, "Traveler-E": 0.08
+        "Nahida": 77.86, "Bennett": 76.73, "Yelan": 72.7, "Kaedehara Kazuha": 68.8, "Xingqiu": 67.63, "Raiden Shogun": 60.08, "Xiangling": 59.26, "Zhongli": 48.32, "Alhaitham": 43.79, "Hu Tao": 43.02, "Yae Miko": 38.46, "Sangonomiya Kokomi": 38.06, "Kuki Shinobu": 34.63, "Kamisato Ayaka": 27.59, "Dehya": 26.13, "Shenhe": 25.99, "Tartaglia": 23.07, "Kamisato Ayato": 19.0, "Ganyu": 18.2, "Yoimiya": 16.79, "Fischl": 15.82, "Tighnari": 13.03, "Nilou": 12.93, "Mona": 11.02, "Diona": 9.1, "Albedo": 8.81, "Yaoyao": 8.33, "Sucrose": 8.09, "Xiao": 7.59, "Arataki Itto": 7.22, "Cyno": 6.89, "Wanderer": 6.77, "Jean": 6.74, "Eula": 6.1, "Kujou Sara": 5.55, "Faruzan": 5.38, "Venti": 5.03, "Keqing": 4.98, "Klee": 4.5, "Rosaria": 4.5, "Traveler-D": 4.33, "Thoma": 3.36, "Gorou": 2.94, "Yun Jin": 2.7, "Layla": 2.64, "Barbara": 2.36, "Diluc": 1.93, "Yanfei": 1.69, "Kaeya": 1.35, "Beidou": 1.2, "Collei": 0.87, "Noelle": 0.87, "Lisa": 0.63, "Chongyun": 0.59, "Amber": 0.53, "Razor": 0.48, "Sayu": 0.48, "Xinyan": 0.44, "Shikanoin Heizou": 0.42, "Ningguang": 0.34, "Qiqi": 0.32, "Dori": 0.29, "Traveler-A": 0.1, "Traveler-G": 0.1, "Aloy": 0.0, "Candace": 0.0, "Traveler-E": 0.0
     }
     past_usage_11 = {
-        "Nahida": 74.26, "Kaedehara Kazuha": 72.42, "Yelan": 61.27, "Sangonomiya Kokomi": 57.79, "Bennett": 54.67, "Zhongli": 54.24, "Xingqiu": 50.69, "Alhaitham": 50.62, "Kamisato Ayaka": 47.81, "Raiden Shogun": 42.52, "Shenhe": 41.48, "Venti": 38.58, "Dehya": 38.55, "Ganyu": 36.40, "Nilou": 31.85, "Xiangling": 30.59, "Yae Miko": 29.02, "Hu Tao": 27.62, "Kuki Shinobu": 27.11, "Kamisato Ayato": 26.47, "Fischl": 19.13, "Tartaglia": 17.61, "Yoimiya": 17.36, "Diona": 15.83, "Yaoyao": 15.16, "Wanderer": 15.08, "Mona": 15.06, "Tighnari": 12.19, "Albedo": 11.81, "Xiao": 11.38, "Rosaria": 11.17, "Traveler-D": 11.00, "Sucrose": 10.46, "Faruzan": 8.84, "Cyno": 7.88, "Eula": 6.93, "Arataki Itto": 5.98, "Layla": 5.71, "Keqing": 5.64, "Jean": 5.06, "Yun Jin": 4.33, "Kujou Sara": 4.14, "Barbara": 4.10, "Beidou": 3.94, "Kaeya": 3.87, "Klee": 3.29, "Thoma": 3.15, "Gorou": 2.79, "Chongyun": 2.26, "Collei": 2.21, "Noelle": 1.89, "Diluc": 1.73, "Qiqi": 1.43, "Shikanoin Heizou": 1.21, "Ningguang": 1.05, "Yanfei": 1.03, "Lisa": 0.82, "Razor": 0.51, "Candace": 0.47, "Aloy": 0.39, "Traveler-A": 0.31, "Dori": 0.26, "Sayu": 0.26, "Amber": 0.25, "Traveler-G": 0.17, "Xinyan": 0.17, "Traveler-E": 0.08
+        "Kaedehara Kazuha": 72.62, "Nahida": 71.49, "Zhongli": 65.19, "Bennett": 64.74, "Yelan": 59.39, "Xingqiu": 51.23, "Raiden Shogun": 47.28, "Sangonomiya Kokomi": 46.32, "Dehya": 44.14, "Hu Tao": 43.46, "Shenhe": 42.86, "Xiangling": 42.42, "Alhaitham": 39.61, "Kamisato Ayaka": 37.28, "Ganyu": 34.31, "Yae Miko": 31.07, "Kuki Shinobu": 28.27, "Yoimiya": 23.38, "Nilou": 19.59, "Fischl": 17.42, "Kamisato Ayato": 16.85, "Tartaglia": 16.72, "Diona": 14.4, "Wanderer": 13.53, "Venti": 12.49, "Tighnari": 12.4, "Albedo": 12.37, "Yaoyao": 11.94, "Cyno": 10.8, "Sucrose": 9.3, "Mona": 9.19, "Rosaria": 8.56, "Eula": 8.54, "Xiao": 8.54, "Faruzan": 7.96, "Traveler-D": 6.2, "Arataki Itto": 5.99, "Keqing": 5.79, "Jean": 5.66, "Kujou Sara": 5.5, "Layla": 4.84, "Yun Jin": 4.27, "Diluc": 3.85, "Klee": 3.78, "Beidou": 3.46, "Thoma": 3.36, "Kaeya": 2.89, "Gorou": 2.52, "Yanfei": 2.03, "Barbara": 1.73, "Chongyun": 1.62, "Qiqi": 1.62, "Collei": 1.44, "Noelle": 1.01, "Shikanoin Heizou": 0.79, "Lisa": 0.58, "Ningguang": 0.58, "Amber": 0.43, "Sayu": 0.43, "Razor": 0.29, "Xinyan": 0.29, "Candace": 0.21, "Aloy": 0.0, "Dori": 0.0, "Traveler-A": 0.0, "Traveler-G": 0.0, "Traveler-E": 0.0
     }
     for phase in owns:
         uses[phase] = {}
