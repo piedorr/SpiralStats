@@ -20,7 +20,7 @@ def main():
     f2p_app_rate_threshold = 0.15
     # threshold for comps in character infographics
     global char_app_rate_threshold
-    char_app_rate_threshold = 0.15
+    char_app_rate_threshold = 0.10
     # Sample size will be needed to calculate the comp app and own rate
     global sample_size
     sample_size = 0
@@ -130,16 +130,13 @@ def main():
     char_usages(all_players, rooms=["11-1-1", "11-1-2", "11-2-1", "11-2-2", "11-3-1", "11-3-2"], filename="11")
     duo_usages(all_comps, all_players, usage)
 
-    # # Comp usages floor 12
-    # comp_usages(all_comps, all_players, rooms=["12-1-2", "12-2-2", "12-3-2"], filename="12 second", floor=True)
-    # comp_usages(all_comps, all_players, rooms=["12-1-1", "12-2-1", "12-3-1"], filename="12 first", floor=True)
+    # Comp usages floor 12
+    comp_usages(all_comps, all_players, rooms=["12-1-2", "12-2-2", "12-3-2"], filename="12 second", floor=True)
+    comp_usages(all_comps, all_players, rooms=["12-1-1", "12-2-1", "12-3-1"], filename="12 first", floor=True)
 
-    # # Comp usages floor 11
-    # comp_usages(all_comps, all_players, rooms=["11-1-2", "11-2-2", "11-3-2"], filename="11 second", floor=True)
-    # comp_usages(all_comps, all_players, rooms=["11-1-1", "11-2-1", "11-3-1"], filename="11 first", floor=True)
-
-    # # Character specific infographics
-    # comp_usages(all_comps, all_players, filename=char, info_char=True, floor=True)
+    # Comp usages floor 11
+    comp_usages(all_comps, all_players, rooms=["11-1-2", "11-2-2", "11-3-2"], filename="11 second", floor=True)
+    comp_usages(all_comps, all_players, rooms=["11-1-1", "11-2-1", "11-3-1"], filename="11 first", floor=True)
 
     # # Comp usage floor 12 overall
     # comp_usages(all_comps, all_players, rooms=["12-1-2", "12-2-2", "12-3-2", "12-1-1", "12-2-1", "12-3-1"], filename="12", floor=True)
@@ -147,6 +144,9 @@ def main():
     # # Comp usages for each chamber
     # for room in ["12-1-1", "12-1-2", "12-2-1", "12-2-2", "12-3-1", "12-3-2", "11-1-1", "11-1-2", "11-2-1", "11-2-2", "11-3-1", "11-3-2"]:
     #     comp_usages(all_comps, all_players, rooms=[room], filename=room, offset=1)
+
+    # # Character specific infographics
+    # comp_usages(all_comps, all_players, filename=char, info_char=True, floor=True)
 
     # # Char usages for each chamber
     # for room in ["12-1-1", "12-1-2", "12-2-1", "12-2-2", "12-3-1", "12-3-2", "11-1-1", "11-1-2", "11-2-1", "11-2-2", "11-3-1", "11-3-2"]:

@@ -36,6 +36,16 @@ class PlayerPhase:
             Artifacts, a string.
             Element, a string.
         """
+        hpcom = ["Vourukasha's Glow, ", "Tenacity of the Millelith, "]
+        comhp = [", Vourukasha's Glow", ", Tenacity of the Millelith"]
+        for i in hpcom:
+            if i in artifacts:
+                artifacts = artifacts.replace(i, "HP +20%, ")
+        for i in comhp:
+            if i in artifacts:
+                artifacts = artifacts.replace(i, "")
+                artifacts = "HP +20%, " + artifacts
+
         atkcom = ["Gladiator's Finale, ", "Shimenawa's Reminiscence, ", "Echoes of an Offering, ", "Vermillion Hereafter, "]
         comatk = [", Gladiator's Finale", ", Shimenawa's Reminiscence", ", Echoes of an Offering", ", Vermillion Hereafter"]
         for i in atkcom:
@@ -76,6 +86,16 @@ class PlayerPhase:
                 artifacts = artifacts.replace(i, "")
                 artifacts = "Anemo +15%, " + artifacts
 
+        hydrocom = ["Nymph's Dream, ", "Heart of Depth, "]
+        comhydro = [", Nymph's Dream", ", Heart of Depth"]
+        for i in hydrocom:
+            if i in artifacts:
+                artifacts = artifacts.replace(i, "Hydro +15%, ")
+        for i in comhydro:
+            if i in artifacts:
+                artifacts = artifacts.replace(i, "")
+                artifacts = "Hydro +15%, " + artifacts
+
         healcom = ["Ocean-Hued Clam, ", "Maiden Beloved, "]
         comheal = [", Ocean-Hued Clam", ", Maiden Beloved"]
         for i in healcom:
@@ -106,7 +126,7 @@ class PlayerPhase:
         """Takes in an iter of character names, and returns true if the player owned them all."""
         for char in characters:
             if char in {"Traveler-A", "Traveler-G", "Traveler-E", "Traveler-D", "Traveler"}:
-                return True
+                continue
             elif not self.owned[char]:
                 return False
         return True
