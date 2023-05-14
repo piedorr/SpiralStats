@@ -12,12 +12,12 @@ with open('../data/characters.json') as char_file:
     CHARACTERS = json.load(char_file)
 
 def main():
-    char = "Nahida"
+    char = "Nilou"
     # threshold for comps, not inclusive
     global app_rate_threshold
     global f2p_app_rate_threshold
     app_rate_threshold = 0.15
-    f2p_app_rate_threshold = 0.15
+    f2p_app_rate_threshold = 0.10
     # threshold for comps in character infographics
     global char_app_rate_threshold
     char_app_rate_threshold = 0.10
@@ -130,13 +130,13 @@ def main():
     char_usages(all_players, rooms=["11-1-1", "11-1-2", "11-2-1", "11-2-2", "11-3-1", "11-3-2"], filename="11")
     duo_usages(all_comps, all_players, usage)
 
-    # Comp usages floor 12
-    comp_usages(all_comps, all_players, rooms=["12-1-2", "12-2-2", "12-3-2"], filename="12 second", floor=True)
-    comp_usages(all_comps, all_players, rooms=["12-1-1", "12-2-1", "12-3-1"], filename="12 first", floor=True)
+    # # Comp usages floor 12
+    # comp_usages(all_comps, all_players, rooms=["12-1-2", "12-2-2", "12-3-2"], filename="12 second", floor=True)
+    # comp_usages(all_comps, all_players, rooms=["12-1-1", "12-2-1", "12-3-1"], filename="12 first", floor=True)
 
-    # Comp usages floor 11
-    comp_usages(all_comps, all_players, rooms=["11-1-2", "11-2-2", "11-3-2"], filename="11 second", floor=True)
-    comp_usages(all_comps, all_players, rooms=["11-1-1", "11-2-1", "11-3-1"], filename="11 first", floor=True)
+    # # Comp usages floor 11
+    # comp_usages(all_comps, all_players, rooms=["11-1-2", "11-2-2", "11-3-2"], filename="11 second", floor=True)
+    # comp_usages(all_comps, all_players, rooms=["11-1-1", "11-2-1", "11-3-1"], filename="11 first", floor=True)
 
     # # Comp usage floor 12 overall
     # comp_usages(all_comps, all_players, rooms=["12-1-2", "12-2-2", "12-3-2", "12-1-1", "12-2-1", "12-3-1"], filename="12", floor=True)
@@ -145,8 +145,8 @@ def main():
     # for room in ["12-1-1", "12-1-2", "12-2-1", "12-2-2", "12-3-1", "12-3-2", "11-1-1", "11-1-2", "11-2-1", "11-2-2", "11-3-1", "11-3-2"]:
     #     comp_usages(all_comps, all_players, rooms=[room], filename=room, offset=1)
 
-    # # Character specific infographics
-    # comp_usages(all_comps, all_players, filename=char, info_char=True, floor=True)
+    # Character specific infographics
+    comp_usages(all_comps, all_players, filename=char, info_char=True, floor=True)
 
     # # Char usages for each chamber
     # for room in ["12-1-1", "12-1-2", "12-2-1", "12-2-2", "12-3-1", "12-3-2", "11-1-1", "11-1-2", "11-2-1", "11-2-2", "11-3-1", "11-3-2"]:
@@ -599,6 +599,10 @@ def comp_usages_write(comps_dict, filename, floor, info_char):
             outvar_comps.append(outvar_comps_append)
         if not info_char:
             out = name_filter(comp, mode="out")
+            for i in range(len(out)):
+                if out[i] == "Yun Jin":
+                    out[i] = "Yunjin"
+                    break
             out_json.append({
                 "char_one": out[0],
                 "char_two": out[1],
@@ -610,9 +614,6 @@ def comp_usages_write(comps_dict, filename, floor, info_char):
 
     if info_char:
         out_comps += var_comps
-    csv_writer = csv.writer(open("../comp_results/comps_usage_" + filename + ".csv", 'w', newline=''))
-    for comps in out_comps:
-        csv_writer.writerow(comps.values())
 
     if floor and not info_char:
         csv_writer = csv.writer(open("../comp_results/f2p_app_" + filename + ".csv", 'w', newline=''))
@@ -622,6 +623,9 @@ def comp_usages_write(comps_dict, filename, floor, info_char):
             out_file.write(json.dumps(outvar_comps,indent=4))
 
     if floor:
+        csv_writer = csv.writer(open("../comp_results/comps_usage_" + filename + ".csv", 'w', newline=''))
+        for comps in out_comps:
+            csv_writer.writerow(comps.values())
         with open("../comp_results/exc_" + filename + ".json", "w") as out_file:
             out_file.write(json.dumps(exc_comps,indent=4))
 
