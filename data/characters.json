@@ -49,6 +49,16 @@
 		"rarity": 5,
 		"availability": "Limited 5*"
 	},
+	"Baizhu": {
+		"weapon": "Catalyst",
+		"element": "Dendro",
+		"version": 3.6,
+		"phase": "3.6b",
+		"alt_name": "Baizhuer",
+		"out_name": false,
+		"rarity": 5,
+		"availability": "Limited 5*"
+	},
 	"Barbara": {
 		"weapon": "Catalyst",
 		"element": "Hydro",
@@ -269,6 +279,16 @@
         "rarity": 5,
 		"availability": "Limited 5*"
     },
+	"Kaveh": {
+		"weapon": "Claymore",
+		"element": "Dendro",
+		"version": 3.6,
+		"phase": "3.6b",
+		"alt_name": null,
+		"out_name": false,
+        "rarity": 4,
+        "availability": "4*"
+	},
 	"Keqing": {
 		"weapon": "Sword",
 		"element": "Electro",
@@ -279,6 +299,16 @@
 		"rarity": 5,
 		"availability": "5*"
 	},
+    "Kirara": {
+        "weapon": "Sword",
+        "element": "Dendro",
+        "version": 3.6,
+        "phase": "3.6c",
+        "alt_name": "Kirara",
+        "out_name": false,
+        "rarity": 4,
+        "availability": "4*"
+    },
 	"Klee": {
 		"weapon": "Catalyst",
 		"element": "Pyro",

@@ -12,15 +12,18 @@ with open('../data/characters.json') as char_file:
     CHARACTERS = json.load(char_file)
 
 def main():
-    char = "Nilou"
+    # archetypes: all, Nilou, dendro, nondendro, off-field, on-field, melt, freeze
+    archetype = "all"
+    alt_comps = False
+    char = "Yoimiya"
     # threshold for comps, not inclusive
     global app_rate_threshold
     global f2p_app_rate_threshold
-    app_rate_threshold = 0.15
-    f2p_app_rate_threshold = 0.10
+    app_rate_threshold = 0.2
+    f2p_app_rate_threshold = 0.2
     # threshold for comps in character infographics
     global char_app_rate_threshold
-    char_app_rate_threshold = 0.10
+    char_app_rate_threshold = 0.07
     # Sample size will be needed to calculate the comp app and own rate
     global sample_size
     sample_size = 0
@@ -70,6 +73,11 @@ def main():
         col_names = next(reader)
         comp_table = []
         uid_freq_comp = {}
+        indexTraveler = col_names.index('Traveler')
+        indexTravelerA = col_names.index('Traveler-A')
+        indexTravelerG = col_names.index('Traveler-G')
+        indexTravelerE = col_names.index('Traveler-E')
+        indexTravelerD = col_names.index('Traveler-D')
 
         # Append lines and check for duplicate UIDs by checking if
         # there are exactly 12 entries (1 for each chamber) for a UID
@@ -85,17 +93,17 @@ def main():
 
             # Change traveler to respective element
             # Need to update in case of new character
-            if line[54] == "1":
+            if line[indexTraveler] == "1":
                 try:
-                    line[54] = "0"
+                    line[indexTraveler] = "0"
                     if trav_elements[line[0]] == "Anemo":
-                        line[55] = "1"
+                        line[indexTravelerA] = "1"
                     elif trav_elements[line[0]] == "Geo":
-                        line[56] = "1"
+                        line[indexTravelerG] = "1"
                     elif trav_elements[line[0]] == "Electro":
-                        line[57] = "1"
+                        line[indexTravelerE] = "1"
                     elif trav_elements[line[0]] == "Dendro":
-                        line[58] = "1"
+                        line[indexTravelerD] = "1"
                     # elif trav_elements[line[0]] == "None":
                     #     line[49] = "1"
                     else:
@@ -118,25 +126,25 @@ def main():
         if uid not in uid_freq_comp:
             print("char not in comp: " + uid)
 
-    all_comps = form_comps(col_names, comp_table)
+    all_comps = form_comps(col_names, comp_table, alt_comps)
     all_players = form_players(player_table, all_comps, [RECENT_PHASE])
 
     # Below are the commands to print CSV files, comment the ones not needed
 
     # Char usages floor 12 and 11
     global usage
-    usage = char_usages(all_players, filename="12", floor=True)
-    char_usages(all_players, filename="12 build", info_char=True, floor=True)
-    char_usages(all_players, rooms=["11-1-1", "11-1-2", "11-2-1", "11-2-2", "11-3-1", "11-3-2"], filename="11")
-    duo_usages(all_comps, all_players, usage)
+    usage = char_usages(all_players, archetype, filename="12", floor=True)
+    # char_usages(all_players, archetype, filename="12 build", info_char=True, floor=True)
+    # char_usages(all_players, archetype, rooms=["11-1-1", "11-1-2", "11-2-1", "11-2-2", "11-3-1", "11-3-2"], filename="11")
+    # duo_usages(all_comps, all_players, usage, archetype)
 
-    # # Comp usages floor 12
-    # comp_usages(all_comps, all_players, rooms=["12-1-2", "12-2-2", "12-3-2"], filename="12 second", floor=True)
-    # comp_usages(all_comps, all_players, rooms=["12-1-1", "12-2-1", "12-3-1"], filename="12 first", floor=True)
+    # Comp usages floor 12
+    comp_usages(all_comps, all_players, rooms=["12-1-2", "12-2-2", "12-3-2"], filename="12 second", floor=True)
+    comp_usages(all_comps, all_players, rooms=["12-1-1", "12-2-1", "12-3-1"], filename="12 first", floor=True)
 
-    # # Comp usages floor 11
-    # comp_usages(all_comps, all_players, rooms=["11-1-2", "11-2-2", "11-3-2"], filename="11 second", floor=True)
-    # comp_usages(all_comps, all_players, rooms=["11-1-1", "11-2-1", "11-3-1"], filename="11 first", floor=True)
+    # Comp usages floor 11
+    comp_usages(all_comps, all_players, rooms=["11-1-2", "11-2-2", "11-3-2"], filename="11 second", floor=True)
+    comp_usages(all_comps, all_players, rooms=["11-1-1", "11-2-1", "11-3-1"], filename="11 first", floor=True)
 
     # # Comp usage floor 12 overall
     # comp_usages(all_comps, all_players, rooms=["12-1-2", "12-2-2", "12-3-2", "12-1-1", "12-2-1", "12-3-1"], filename="12", floor=True)
@@ -145,12 +153,12 @@ def main():
     # for room in ["12-1-1", "12-1-2", "12-2-1", "12-2-2", "12-3-1", "12-3-2", "11-1-1", "11-1-2", "11-2-1", "11-2-2", "11-3-1", "11-3-2"]:
     #     comp_usages(all_comps, all_players, rooms=[room], filename=room, offset=1)
 
-    # Character specific infographics
-    comp_usages(all_comps, all_players, filename=char, info_char=True, floor=True)
+    # # Character specific infographics
+    # comp_usages(all_comps, all_players, filename=char, info_char=True, floor=True)
 
     # # Char usages for each chamber
     # for room in ["12-1-1", "12-1-2", "12-2-1", "12-2-2", "12-3-1", "12-3-2", "11-1-1", "11-1-2", "11-2-1", "11-2-2", "11-3-1", "11-3-2"]:
-    #     char_usages(all_players, rooms=[room], filename=room, offset=1)
+    #     char_usages(all_players, archetype, rooms=[room], filename=room, offset=1)
 
 def comp_usages(comps, 
                 players, 
@@ -385,50 +393,81 @@ def rank_usages(comps_dict, owns_offset=3):
 def duo_usages(comps,
                 players,
                 usage,
+                archetype,
                 rooms=["12-1-1", "12-1-2", "12-2-1", "12-2-2", "12-3-1", "12-3-2"],
                 filename="duo_usages"):
-    duos_dict = used_duos(players, comps, rooms, usage)
-    duo_write(duos_dict, usage, filename)
+    duos_dict = used_duos(players, comps, rooms, usage, archetype)
+    duo_write(duos_dict, usage, filename, archetype)
 
-def used_duos(players, comps, rooms, usage, phase=RECENT_PHASE):
+def used_duos(players, comps, rooms, usage, archetype, phase=RECENT_PHASE):
     # Returns dictionary of all the duos used and how many times they were used
     duos_dict = {}
     pyroChars = ["Bennett","Xiangling","Hu Tao","Thoma","Yoimiya","Yanfei","Xinyan","Diluc","Amber","Klee"]
     hydroChars = ["Mona","Sangonomiya Kokomi","Barbara","Xingqiu","Nilou","Candace","Yelan","Kamisato Ayato","Tartaglia"]
-    onField = ["Alhaitham", "Arataki Itto", "Cyno", "Dehya", "Diluc", "Eula", "Ganyu", "Hu Tao", "Kamisato Ayaka", "Kamisato Ayato", "Keqing", "Klee", "Ningguang", "Noelle", "Razor", "Shikanoin Heizou", "Tartaglia", "Tighnari", "Wanderer", "Xiao", "Yanfei", "Yoimiya"]
+    dendroChars = ["Alhaitham","Collei","Nahida","Tighnari","Traveler-D","Yaoyao","Baizhu","Kaveh","Kirara"]
+    onField = ["Alhaitham", "Arataki Itto", "Cyno", "Dehya", "Diluc", "Eula", "Ganyu", "Hu Tao", "Kamisato Ayaka", "Kamisato Ayato", "Keqing", "Klee", "Ningguang", "Noelle", "Razor", "Shikanoin Heizou", "Tartaglia", "Tighnari", "Wanderer", "Xiao", "Yanfei", "Yoimiya","Kaveh"]
 
     for comp in comps:
         if len(comp.characters) < 2 or comp.room not in rooms:
             continue
 
-        # foundPyro = False
-        # foundHydro = False
-        # foundNilou = False
-        # foundOnField = False
+        foundPyro = False
+        foundHydro = False
+        foundDendro = False
+        foundNilou = False
+        foundOnField = False
 
-        # testChar = 0
-        # while not foundPyro and testChar < len(pyroChars):
-        #     if comp.char_presence[pyroChars[testChar]]:
-        #         foundPyro = True
-        #     testChar += 1
-        # testChar = 0
+        testChar = 0
+        while not foundPyro and testChar < len(pyroChars):
+            if comp.char_presence[pyroChars[testChar]]:
+                foundPyro = True
+            testChar += 1
 
-        # while not foundHydro and testChar < len(hydroChars):
-        #     if comp.char_presence[hydroChars[testChar]]:
-        #         foundHydro = True
-        #     testChar += 1
+        testChar = 0
+        while not foundHydro and testChar < len(hydroChars):
+            if comp.char_presence[hydroChars[testChar]]:
+                foundHydro = True
+            testChar += 1
 
-        # testChar = 0
-        # while not foundOnField and testChar < len(onField):
-        #     if comp.char_presence[onField[testChar]]:
-        #         foundOnField = True
-        #     testChar += 1
+        testChar = 0
+        while not foundDendro and testChar < len(dendroChars):
+            if comp.char_presence[dendroChars[testChar]]:
+                foundDendro = True
+            testChar += 1
 
-        # if comp.char_presence["Nilou"]:
-        #     foundNilou = True
+        testChar = 0
+        while not foundOnField and testChar < len(onField):
+            if comp.char_presence[onField[testChar]]:
+                foundOnField = True
+            testChar += 1
 
-        # if not (not foundOnField and not foundNilou):
-        #     continue
+        if comp.char_presence["Nilou"]:
+            foundNilou = True
+
+        match archetype:
+            case "Nilou":
+                if not (foundNilou):
+                    continue
+            case "dendro":
+                if not (foundDendro):
+                    continue
+            case "nondendro":
+                if not (not foundDendro):
+                    continue
+            case "off-field":
+                if not (not foundOnField and not foundNilou):
+                    continue
+            case "on-field":
+                if not (foundOnField and not foundNilou):
+                    continue
+            case "melt":
+                if not (foundPyro):
+                    continue
+            case "freeze":
+                if not (not foundPyro and foundHydro):
+                    continue
+            case _:
+                pass
 
         # Permutate the duos, for example if Ganyu and Xiangling are used,
         # two duos are used, Ganyu/Xiangling and Xiangling/Ganyu
@@ -459,18 +498,19 @@ def used_duos(players, comps, rooms, usage, phase=RECENT_PHASE):
     return sorted_duos
 
 def char_usages(players,
+                archetype,
                 rooms=["12-1-1", "12-1-2", "12-2-1", "12-2-2", "12-3-1", "12-3-2"],
                 filename="char_usages",
                 offset=3,
                 info_char=False,
                 floor=False):
     own = cu.ownership(players, chambers = rooms)
-    app = cu.appearances(players, own, chambers = rooms, offset = offset, info_char = info_char)
+    app = cu.appearances(players, own, archetype, chambers = rooms, offset = offset, info_char = info_char)
     chars_dict = cu.usages(own, app, chambers = rooms, offset = offset)
     # # Print the list of weapons and artifacts used for a character
     # if floor:
     #     print(app[RECENT_PHASE][filename])
-    char_usages_write(chars_dict[RECENT_PHASE], filename, floor)
+    char_usages_write(chars_dict[RECENT_PHASE], filename, floor, archetype)
     return chars_dict
 
 def comp_usages_write(comps_dict, filename, floor, info_char):
@@ -633,7 +673,7 @@ def comp_usages_write(comps_dict, filename, floor, info_char):
         with open("../comp_results/json/" + filename + ".json", "w") as out_file:
             out_file.write(json.dumps(out_json,indent=4))
 
-def duo_write(duos_dict, usage, filename):
+def duo_write(duos_dict, usage, filename, archetype):
     out_duos = []
     for char in duos_dict:
         if usage[RECENT_PHASE][char]["app"] > 1:
@@ -651,11 +691,13 @@ def duo_write(duos_dict, usage, filename):
             out_duos.append(out_duos_append)
     out_duos = sorted(out_duos, key=lambda t: t["usage_rate"], reverse = True)
 
+    if archetype != "all":
+        filename = filename + "_" + archetype
     csv_writer = csv.writer(open("../comp_results/" + filename + ".csv", 'w', newline=''))
     for duos in out_duos:
         csv_writer.writerow(duos.values())
 
-def char_usages_write(chars_dict, filename, floor):
+def char_usages_write(chars_dict, filename, floor, archetype):
     out_chars = []
     weap_len = 8
     arti_len = 4
@@ -717,6 +759,8 @@ def char_usages_write(chars_dict, filename, floor):
                     out_chars_append[i] = "-"
             out_chars.append(out_chars_append)
 
+    if archetype != "all":
+        filename = filename + "_" + archetype
     csv_writer = csv.writer(open("../char_results/" + filename + ".csv", 'w', newline=''))
     count = 0
     for chars in out_chars:
@@ -744,14 +788,13 @@ def comp_chars(row, cols):
             comp.append(cols[i])
     return comp
 
-def form_comps(col_names, table):
+def form_comps(col_names, table, info_char):
     room = col_names.index('room')
     phase = col_names.index('phase')
     comps = []
 
     for row in table:
-        comp = Composition(row[0], comp_chars(row, col_names),
-                                 row[phase], row[room])
+        comp = Composition(row[0], comp_chars(row, col_names), row[phase], row[room], info_char)
         comps.append(comp)
 
     return comps

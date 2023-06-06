@@ -1,23 +1,29 @@
-In case of new arti with one of these substats:
-    atk, anemo, burst, cryo, def, dendro, em, electro, electro res, er, geo, heal, hp, hydro, phys, pyro, pyro res, shield
+In case of new arti with one of these 2pc effects:
+    atk, def, em, er, heal, hp, burst, shield, phys, anemo, cryo, dendro, electro, geo, hydro, pyro, electro res, pyro res
     update player_phase.py line 39
 In case of new character:
     Add new characters to characters.json
-    Change indexes at comp_rates.py lines 84 to 96 for the travelers
-
+    Add certain archetypes to char_usage.py line 81, comp_rates.py line 399
     Add comp role at composition.py line 61
     If new char is traveler, update comp_rates.py, char_usage.py, and player_phase.py
 
 
-Rename CSV files in 'data/raw_csvs' from 'ver.csv' and 'ver_char.csv' to '2.2b.csv' and '2.2b_char.csv'
 Update previous char usage at line 168 on comps/char_usage.py, take it from jsons
 delete old phase_characters.csv and compositions.csv
 Run char_csv_filterer.py and csv_filterer.py
-Run comp_rates.py thrice:
-    Once with only the character write commands uncommented, to check the UIDs
-    Second with the comp write commands uncommented, comment the chars usage
-    Third onward for the comp names
-In case of error when running comp_rates:
-    Run with only the char usages write uncommented
-    New compositions.csv and phase_characters.csv should be created, cut them to the raw data folder
-    (Optional, run with: "python comp_rates.py > E:\OUTPUT.txt")
+Run comp_rates.py
+For character infographics:
+    Edit comp_rates.py lines 16 - 18
+    Run comp_rates.py
+Possible errors:
+    'charmap' codec can't encode characters:
+        There must be Chinese character names, search for UIDs beginning with 2 or 1
+    In case of error when running comp_rates:
+        Run with only the char usages write uncommented
+        New compositions.csv and phase_characters.csv should be created, cut them to the raw data folder
+        (Optional, run "python comp_rates.py > E:\OUTPUT.txt")
+
+New chars, weapon, artifacts:
+https://genshin-impact.fandom.com/wiki/Layla
+https://ambr.top/en/archive/avatar
+https://ambr.top/en/archive/reliquary
