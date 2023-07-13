@@ -8,13 +8,9 @@ In case of new character:
     If new char is traveler, update comp_rates.py, char_usage.py, and player_phase.py
 
 
-Update previous char usage at line 168 on comps/char_usage.py, take it from jsons
-delete old phase_characters.csv and compositions.csv
-Run char_csv_filterer.py and csv_filterer.py
+Update previous phase at comp_rates_config.py
+Run csv_filterer.py
 Run comp_rates.py
-For character infographics:
-    Edit comp_rates.py lines 16 - 18
-    Run comp_rates.py
 Possible errors:
     'charmap' codec can't encode characters:
         There must be Chinese character names, search for UIDs beginning with 2 or 1

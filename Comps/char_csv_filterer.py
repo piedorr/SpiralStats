@@ -33,7 +33,7 @@ def build_char(indexes, line):
     }
 
 def write_chars(all_chars, phase):
-    with open('../data/phase_characters.csv', 'a') as out_file:
+    with open('../data/phase_characters.csv', 'w') as out_file:
         if out_file.tell() == 0:
             out_file.write("uid,phase,name,level,cons,weapon,artifact,element\n")
         for char_data in all_chars:

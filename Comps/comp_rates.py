@@ -4,29 +4,17 @@ import operator
 from itertools import permutations
 from composition import Composition
 from player_phase import PlayerPhase
+from comp_rates_config import *
 import char_usage as cu
-# This var needs to change every time
-RECENT_PHASE = "2.2b"
 
 with open('../data/characters.json') as char_file:
     CHARACTERS = json.load(char_file)
 
 def main():
-    # archetypes: all, Nilou, dendro, nondendro, off-field, on-field, melt, freeze
-    archetype = "all"
-    alt_comps = False
-    char = "Yoimiya"
-    # threshold for comps, not inclusive
-    global app_rate_threshold
-    global f2p_app_rate_threshold
-    app_rate_threshold = 0.2
-    f2p_app_rate_threshold = 0.2
-    # threshold for comps in character infographics
-    global char_app_rate_threshold
-    char_app_rate_threshold = 0.07
     # Sample size will be needed to calculate the comp app and own rate
     global sample_size
     sample_size = 0
+    print("start")
 
     with open("../data/phase_characters.csv") as stats:
         # uid_freq_char and last_uid will help detect duplicate UIDs
@@ -51,6 +39,12 @@ def main():
                     line[2] = "Traveler-E"
                 elif line[7] == "Dendro":
                     line[2] = "Traveler-D"
+                elif line[7] == "Hydro":
+                    line[2] = "Traveler-H"
+                elif line[7] == "Pyro":
+                    line[2] = "Traveler-P"
+                elif line[7] == "Cryo":
+                    line[2] = "Traveler-C"
                 elif line[7] == "None":
                     line[2] = "Traveler-D"
                 else:
@@ -73,11 +67,6 @@ def main():
         col_names = next(reader)
         comp_table = []
         uid_freq_comp = {}
-        indexTraveler = col_names.index('Traveler')
-        indexTravelerA = col_names.index('Traveler-A')
-        indexTravelerG = col_names.index('Traveler-G')
-        indexTravelerE = col_names.index('Traveler-E')
-        indexTravelerD = col_names.index('Traveler-D')
 
         # Append lines and check for duplicate UIDs by checking if
         # there are exactly 12 entries (1 for each chamber) for a UID
@@ -93,25 +82,32 @@ def main():
 
             # Change traveler to respective element
             # Need to update in case of new character
-            if line[indexTraveler] == "1":
+            if line[col_names.index('Traveler')] == "1":
                 try:
-                    line[indexTraveler] = "0"
+                    line[col_names.index('Traveler')] = "0"
                     if trav_elements[line[0]] == "Anemo":
-                        line[indexTravelerA] = "1"
+                        line[col_names.index('Traveler-A')] = "1"
                     elif trav_elements[line[0]] == "Geo":
-                        line[indexTravelerG] = "1"
+                        line[col_names.index('Traveler-G')] = "1"
                     elif trav_elements[line[0]] == "Electro":
-                        line[indexTravelerE] = "1"
+                        line[col_names.index('Traveler-E')] = "1"
                     elif trav_elements[line[0]] == "Dendro":
-                        line[indexTravelerD] = "1"
+                        line[col_names.index('Traveler-D')] = "1"
+                    elif trav_elements[line[0]] == "Hydro":
+                        line[col_names.index('Traveler-H')] = "1"
+                    elif trav_elements[line[0]] == "Pyro":
+                        line[col_names.index('Traveler-P')] = "1"
+                    elif trav_elements[line[0]] == "Cryo":
+                        line[col_names.index('Traveler-C')] = "1"
                     # elif trav_elements[line[0]] == "None":
-                    #     line[49] = "1"
+                    #     line[col_names.index('Traveler')] = "1"
                     else:
                         print(trav_elements[line[0]])
                 except KeyError:
                     print("Traveler key error: " + line[0])
             comp_table.append(line)
             sample_size += 1
+        print("done csv")
 
         # 12 entries for each UID, so sample size
         # should be divided by 12
@@ -119,7 +115,9 @@ def main():
         print("sample size: " + str(sample_size))
 
     # Check for missing UIDs
+    csv_writer = csv.writer(open("../char_results/uids.csv", 'w', newline=''))
     for uid in uid_freq_comp:
+        csv_writer.writerow([uid])
         if uid not in uid_freq_char:
             print("comp not in char: " + uid)
     for uid in uid_freq_char:
@@ -128,65 +126,97 @@ def main():
 
     all_comps = form_comps(col_names, comp_table, alt_comps)
     all_players = form_players(player_table, all_comps, [RECENT_PHASE])
+    print("done form")
 
     # Below are the commands to print CSV files, comment the ones not needed
 
-    # Char usages floor 12 and 11
-    global usage
-    usage = char_usages(all_players, archetype, filename="12", floor=True)
-    # char_usages(all_players, archetype, filename="12 build", info_char=True, floor=True)
-    # char_usages(all_players, archetype, rooms=["11-1-1", "11-1-2", "11-2-1", "11-2-2", "11-3-1", "11-3-2"], filename="11")
-    # duo_usages(all_comps, all_players, usage, archetype)
+    if "Char usages all chambers" in run_commands:
+        global usage
+        usage = char_usages(all_players, archetype, past_phase, filename="12", floor=True)
+        char_usages(all_players, archetype, past_phase, filename="12 build", info_char=True, floor=True)
+        char_usages(all_players, archetype, past_phase, rooms=["11-1-1", "11-1-2", "11-2-1", "11-2-2", "11-3-1", "11-3-2"], filename="11")
+        duo_usages(all_comps, all_players, usage, archetype)
+        print("done char")
 
-    # Comp usages floor 12
-    comp_usages(all_comps, all_players, rooms=["12-1-2", "12-2-2", "12-3-2"], filename="12 second", floor=True)
-    comp_usages(all_comps, all_players, rooms=["12-1-1", "12-2-1", "12-3-1"], filename="12 first", floor=True)
+    if "Comp usage floor 12 each half" in run_commands:
+        comp_usages(all_comps, all_players, whaleCheck, whaleSigWeap, sigWeaps, rooms=["12-1-2", "12-2-2", "12-3-2"], filename="12 second", floor=True)
+        comp_usages(all_comps, all_players, whaleCheck, whaleSigWeap, sigWeaps, rooms=["12-1-1", "12-2-1", "12-3-1"], filename="12 first", floor=True)
+        print("done 12 comps")
 
-    # Comp usages floor 11
-    comp_usages(all_comps, all_players, rooms=["11-1-2", "11-2-2", "11-3-2"], filename="11 second", floor=True)
-    comp_usages(all_comps, all_players, rooms=["11-1-1", "11-2-1", "11-3-1"], filename="11 first", floor=True)
+    if "Comp usage floor 11 each half" in run_commands:
+        comp_usages(all_comps, all_players, whaleCheck, whaleSigWeap, sigWeaps, rooms=["11-1-2", "11-2-2", "11-3-2"], filename="11 second", floor=True)
+        comp_usages(all_comps, all_players, whaleCheck, whaleSigWeap, sigWeaps, rooms=["11-1-1", "11-2-1", "11-3-1"], filename="11 first", floor=True)
+        print("done 11 comps")
 
-    # # Comp usage floor 12 overall
-    # comp_usages(all_comps, all_players, rooms=["12-1-2", "12-2-2", "12-3-2", "12-1-1", "12-2-1", "12-3-1"], filename="12", floor=True)
+    if "Comp usage floor 12 combined" in run_commands:
+        comp_usages(all_comps, all_players, whaleCheck, whaleSigWeap, sigWeaps, rooms=["12-1-2", "12-2-2", "12-3-2", "12-1-1", "12-2-1", "12-3-1"], filename="12", floor=True)
+        print("done 12 comps combined")
 
-    # # Comp usages for each chamber
-    # for room in ["12-1-1", "12-1-2", "12-2-1", "12-2-2", "12-3-1", "12-3-2", "11-1-1", "11-1-2", "11-2-1", "11-2-2", "11-3-1", "11-3-2"]:
-    #     comp_usages(all_comps, all_players, rooms=[room], filename=room, offset=1)
+    if "Comp usage each chamber" in run_commands:
+        for room in ["12-1-1", "12-1-2", "12-2-1", "12-2-2", "12-3-1", "12-3-2", "11-1-1", "11-1-2", "11-2-1", "11-2-2", "11-3-1", "11-3-2"]:
+            comp_usages(all_comps, all_players, whaleCheck, whaleSigWeap, sigWeaps, rooms=[room], filename=room, offset=1)
+        print("done chamber comps")
 
-    # # Character specific infographics
-    # comp_usages(all_comps, all_players, filename=char, info_char=True, floor=True)
+    if "Character specific infographics" in run_commands:
+        comp_usages(all_comps, all_players, whaleCheck, whaleSigWeap, sigWeaps, filename=char, info_char=True, floor=True)
+        print("char infographics")
 
-    # # Char usages for each chamber
-    # for room in ["12-1-1", "12-1-2", "12-2-1", "12-2-2", "12-3-1", "12-3-2", "11-1-1", "11-1-2", "11-2-1", "11-2-2", "11-3-1", "11-3-2"]:
-    #     char_usages(all_players, archetype, rooms=[room], filename=room, offset=1)
+    if "Char usages for each chamber" in run_commands:
+        for room in ["12-1-1", "12-1-2", "12-2-1", "12-2-2", "12-3-1", "12-3-2", "11-1-1", "11-1-2", "11-2-1", "11-2-2", "11-3-1", "11-3-2"]:
+            char_usages(all_players, archetype, past_phase, rooms=[room], filename=room, offset=1)
+        print("done char chambers")
 
 def comp_usages(comps, 
                 players, 
+                whaleCheck,
+                whaleSigWeap,
+                sigWeaps,
                 rooms=["12-1-1", "12-1-2", "12-2-1", "12-2-2", "12-3-1", "12-3-2"],
                 filename="comp_usages",
                 offset=3,
                 info_char=False,
                 floor=False):
-    comps_dict = used_comps(players, comps, rooms, floor=floor)
-    comp_owned(players, comps_dict, owns_offset=offset)
+    comps_dict = used_comps(players, comps, rooms, whaleCheck, whaleSigWeap, sigWeaps, floor=floor)
+    comp_owned(players, comps_dict, whaleCheck, whaleSigWeap, sigWeaps, owns_offset=offset)
     rank_usages(comps_dict, owns_offset=offset)
     comp_usages_write(comps_dict, filename, floor, info_char)
 
-def used_comps(players, comps, rooms, phase=RECENT_PHASE, floor=False):
+def used_comps(players, comps, rooms, whaleCheck, whaleSigWeap, sigWeaps, phase=RECENT_PHASE, floor=False):
     # Returns the dictionary of all the comps used and how many times they were used
     comps_dict = {}
     error_uids = []
-    deepwoodTighnari = 0
-    deepwoodEquipChars = {}
-    meltGanyu = 0
-    meltGanyuWeap = {}
-    meltGanyuArti = {}
+    # deepwoodTighnari = 0
+    # deepwoodEquipChars = {}
+    # meltGanyu = 0
+    # meltGanyuWeap = {}
+    # meltGanyuArti = {}
+    # lessFour = []
+    # lessFourComps = {}
+    totalComps = 0
+    whaleCount = 0
     for comp in comps:
         comp_tuple = tuple(comp.characters)
         # Check if the comp is used in the rooms that are being checked
-        if len(comp_tuple) < 4 or comp.room not in rooms:
+        if comp.room not in rooms or len(comp_tuple) < 4:
             continue
-        elif comp_tuple not in comps_dict:
+        totalComps += 1
+        if whaleCheck:
+            whaleComp = False
+            for char in range (4):
+                if (
+                    players[phase][comp.player].owned[comp_tuple[char]]["cons"] != 0
+                    and CHARACTERS[comp_tuple[char]]["availability"] in ["Limited 5*"]
+                ) or (
+                    whaleSigWeap and players[phase][comp.player].owned[comp_tuple[char]]["weapon"] in sigWeaps
+                ):
+                    whaleComp = True
+            if whaleComp:
+                whaleCount += 1
+                continue
+        # if len(comp_tuple) < 4:
+        #     lessFour.append(comp.player)
+        #     continue
+        if comp_tuple not in comps_dict:
             comps_dict[comp_tuple] = {
                 "uses": 1,
                 "owns": 0,
@@ -196,12 +226,12 @@ def used_comps(players, comps, rooms, phase=RECENT_PHASE, floor=False):
                 "deepwood": 0
             }
             if floor:
-                deepwood = False
-                melt = False
-                deepwoodEquip = ""
+                # deepwood = False
+                # melt = False
+                # deepwoodEquip = ""
                 for char in range (4):
-                    if char in ["Thoma","Yoimiya","Yanfei","Hu Tao","Xinyan","Diluc","Amber","Xiangling","Klee","Bennett"]:
-                        melt = True
+                    # if char in ["Thoma","Yoimiya","Yanfei","Hu Tao","Xinyan","Diluc","Amber","Xiangling","Klee","Bennett"]:
+                    #     melt = True
                     # "weapon" and "artifacts" stores dictionary of
                     # used gear, key is the name of the gear, value is the app#
                     comps_dict[comp_tuple][comp_tuple[char]] = {
@@ -213,27 +243,27 @@ def used_comps(players, comps, rooms, phase=RECENT_PHASE, floor=False):
                         comps_dict[comp_tuple][comp_tuple[char]]["weapon"][players[phase][comp.player].owned[comp_tuple[char]]["weapon"]] = 1
                         if players[phase][comp.player].owned[comp_tuple[char]]["artifacts"] != "":
                             comps_dict[comp_tuple][comp_tuple[char]]["artifacts"][players[phase][comp.player].owned[comp_tuple[char]]["artifacts"]] = 1
-                            if players[phase][comp.player].owned[comp_tuple[char]]["artifacts"] == "Deepwood Memories":
-                                deepwood = True
-                                deepwoodEquip = comp_tuple[char]
+                            # if players[phase][comp.player].owned[comp_tuple[char]]["artifacts"] == "Deepwood Memories":
+                            #     deepwood = True
+                            #     deepwoodEquip = comp_tuple[char]
                     except Exception as e:
                         if ('{}: {}'.format(comp.player, e)) not in error_uids:
                             error_uids.append('{}: {}'.format(comp.player, e))
-                if deepwood:
-                    comps_dict[comp_tuple]["deepwood"] += 1
-                    if ("Tighnari" in comp_tuple):
-                        deepwoodTighnari += 1
-                        if deepwoodEquip in deepwoodEquipChars:
-                            deepwoodEquipChars[deepwoodEquip] += 1
-                        else:
-                            deepwoodEquipChars[deepwoodEquip] = 1
-                if melt and "Ganyu" in comp_tuple:
-                    meltGanyu += 1
+                # if deepwood:
+                #     comps_dict[comp_tuple]["deepwood"] += 1
+                #     if ("Tighnari" in comp_tuple):
+                #         deepwoodTighnari += 1
+                #         if deepwoodEquip in deepwoodEquipChars:
+                #             deepwoodEquipChars[deepwoodEquip] += 1
+                #         else:
+                #             deepwoodEquipChars[deepwoodEquip] = 1
+                # if melt and "Ganyu" in comp_tuple:
+                #     meltGanyu += 1
         else:
             comps_dict[comp_tuple]["uses"] +=1
             if floor:
-                deepwood = False
-                deepwoodEquip = ""
+                # deepwood = False
+                # deepwoodEquip = ""
                 for i in range(4):
                     try:
                         if players[phase][comp.player].owned[comp_tuple[i]]["weapon"] in comps_dict[comp_tuple][comp_tuple[i]]["weapon"]:
@@ -245,20 +275,20 @@ def used_comps(players, comps, rooms, phase=RECENT_PHASE, floor=False):
                                 comps_dict[comp_tuple][comp_tuple[i]]["artifacts"][players[phase][comp.player].owned[comp_tuple[i]]["artifacts"]] += 1
                             else:
                                 comps_dict[comp_tuple][comp_tuple[i]]["artifacts"][players[phase][comp.player].owned[comp_tuple[i]]["artifacts"]] = 1
-                            if players[phase][comp.player].owned[comp_tuple[i]]["artifacts"] == "Deepwood Memories":
-                                deepwood = True
-                                deepwoodEquip = comp_tuple[i]
+                            # if players[phase][comp.player].owned[comp_tuple[i]]["artifacts"] == "Deepwood Memories":
+                            #     deepwood = True
+                            #     deepwoodEquip = comp_tuple[i]
                     except Exception as e:
                         if ('{}: {}'.format(comp.player, e)) not in error_uids:
                             error_uids.append('{}: {}'.format(comp.player, e))
-                if deepwood:
-                    comps_dict[comp_tuple]["deepwood"] += 1
-                    if ("Tighnari" in comp_tuple):
-                        deepwoodTighnari += 1
-                        if deepwoodEquip in deepwoodEquipChars:
-                            deepwoodEquipChars[deepwoodEquip] += 1
-                        else:
-                            deepwoodEquipChars[deepwoodEquip] = 1
+                # if deepwood:
+                #     comps_dict[comp_tuple]["deepwood"] += 1
+                #     if ("Tighnari" in comp_tuple):
+                #         deepwoodTighnari += 1
+                #         if deepwoodEquip in deepwoodEquipChars:
+                #             deepwoodEquipChars[deepwoodEquip] += 1
+                #         else:
+                #             deepwoodEquipChars[deepwoodEquip] = 1
     if floor:
         for comp in comps_dict:
             for char in comp:
@@ -337,19 +367,41 @@ def used_comps(players, comps, rooms, phase=RECENT_PHASE, floor=False):
                             sorted_artifacts.insert(0, maxArtifact)
                         # print(sorted_artifacts)
                 comps_dict[comp][char]["artifacts"] = {k: v for k, v in sorted_artifacts}
-        # if len(error_uids):
-        #     print('Error with UIDs:')
-        #     print(error_uids)
+    # print("Less than four: " + str(lessFour))
+    # print("Less than four: " + str(len(lessFour)/totalComps))
+    if whaleCheck:
+        print("Whale percentage: " + str(whaleCount/totalComps))
     # print("Tighnari with deepwood: " + str(deepwoodTighnari))
     # print(deepwoodEquipChars)
     return comps_dict
 
-def comp_owned(players, comps_dict, phase=RECENT_PHASE, owns_offset=3):
+def comp_owned(players, comps_dict, whaleCheck, whaleSigWeap, sigWeaps, phase=RECENT_PHASE, owns_offset=3):
     # For every comp that is used, calculate the ownership rate,
     # i.e. how many players own all four characters in the comp
     for player in players[phase].values():
         for comp in comps_dict:
             if player.chars_owned(comp):
+                if whaleCheck:
+                    whaleComp = False
+                    for char in comp:
+                        if char not in CHARACTERS:
+                            continue
+                        if player.owned[char] == None:
+                            if whaleSigWeap:
+                                for trav in ["Traveler-A", "Traveler-G", "Traveler-E", "Traveler-D"]:
+                                    if player.owned[trav] != None:
+                                        if player.owned[trav]["weapon"] in sigWeaps:
+                                            whaleComp = True
+                            continue
+                        if (
+                            player.owned[char]["cons"] != 0
+                            and CHARACTERS[char]["availability"] in ["Limited 5*"]
+                        ) or (
+                            whaleSigWeap and player.owned[char]["weapon"] in sigWeaps
+                        ):
+                            whaleComp = True
+                    if whaleComp:
+                        continue
                 comps_dict[comp]["owns"] += owns_offset
 
 def rank_usages(comps_dict, owns_offset=3):
@@ -499,6 +551,7 @@ def used_duos(players, comps, rooms, usage, archetype, phase=RECENT_PHASE):
 
 def char_usages(players,
                 archetype,
+                past_phase,
                 rooms=["12-1-1", "12-1-2", "12-2-1", "12-2-2", "12-3-1", "12-3-2"],
                 filename="char_usages",
                 offset=3,
@@ -506,7 +559,7 @@ def char_usages(players,
                 floor=False):
     own = cu.ownership(players, chambers = rooms)
     app = cu.appearances(players, own, archetype, chambers = rooms, offset = offset, info_char = info_char)
-    chars_dict = cu.usages(own, app, chambers = rooms, offset = offset)
+    chars_dict = cu.usages(own, app, past_phase, filename, chambers = rooms, offset = offset)
     # # Print the list of weapons and artifacts used for a character
     # if floor:
     #     print(app[RECENT_PHASE][filename])
@@ -752,7 +805,7 @@ def char_usages_write(chars_dict, filename, floor, archetype):
                 "app_rate": str(chars_dict[char]["app"]) + "%",
                 "own_rate": str(chars_dict[char]["own"]) + "%",
                 "rarity": chars_dict[char]["rarity"],
-                "diff": str(chars_dict[char]["diff_11"]) + "%",
+                "diff": str(chars_dict[char]["diff"]) + "%",
             }
             for i in ["app_rate","own_rate","usage_rate","diff"]:
                 if out_chars_append[i] == "-%":

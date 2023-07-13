@@ -910,6 +910,7 @@ class Composition:
                 ["Xingqiu","Traveler-D","Kaedehara Kazuha","Bennett"]
             ],
             "Burgeon Ayato": [
+                ["Kamisato Ayato","Nahida","Thoma","Bennett"],
                 ["Kamisato Ayato","Xiangling","Baizhu","Bennett"],
                 ["Kamisato Ayato","Traveler-D","Kaedehara Kazuha","Bennett"],
                 ["Kamisato Ayato","Nahida","Kaedehara Kazuha","Bennett"]
@@ -925,9 +926,13 @@ class Composition:
                 ["Hu Tao","Xingqiu","Traveler-D","Zhongli"],
                 ["Hu Tao","Yelan","Xingqiu","Kirara"],
                 ["Hu Tao","Yelan","Xingqiu","Nahida"],
+                ["Hu Tao","Yelan","Nahida","Thoma"],
                 ["Hu Tao","Yelan","Nahida","Zhongli"]
             ],
             "Burgeon Klee": [
+                ["Klee","Yelan","Nahida","Zhongli"],
+                ["Klee","Xingqiu","Nahida","Baizhu"],
+                ["Klee","Xingqiu","Nahida","Bennett"],
                 ["Klee","Xingqiu","Nahida","Zhongli"]
             ],
             "Burgeon Diluc": [
@@ -952,16 +957,26 @@ class Composition:
                 ["Nahida","Xiangling","Xingqiu","Thoma"],
                 ["Nahida","Xiangling","Xingqiu","Zhongli"]
             ],
+            "Burgeon Alhaitham": [
+                ["Alhaitham","Xingqiu","Thoma","Baizhu"]
+            ],
 
             # Curry: Pyro, electro, dendro, hydro, like soup but with vegetables
             # Raiden/Kuki doesn't work (go to hyperbloom), only Fischl/Beidou
             # Unless it's Thoma, which is really meant to go curry
             "Thundering Furry": [
+                ["Razor","Xiangling","Nahida","Sangonomiya Kokomi"],
                 ["Razor","Xingqiu","Traveler-D","Bennett"],
                 ["Razor","Xingqiu","Nahida","Bennett"]
             ],
             "Chaos Cyno": [
                 ["Cyno","Yelan","Nahida","Thoma"]
+            ],
+            "Hyperburgeon Klee": [
+                ["Klee","Xingqiu","Nahida","Kuki Shinobu"]
+            ],
+            "Hyperburgeon Ayato": [
+                ["Kamisato Ayato","Nahida","Thoma","Kuki Shinobu"]
             ],
             "Hyperburgeon Yanfei": [
                 ["Yanfei","Xingqiu","Nahida","Kuki Shinobu"]
@@ -977,6 +992,10 @@ class Composition:
             ],
             "Nahida Curry": [
             # Alt: Hyperburgeon Nahida
+                ["Nahida","Fischl","Sangonomiya Kokomi","Thoma"],
+                ["Nahida","Fischl","Barbara","Thoma"],
+                ["Nahida","Yelan","Thoma","Kuki Shinobu"],
+                ["Nahida","Yelan","Thoma","Bennett"],
                 ["Nahida","Xiangling","Yelan","Kuki Shinobu"],
                 ["Nahida","Xiangling","Xingqiu","Kuki Shinobu"],
                 ["Nahida","Xingqiu","Thoma","Kuki Shinobu"],
@@ -1142,9 +1161,11 @@ class Composition:
                 ["Raiden Shogun","Xiangling","Mona","Bennett"],
                 ["Shikanoin Heizou","Xiangling","Xingqiu","Bennett"],
                 ["Shikanoin Heizou","Xiangling","Yelan","Bennett"],
+                ["Eula","Xiangling","Xingqiu","Bennett"],
                 ["Nahida","Xiangling","Xingqiu","Bennett"],
                 ["Alhaitham","Xiangling","Xingqiu","Bennett"],
                 ["Nahida","Xiangling","Yelan","Bennett"],
+                ["Klee","Xiangling","Xingqiu","Bennett"],
                 ["Cyno","Xiangling","Xingqiu","Bennett"],
                 ["Ningguang","Xiangling","Xingqiu","Bennett"],
                 ["Kamisato Ayaka","Xiangling","Xingqiu","Bennett"],
@@ -1330,6 +1351,7 @@ class Composition:
             ],
             "Mono Geo Itto": [
             # Alt: 3 geo
+                ["Klee","Arataki Itto","Gorou","Albedo"],
                 ["Arataki Itto","Mona","Gorou","Zhongli"],
                 ["Arataki Itto","Traveler-G","Gorou","Zhongli"],
                 ["Arataki Itto","Ningguang","Gorou","Zhongli"],
@@ -1505,6 +1527,7 @@ class Composition:
             ],
             "Reverse Vape Ayato": [
             # Ayato, Xiangling, Bennett
+                ["Kamisato Ayato","Jean","Thoma","Bennett"],
                 ["Kamisato Ayato","Xiangling","Sucrose","Bennett"],
                 ["Kamisato Ayato","Xiangling","Kaedehara Kazuha","Bennett"],
                 ["Kamisato Ayato","Xiangling","Venti","Bennett"],
@@ -1585,8 +1608,11 @@ class Composition:
                 ["Ganyu","Nahida","Zhongli","Bennett"]
             ],
             "Eula/Raiden Dual Carry": [
-            # Alt: sunfire
-                ["Eula","Raiden Shogun","Jean","Bennett"],
+                ["Eula","Raiden Shogun","Yelan","Baizhu"],
+                ["Eula","Raiden Shogun","Nahida","Baizhu"],
+                ["Eula","Raiden Shogun","Venti","Zhongli"],
+                ["Eula","Raiden Shogun","Rosaria","Sangonomiya Kokomi"],
+                ["Eula","Raiden Shogun","Yelan","Jean"],
                 ["Eula","Raiden Shogun","Zhongli","Diona"],
                 ["Eula","Raiden Shogun","Zhongli","Bennett"],
                 ["Eula","Raiden Shogun","Zhongli","Mika"],
@@ -1604,6 +1630,10 @@ class Composition:
                 ["Eula","Raiden Shogun","Rosaria","Diona"],
                 ["Eula","Raiden Shogun","Rosaria","Zhongli"]
             ],
+            "Eula Sunfire": [
+                ["Eula","Nahida","Jean","Bennett"],
+                ["Eula","Raiden Shogun","Jean","Bennett"]
+            ],
             "Double Electro Eula": [
                 ["Eula","Rosaria","Fischl","Kuki Shinobu"],
                 ["Eula","Fischl","Beidou","Diona"]
@@ -1614,6 +1644,9 @@ class Composition:
                 ["Eula","Ganyu","Kaedehara Kazuha","Zhongli"],
                 ["Eula","Rosaria","Jean","Zhongli"],
                 ["Eula","Rosaria","Fischl","Zhongli"]
+            ],
+            "Eula Taser": [
+                ["Eula","Yelan","Zhongli","Kuki Shinobu"]
             ],
             "Vape Yoimiya": [
             # Alt: vv vape, double/triple pyro (xiangling)
@@ -1727,6 +1760,10 @@ class Composition:
                 ["Klee","Kaedehara Kazuha","Zhongli","Bennett"],
                 ["Klee","Xiangling","Kaedehara Kazuha","Bennett"],
                 ["Klee","Xiangling","Sucrose","Bennett"]
+            ],
+            "Vape Klee": [
+                ["Klee","Xingqiu","Kaedehara Kazuha","Bennett"],
+                ["Klee","Xingqiu","Jean","Bennett"]
             ],
             "Double Hydro Klee": [
                 ["Klee","Yelan","Xingqiu","Bennett"]
@@ -1881,6 +1918,7 @@ class Composition:
                 ["Dehya","Nahida","Kaedehara Kazuha","Kuki Shinobu"]
             ],
             "Hyperburgeon Nahida": [
+                ["Nahida","Yelan","Thoma","Kuki Shinobu"],
                 ["Nahida","Xiangling","Yelan","Kuki Shinobu"],
                 ["Nahida","Xiangling","Xingqiu","Kuki Shinobu"],
                 ["Nahida","Xingqiu","Thoma","Kuki Shinobu"]
@@ -1923,6 +1961,12 @@ class Composition:
             ],
             "Vape Kokomi": [
                 ["Sangonomiya Kokomi","Xiangling","Kaedehara Kazuha","Bennett"]
+            ],
+            "Klee National Team": [
+                ["Klee","Xiangling","Xingqiu","Bennett"]
+            ],
+            "Eula National Team": [
+                ["Eula","Xiangling","Xingqiu","Bennett"]
             ],
             "Nahida National Team": [
                 ["Nahida","Xiangling","Xingqiu","Bennett"],
@@ -2020,6 +2064,7 @@ class Composition:
                 ["Xiao","Faruzan","Jean","Zhongli"]
             ],
             "Triple Geo Itto": [
+                ["Klee","Arataki Itto","Gorou","Albedo"],
                 ["Arataki Itto","Mona","Gorou","Zhongli"],
                 ["Arataki Itto","Raiden Shogun","Gorou","Zhongli"],
                 ["Arataki Itto","Albedo","Zhongli","Bennett"],
@@ -2088,9 +2133,6 @@ class Composition:
             "Mono Cryo Eula": [
                 ["Eula","Ganyu","Kaedehara Kazuha","Zhongli"],
                 ["Eula","Rosaria","Jean","Zhongli"]
-            ],
-            "Eula Sunfire": [
-                ["Eula","Raiden Shogun","Jean","Bennett"]
             ],
             "Eula/Rosaria/Fischl/Zhongli": [
                 ["Eula","Rosaria","Fischl","Zhongli"]

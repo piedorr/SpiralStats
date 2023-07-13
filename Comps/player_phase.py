@@ -21,7 +21,7 @@ class PlayerPhase:
         """
         self.player = player
         self.phase = phase
-        self.owned = dict.fromkeys(CHARACTERS, None)
+        self.owned = {}
         self.chambers = { "11-1-1": None, "11-1-2": None, "11-2-1": None, 
                           "11-2-2": None, "11-3-1": None, "11-3-2": None, 
                           "12-1-1": None, "12-1-2": None, "12-2-1": None, 
@@ -125,9 +125,9 @@ class PlayerPhase:
     def chars_owned(self, characters):
         """Takes in an iter of character names, and returns true if the player owned them all."""
         for char in characters:
-            if char in {"Traveler-A", "Traveler-G", "Traveler-E", "Traveler-D", "Traveler"}:
+            if "Traveler" in char:
                 continue
-            elif not self.owned[char]:
+            elif char not in self.owned:
                 return False
         return True
 

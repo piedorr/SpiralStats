@@ -32,13 +32,11 @@ def ownership(players, chambers=ROOMS):
         total = 0
         for player in players[phase]:
             total += 1
-            for character in CHARACTERS:
-                if players[phase][player].owned[character]:
-                    char_name = character
-                    owns[phase][char_name]["flat"] += 1
-                    owns[phase][char_name]["cons_freq"][
-                        players[phase][player].owned[character]["cons"]
-                    ]["flat"] += 1
+            for character in players[phase][player].owned.keys():
+                owns[phase][character]["flat"] += 1
+                owns[phase][character]["cons_freq"][
+                    players[phase][player].owned[character]["cons"]
+                ]["flat"] += 1
         total /= 100.0
         for char in owns[phase]:
             own_flat = owns[phase][char]["flat"] / 100.0
@@ -110,10 +108,10 @@ def appearances(players, owns, archetype, chambers=ROOMS, offset=3, info_char=Fa
         # There's probably a better way to cache these things
         for player in players[phase].values():
             num_players[phase] += 1
-            for char in CHARACTERS:
-                for chamber in chambers:
-                    if player.chambers[chamber] == None:
-                        continue
+            for chamber in chambers:
+                if player.chambers[chamber] == None:
+                    continue
+                for char in player.chambers[chamber].characters:
 
                     foundPyro = False
                     foundHydro = False
@@ -151,29 +149,28 @@ def appearances(players, owns, archetype, chambers=ROOMS, offset=3, info_char=Fa
                     isValidChar = False
                     match archetype:
                         case "Nilou":
-                            if player.chambers[chamber].char_presence[char] and foundNilou:
+                            if foundNilou:
                                 isValidChar = True
                         case "dendro":
-                            if player.chambers[chamber].char_presence[char] and foundDendro:
+                            if foundDendro:
                                 isValidChar = True
                         case "nondendro":
-                            if player.chambers[chamber].char_presence[char] and not foundDendro:
+                            if not foundDendro:
                                 isValidChar = True
                         case "off-field":
-                            if player.chambers[chamber].char_presence[char] and not foundOnField and not foundNilou:
+                            if not foundOnField and not foundNilou:
                                 isValidChar = True
                         case "on-field":
-                            if player.chambers[chamber].char_presence[char] and foundOnField and not foundNilou:
+                            if foundOnField and not foundNilou:
                                 isValidChar = True
                         case "melt":
-                            if player.chambers[chamber].char_presence[char] and foundPyro:
+                            if foundPyro:
                                 isValidChar = True
                         case "freeze":
-                            if player.chambers[chamber].char_presence[char] and not foundPyro and foundHydro:
+                            if not foundPyro and foundHydro:
                                 isValidChar = True
                         case _:
-                            if player.chambers[chamber].char_presence[char]:
-                                isValidChar = True
+                            isValidChar = True
 
                     if isValidChar:
                         # to print the amount of players using a character, for char infographics
@@ -183,7 +180,7 @@ def appearances(players, owns, archetype, chambers=ROOMS, offset=3, info_char=Fa
                         char_name = char
                         appears[phase][char_name]["flat"] += 1
                         # In case of character in comp data missing from character data
-                        if not player.owned[char]:
+                        if char not in player.owned:
                             print("Comp data missing from character data: " + str(player.player) + ", " + str(char))
                             if player.player not in error_comps:
                                 error_comps.append(player.player)
@@ -275,14 +272,23 @@ def appearances(players, owns, archetype, chambers=ROOMS, offset=3, info_char=Fa
                         appears[phase][char]["arti_freq"][arti] = "-"
     return appears
 
-def usages(owns, appears, chambers=ROOMS, offset=3):
+def usages(owns, appears, past_phase, filename, chambers=ROOMS, offset=3):
     uses = {}
-    past_usage = {
-        "Nahida": 88.61, "Yelan": 82.37, "Sangonomiya Kokomi": 62.64, "Raiden Shogun": 60.73, "Nilou": 59.95, "Kaedehara Kazuha": 58.73, "Bennett": 58.49, "Xingqiu": 56.69, "Baizhu": 54.54, "Zhongli": 47.16, "Alhaitham": 42.39, "Xiangling": 38.29, "Kuki Shinobu": 37.07, "Hu Tao": 25.07, "Yae Miko": 24.83, "Kamisato Ayato": 20.17, "Fischl": 19.41, "Kamisato Ayaka": 18.73, "Yaoyao": 17.64, "Shenhe": 16.81, "Tartaglia": 16.18, "Traveler-D": 11.96, "Cyno": 11.42, "Kujou Sara": 11.08, "Ganyu": 11.01, "Arataki Itto": 10.33, "Albedo": 9.92, "Tighnari": 8.81, "Yoimiya": 7.22, "Wanderer": 7.19, "Dehya": 6.62, "Kirara": 6.57, "Eula": 6.36, "Barbara": 5.64, "Diona": 5.34, "Collei": 5.15, "Xiao": 5.14, "Mona": 4.62, "Keqing": 4.25, "Venti": 4.22, "Jean": 4.13, "Gorou": 4.1, "Faruzan": 4.08, "Sucrose": 3.51, "Kaveh": 3.44, "Beidou": 2.42, "Klee": 2.33, "Rosaria": 2.21, "Yun Jin": 1.94, "Thoma": 1.91, "Layla": 1.66, "Noelle": 1.28, "Candace": 1.27, "Mika": 0.72, "Diluc": 0.66, "Qiqi": 0.57, "Razor": 0.54, "Shikanoin Heizou": 0.52, "Yanfei": 0.52, "Kaeya": 0.43, "Lisa": 0.37, "Ningguang": 0.37, "Chongyun": 0.35, "Amber": 0.34, "Sayu": 0.2, "Traveler-E": 0.17, "Xinyan": 0.17, "Traveler-G": 0.11, "Dori": 0.09, "Traveler-A": 0.09, "Aloy": 0.03
-    }
-    past_usage_11 = {
-        "Nahida": 85.22, "Kaedehara Kazuha": 63.63, "Yelan": 63.07, "Sangonomiya Kokomi": 61.05, "Baizhu": 60.06, "Nilou": 55.4, "Zhongli": 49.79, "Bennett": 49.34, "Xingqiu": 48.99, "Alhaitham": 45.81, "Raiden Shogun": 44.23, "Kuki Shinobu": 34.8, "Yae Miko": 32.7, "Shenhe": 30.58, "Kamisato Ayaka": 29.83, "Ganyu": 28.99, "Xiangling": 28.38, "Kamisato Ayato": 20.33, "Yaoyao": 18.2, "Fischl": 17.78, "Venti": 16.3, "Tartaglia": 15.93, "Hu Tao": 15.82, "Wanderer": 15.75, "Yoimiya": 12.77, "Tighnari": 12.6, "Traveler-D": 11.87, "Cyno": 11.62, "Albedo": 10.33, "Mona": 9.26, "Diona": 8.79, "Dehya": 8.42, "Eula": 7.83, "Barbara": 6.32, "Kaveh": 6.31, "Xiao": 5.95, "Faruzan": 5.86, "Kujou Sara": 5.42, "Arataki Itto": 5.35, "Keqing": 4.78, "Rosaria": 4.74, "Jean": 4.29, "Collei": 4.1, "Sucrose": 3.94, "Beidou": 3.65, "Layla": 3.55, "Yun Jin": 3.13, "Gorou": 2.68, "Klee": 2.67, "Thoma": 2.52, "Mika": 1.85, "Kirara": 1.77, "Noelle": 1.28, "Candace": 1.23, "Diluc": 1.22, "Shikanoin Heizou": 1.19, "Kaeya": 1.02, "Qiqi": 0.95, "Ningguang": 0.94, "Lisa": 0.88, "Yanfei": 0.78, "Chongyun": 0.7, "Razor": 0.51, "Amber": 0.26, "Dori": 0.26, "Xinyan": 0.26, "Aloy": 0.2, "Sayu": 0.17, "Traveler-A": 0.09, "Traveler-G": 0.09, "Traveler-E": 0.09
-    }
+
+    try:
+        with open("../char_results/" + past_phase + "/" + filename + ".csv") as stats:
+            # uid_freq_comp will help detect duplicate UIDs
+            reader = csv.reader(stats)
+            col_names = next(reader)
+            past_usage = {}
+
+            # Append lines and check for duplicate UIDs by checking if
+            # there are exactly 12 entries (1 for each chamber) for a UID
+            for line in reader:
+                past_usage[line[0]] = float(line[1].strip('%'))
+    except:
+        past_usage = {}
+
     for phase in owns:
         uses[phase] = {}
         rates = []
@@ -297,7 +303,6 @@ def usages(owns, appears, chambers=ROOMS, offset=3):
                     "own": owns[phase][char]["percent"],
                     "usage" : rate,
                     "diff": "-",
-                    "diff_11": "-",
                     "rarity": CHARACTERS[char]["availability"],
                     "weapons" : {},
                     "artifacts" : {},
@@ -308,9 +313,6 @@ def usages(owns, appears, chambers=ROOMS, offset=3):
 
                 if char in past_usage:
                     uses[phase][char]["diff"] = round(rate - past_usage[char], 2)
-
-                if char in past_usage_11:
-                    uses[phase][char]["diff_11"] = round(rate - past_usage_11[char], 2)
 
                 if (chambers == ["12-1-1", "12-1-2", "12-2-1", "12-2-2", "12-3-1", "12-3-2"]):
                     for i in range (7):

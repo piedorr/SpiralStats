@@ -38,7 +38,7 @@ def form_comps(col_names, table, patch):
         end = start + col_names.index("Zhongli")
         for row in table:
             comps.append(Composition(row[0], bool_chars(row, col_names, start, end),
-                                     patch, row[room]))
+                                     patch, row[room], False))
     else:
         indexes = [col_names.index("ch1"), col_names.index("ch2"),
                    col_names.index("ch3"), col_names.index("ch4")]
@@ -47,11 +47,11 @@ def form_comps(col_names, table, patch):
             for char in comp_chars:
                 if char not in CHARACTERS.keys() and char != "":
                     print("bad char name: " + char)
-            comps.append(Composition(row[0], comp_chars, patch, row[room]))
+            comps.append(Composition(row[0], comp_chars, patch, row[room], False))
     return comps
 
 def write_comps(comps):
-    with open('../data/compositions.csv', 'a') as out_file:
+    with open('../data/compositions.csv', 'w') as out_file:
         if out_file.tell() == 0:
             out_file.write("uid,phase,room," + ",".join(list(CHARACTERS.keys())) + "\n")
         for comp in comps:
