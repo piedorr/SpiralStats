@@ -4,6 +4,8 @@ import json
 # Load the list of characters from their file
 with open('../data/characters.json') as char_file:
     CHARACTERS = json.load(char_file)
+with open('../data/artifacts.json') as artifact_file:
+    articombinations = json.load(artifact_file)
 
 class PlayerPhase:
     """An object that stores information about a player on a phase. Has:
@@ -36,75 +38,20 @@ class PlayerPhase:
             Artifacts, a string.
             Element, a string.
         """
-        hpcom = ["Vourukasha's Glow, ", "Tenacity of the Millelith, "]
-        comhp = [", Vourukasha's Glow", ", Tenacity of the Millelith"]
-        for i in hpcom:
-            if i in artifacts:
-                artifacts = artifacts.replace(i, "HP +20%, ")
-        for i in comhp:
-            if i in artifacts:
-                artifacts = artifacts.replace(i, "")
-                artifacts = "HP +20%, " + artifacts
 
-        atkcom = ["Gladiator's Finale, ", "Shimenawa's Reminiscence, ", "Echoes of an Offering, ", "Vermillion Hereafter, "]
-        comatk = [", Gladiator's Finale", ", Shimenawa's Reminiscence", ", Echoes of an Offering", ", Vermillion Hereafter"]
-        for i in atkcom:
-            if i in artifacts:
-                artifacts = artifacts.replace(i, "ATK +18%, ")
-        for i in comatk:
-            if i in artifacts:
-                artifacts = artifacts.replace(i, "")
-                artifacts = "ATK +18%, " + artifacts
-
-        emcom = ["Wanderer's Troupe, ", "Gilded Dreams, ", "Flower of Paradise Lost, "]
-        comem = [", Wanderer's Troupe", ", Gilded Dreams", ", Flower of Paradise Lost"]
-        for i in emcom:
-            if i in artifacts:
-                artifacts = artifacts.replace(i, "EM +80, ")
-        for i in comem:
-            if i in artifacts:
-                artifacts = artifacts.replace(i, "")
-                artifacts = "EM +80, " + artifacts
-
-        physcom = ["Bloodstained Chivalry, ", "Pale Flame, "]
-        comphys = [", Bloodstained Chivalry", ", Pale Flame"]
-        for i in physcom:
-            if i in artifacts:
-                artifacts = artifacts.replace(i, "Phys +25%, ")
-        for i in comphys:
-            if i in artifacts:
-                artifacts = artifacts.replace(i, "")
-                artifacts = "Phys +25%, " + artifacts
-
-        anemocom = ["Desert Pavilion Chronicle, ", "Viridescent Venerer, "]
-        comanemo = [", Desert Pavilion Chronicle", ", Viridescent Venerer"]
-        for i in anemocom:
-            if i in artifacts:
-                artifacts = artifacts.replace(i, "Anemo +15%, ")
-        for i in comanemo:
-            if i in artifacts:
-                artifacts = artifacts.replace(i, "")
-                artifacts = "Anemo +15%, " + artifacts
-
-        hydrocom = ["Nymph's Dream, ", "Heart of Depth, "]
-        comhydro = [", Nymph's Dream", ", Heart of Depth"]
-        for i in hydrocom:
-            if i in artifacts:
-                artifacts = artifacts.replace(i, "Hydro +15%, ")
-        for i in comhydro:
-            if i in artifacts:
-                artifacts = artifacts.replace(i, "")
-                artifacts = "Hydro +15%, " + artifacts
-
-        healcom = ["Ocean-Hued Clam, ", "Maiden Beloved, "]
-        comheal = [", Ocean-Hued Clam", ", Maiden Beloved"]
-        for i in healcom:
-            if i in artifacts:
-                artifacts = artifacts.replace(i, "Heal +15%, ")
-        for i in comheal:
-            if i in artifacts:
-                artifacts = artifacts.replace(i, "")
-                artifacts = "Heal +15%, " + artifacts
+        for arti in articombinations:
+            articom = []
+            comarti = []
+            for artiset in articombinations[arti]:
+                articom.append(artiset + ", ")
+                comarti.append(", " + artiset)
+            for i in articom:
+                if i in artifacts:
+                    artifacts = artifacts.replace(i, arti + ", ")
+            for i in comarti:
+                if i in artifacts:
+                    artifacts = artifacts.replace(i, "")
+                    artifacts = arti + ", " + artifacts
 
         self.owned[name] = {
             "level": int(level),

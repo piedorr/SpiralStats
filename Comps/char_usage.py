@@ -1,6 +1,7 @@
 import json
 import pandas as pd
 import operator
+from archetypes import *
 
 ROOMS = ["12-1-1", "12-1-2", "12-2-1", "12-2-2", "12-3-1", "12-3-2"]
 global gear_app_threshold
@@ -41,7 +42,7 @@ def ownership(players, chambers=ROOMS):
         for char in owns[phase]:
             own_flat = owns[phase][char]["flat"] / 100.0
             if own_flat > 0:
-                if char in {"Traveler-A", "Traveler-G", "Traveler-E", "Traveler-D"}:
+                if "Traveler" in char:
                     # Cons usage is only added for floor 12
                     if (chambers == ["12-1-1", "12-1-2", "12-2-1", "12-2-2", "12-3-1", "12-3-2"]):
                         for cons in owns[phase][char]["cons_freq"]:
@@ -76,11 +77,6 @@ def appearances(players, owns, archetype, chambers=ROOMS, offset=3, info_char=Fa
     appears = {}
     num_players = {}
     players_chars = {}
-    pyroChars = ["Bennett","Xiangling","Hu Tao","Thoma","Yoimiya","Yanfei","Xinyan","Diluc","Amber","Klee"]
-    hydroChars = ["Mona","Sangonomiya Kokomi","Barbara","Xingqiu","Nilou","Candace","Yelan","Kamisato Ayato","Tartaglia"]
-    dendroChars = ["Alhaitham","Collei","Nahida","Tighnari","Traveler-D","Yaoyao","Baizhu","Kaveh","Kirara"]
-    onField = ["Alhaitham", "Arataki Itto", "Cyno", "Dehya", "Diluc", "Eula", "Ganyu", "Hu Tao", "Kamisato Ayaka", "Kamisato Ayato", "Keqing", "Klee", "Ningguang", "Noelle", "Razor", "Shikanoin Heizou", "Tartaglia", "Tighnari", "Wanderer", "Xiao", "Yanfei", "Yoimiya","Kaveh"]
-
     for phase in players:
         appears[phase] = {}
         num_players[phase] = 0
@@ -111,68 +107,11 @@ def appearances(players, owns, archetype, chambers=ROOMS, offset=3, info_char=Fa
             for chamber in chambers:
                 if player.chambers[chamber] == None:
                     continue
+                foundchar = resetfind()
                 for char in player.chambers[chamber].characters:
-
-                    foundPyro = False
-                    foundHydro = False
-                    foundNilou = False
-                    foundOnField = False
-                    foundDendro = False
-
-                    testChar = 0
-                    while not foundPyro and testChar < len(pyroChars):
-                        if player.chambers[chamber].char_presence[pyroChars[testChar]]:
-                            foundPyro = True
-                        testChar += 1
-
-                    testChar = 0
-                    while not foundDendro and testChar < len(dendroChars):
-                        if player.chambers[chamber].char_presence[dendroChars[testChar]]:
-                            foundDendro = True
-                        testChar += 1
-
-                    testChar = 0
-                    while not foundHydro and testChar < len(hydroChars):
-                        if player.chambers[chamber].char_presence[hydroChars[testChar]]:
-                            foundHydro = True
-                        testChar += 1
-
-                    testChar = 0
-                    while not foundOnField and testChar < len(onField):
-                        if player.chambers[chamber].char_presence[onField[testChar]]:
-                            foundOnField = True
-                        testChar += 1
-
-                    if player.chambers[chamber].char_presence["Nilou"]:
-                        foundNilou = True
-
-                    isValidChar = False
-                    match archetype:
-                        case "Nilou":
-                            if foundNilou:
-                                isValidChar = True
-                        case "dendro":
-                            if foundDendro:
-                                isValidChar = True
-                        case "nondendro":
-                            if not foundDendro:
-                                isValidChar = True
-                        case "off-field":
-                            if not foundOnField and not foundNilou:
-                                isValidChar = True
-                        case "on-field":
-                            if foundOnField and not foundNilou:
-                                isValidChar = True
-                        case "melt":
-                            if foundPyro:
-                                isValidChar = True
-                        case "freeze":
-                            if not foundPyro and foundHydro:
-                                isValidChar = True
-                        case _:
-                            isValidChar = True
-
-                    if isValidChar:
+                    findchars(char, foundchar)
+                if find_archetype(foundchar):
+                    for char in player.chambers[chamber].characters:
                         # to print the amount of players using a character, for char infographics
                         if player.player not in players_chars[phase][char]:
                             players_chars[phase][char].append(player.player)
@@ -344,7 +283,7 @@ def usages(owns, appears, past_phase, filename, chambers=ROOMS, offset=3):
                         if owns[phase][char]["cons_freq"][i]["flat"] > 15:
                             uses[phase][char]["cons_usage"][i]["app"] = appears[phase][char]["cons_freq"][i]["percent"]
                             uses[phase][char]["cons_usage"][i]["own"] = owns[phase][char]["cons_freq"][i]["percent"]
-                            if char in {"Traveler-A", "Traveler-G", "Traveler-E", "Traveler-D"}:
+                            if "Traveler" in char:
                                 uses[phase][char]["cons_usage"][i]["usage"] = round(
                                     appears[phase][char]["cons_freq"][i]["flat"]  / (owns[phase][char]["cons_freq"][i]["flat"] * (
                                             owns[phase][char]["flat"] / owns[phase][char]["cons_freq"][i]["flat"]

@@ -1,25 +1,14 @@
-In case of new arti with one of these 2pc effects:
-    atk, def, em, er, heal, hp, burst, shield, phys, anemo, cryo, dendro, electro, geo, hydro, pyro, electro res, pyro res
-    update player_phase.py line 39
-In case of new character:
-    Add new characters to characters.json
-    Add certain archetypes to char_usage.py line 81, comp_rates.py line 399
+In case of new artifact/character:
+    Run Comps/update.py
     Add comp role at composition.py line 61
-    If new char is traveler, update comp_rates.py, char_usage.py, and player_phase.py
 
 
-Update previous phase at comp_rates_config.py
-Run csv_filterer.py
+Change RECENT_PHASE at comp_rates_config.py
+If data is older than 3.7c:
+    Run char_csv_filterer.py
+    Copy data/phase_characters.csv to data/raw_csvs/{version}_char.csv
 Run comp_rates.py
-Possible errors:
-    'charmap' codec can't encode characters:
-        There must be Chinese character names, search for UIDs beginning with 2 or 1
-    In case of error when running comp_rates:
-        Run with only the char usages write uncommented
-        New compositions.csv and phase_characters.csv should be created, cut them to the raw data folder
-        (Optional, run "python comp_rates.py > E:\OUTPUT.txt")
 
 New chars, weapon, artifacts:
-https://genshin-impact.fandom.com/wiki/Layla
 https://ambr.top/en/archive/avatar
 https://ambr.top/en/archive/reliquary

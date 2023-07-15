@@ -1,9 +1,13 @@
 import csv
+import os
+from comp_rates_config import RECENT_PHASE
 
 def main():
-    # Usage: python char_csv_filterer.py <input file> <phase>
-    for phase in ["2.2b"]:
-        stats = open("../data/raw_csvs/" + phase + "_char.csv")
+    for phase in [RECENT_PHASE]:
+        if os.path.exists("../data/raw_csvs_real/"):
+            stats = open("../data/raw_csvs_real/" + phase + "_char.csv")
+        else:
+            stats = open("../data/raw_csvs/" + phase + "_char.csv")
         reader = csv.reader(stats)
         col_names = next(reader)
         indexes = find_vals(col_names)

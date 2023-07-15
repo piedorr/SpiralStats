@@ -1,11 +1,13 @@
 import csv
 import json
 import operator
+import os
+import char_usage as cu
 from itertools import permutations
 from composition import Composition
 from player_phase import PlayerPhase
 from comp_rates_config import *
-import char_usage as cu
+from archetypes import *
 
 with open('../data/characters.json') as char_file:
     CHARACTERS = json.load(char_file)
@@ -16,103 +18,113 @@ def main():
     sample_size = 0
     print("start")
 
-    with open("../data/phase_characters.csv") as stats:
-        # uid_freq_char and last_uid will help detect duplicate UIDs
-        # trav_elements stores the elements of the traveler of all players
-        reader = csv.reader(stats)
-        col_names = next(reader)
-        player_table = []
-        uid_freq_char = []
-        trav_elements = {}
-        last_uid = "0"
+    if os.path.exists("../data/raw_csvs_real/"):
+        stats = open("../data/raw_csvs_real/" + RECENT_PHASE + "_char.csv")
+    else:
+        stats = open("../data/raw_csvs/" + RECENT_PHASE + "_char.csv")
 
-        # Append lines
-        for line in reader:
-            player_table.append(line)
-            # Change traveler's name to respective element
-            if line[2] == "Traveler":
-                if line[7] == "Geo":
-                    line[2] = "Traveler-G"
-                elif line[7] == "Anemo":
-                    line[2] = "Traveler-A"
-                elif line[7] == "Electro":
-                    line[2] = "Traveler-E"
-                elif line[7] == "Dendro":
-                    line[2] = "Traveler-D"
-                elif line[7] == "Hydro":
-                    line[2] = "Traveler-H"
-                elif line[7] == "Pyro":
-                    line[2] = "Traveler-P"
-                elif line[7] == "Cryo":
-                    line[2] = "Traveler-C"
-                elif line[7] == "None":
-                    line[2] = "Traveler-D"
-                else:
-                    print(line[7] + line[2])
-                trav_elements[line[0]] = line[7]
+    reader = csv.reader(stats)
+    col_names = next(reader)
+    player_table = []
 
-            # Check for duplicate UIDs by keeping track of the amount of
-            # batches of owned characters for each UID. If a UID has
-            # more than two batches of owned characters, it's a duplicate.
-            if line[0] != last_uid:
-                if line[0] in uid_freq_char:
-                    print("duplicate UID in char: " + line[0])
-                else:
-                    uid_freq_char.append(line[0])
-            last_uid = line[0]
+    # uid_freq_char and last_uid will help detect duplicate UIDs
+    # trav_elements stores the elements of the traveler of all players
+    uid_freq_char = []
+    trav_elements = {}
+    last_uid = "0"
 
-    with open("../data/compositions.csv") as stats:
-        # uid_freq_comp will help detect duplicate UIDs
-        reader = csv.reader(stats)
-        col_names = next(reader)
-        comp_table = []
-        uid_freq_comp = {}
-
-        # Append lines and check for duplicate UIDs by checking if
-        # there are exactly 12 entries (1 for each chamber) for a UID
-        for line in reader:
-            if line[0] in uid_freq_comp:
-                uid_freq_comp[line[0]] += 1
+    # Append lines
+    for line in reader:
+        line[1] = RECENT_PHASE
+        # Change traveler's name to respective element
+        if line[2] == "Traveler":
+            if line[7] == "Geo":
+                line[2] = "Traveler-G"
+            elif line[7] == "Anemo":
+                line[2] = "Traveler-A"
+            elif line[7] == "Electro":
+                line[2] = "Traveler-E"
+            elif line[7] == "Dendro":
+                line[2] = "Traveler-D"
+            elif line[7] == "Hydro":
+                line[2] = "Traveler-H"
+            elif line[7] == "Pyro":
+                line[2] = "Traveler-P"
+            elif line[7] == "Cryo":
+                line[2] = "Traveler-C"
+            elif line[7] == "None":
+                line[2] = "Traveler-D"
             else:
-                if uid_freq_comp and uid_freq_comp[list(uid_freq_comp)[-1]] < 12:
-                    print("not enough comps: " + list(uid_freq_comp)[-1])
-                uid_freq_comp[line[0]] = 1
-            if uid_freq_comp[line[0]] > 12:
-                print("duplicate UID in comp: " + line[0])
+                print(line[7] + line[2])
+            trav_elements[line[0]] = line[7]
+        player_table.append(line)
 
-            # Change traveler to respective element
-            # Need to update in case of new character
-            if line[col_names.index('Traveler')] == "1":
+        # Check for duplicate UIDs by keeping track of the amount of
+        # batches of owned characters for each UID. If a UID has
+        # more than two batches of owned characters, it's a duplicate.
+        if line[0] != last_uid:
+            if line[0] in uid_freq_char:
+                print("duplicate UID in char: " + line[0])
+            else:
+                uid_freq_char.append(line[0])
+        last_uid = line[0]
+
+
+    if os.path.exists("../data/raw_csvs_real/"):
+        stats = open("../data/raw_csvs_real/" + RECENT_PHASE + ".csv")
+    else:
+        stats = open("../data/raw_csvs/" + RECENT_PHASE + ".csv")
+    # uid_freq_comp will help detect duplicate UIDs
+    reader = csv.reader(stats)
+    col_names = next(reader)
+    comp_table = []
+    uid_freq_comp = {}
+
+    # Append lines and check for duplicate UIDs by checking if
+    # there are exactly 12 entries (1 for each chamber) for a UID
+    for line in reader:
+        if line[0] in uid_freq_comp:
+            uid_freq_comp[line[0]] += 1
+        else:
+            if uid_freq_comp and uid_freq_comp[list(uid_freq_comp)[-1]] < 12:
+                print("not enough comps: " + list(uid_freq_comp)[-1])
+            uid_freq_comp[line[0]] = 1
+        if uid_freq_comp[line[0]] > 12:
+            print("duplicate UID in comp: " + line[0])
+
+        # Change traveler to respective element
+        for i in range (4,8):
+            if "Traveler" in line[i]:
                 try:
-                    line[col_names.index('Traveler')] = "0"
-                    if trav_elements[line[0]] == "Anemo":
-                        line[col_names.index('Traveler-A')] = "1"
-                    elif trav_elements[line[0]] == "Geo":
-                        line[col_names.index('Traveler-G')] = "1"
-                    elif trav_elements[line[0]] == "Electro":
-                        line[col_names.index('Traveler-E')] = "1"
-                    elif trav_elements[line[0]] == "Dendro":
-                        line[col_names.index('Traveler-D')] = "1"
-                    elif trav_elements[line[0]] == "Hydro":
-                        line[col_names.index('Traveler-H')] = "1"
-                    elif trav_elements[line[0]] == "Pyro":
-                        line[col_names.index('Traveler-P')] = "1"
-                    elif trav_elements[line[0]] == "Cryo":
-                        line[col_names.index('Traveler-C')] = "1"
-                    # elif trav_elements[line[0]] == "None":
-                    #     line[col_names.index('Traveler')] = "1"
-                    else:
-                        print(trav_elements[line[0]])
+                    match trav_elements[line[0]]:
+                        case "Anemo":
+                            line[i] = 'Traveler-A'
+                        case "Geo":
+                            line[i] = 'Traveler-G'
+                        case "Electro":
+                            line[i] = 'Traveler-E'
+                        case "Dendro":
+                            line[i] = 'Traveler-D'
+                        case "Hydro":
+                            line[i] = 'Traveler-H'
+                        case "Pyro":
+                            line[i] = 'Traveler-P'
+                        case "Cryo":
+                            line[i] = 'Traveler-C'
+                        # case "None":
+                        #     line[col_names.index('Traveler')] = "1"
+                        case _:
+                            print(trav_elements[line[0]])
                 except KeyError:
                     print("Traveler key error: " + line[0])
-            comp_table.append(line)
-            sample_size += 1
-        print("done csv")
+        comp_table.append(line)
+        sample_size += 1
+    print("done csv")
 
-        # 12 entries for each UID, so sample size
-        # should be divided by 12
-        sample_size /= 12
-        print("sample size: " + str(sample_size))
+    # 12 entries for each UID, so sample size
+    # should be divided by 12
+    sample_size /= 12
+    print("sample size: " + str(sample_size))
 
     # Check for missing UIDs
     csv_writer = csv.writer(open("../char_results/uids.csv", 'w', newline=''))
@@ -158,7 +170,7 @@ def main():
         print("done chamber comps")
 
     if "Character specific infographics" in run_commands:
-        comp_usages(all_comps, all_players, whaleCheck, whaleSigWeap, sigWeaps, filename=char, info_char=True, floor=True)
+        comp_usages(all_comps, all_players, whaleCheck, whaleSigWeap, sigWeaps, filename=char_infographics, info_char=True, floor=True)
         print("char infographics")
 
     if "Char usages for each chamber" in run_commands:
@@ -179,7 +191,7 @@ def comp_usages(comps,
     comps_dict = used_comps(players, comps, rooms, whaleCheck, whaleSigWeap, sigWeaps, floor=floor)
     comp_owned(players, comps_dict, whaleCheck, whaleSigWeap, sigWeaps, owns_offset=offset)
     rank_usages(comps_dict, owns_offset=offset)
-    comp_usages_write(comps_dict, filename, floor, info_char)
+    comp_usages_write(comps_dict, filename, floor, info_char, whaleCheck)
 
 def used_comps(players, comps, rooms, whaleCheck, whaleSigWeap, sigWeaps, phase=RECENT_PHASE, floor=False):
     # Returns the dictionary of all the comps used and how many times they were used
@@ -199,96 +211,101 @@ def used_comps(players, comps, rooms, whaleCheck, whaleSigWeap, sigWeaps, phase=
         # Check if the comp is used in the rooms that are being checked
         if comp.room not in rooms or len(comp_tuple) < 4:
             continue
-        totalComps += 1
-        if whaleCheck:
-            whaleComp = False
-            for char in range (4):
-                if (
-                    players[phase][comp.player].owned[comp_tuple[char]]["cons"] != 0
-                    and CHARACTERS[comp_tuple[char]]["availability"] in ["Limited 5*"]
-                ) or (
-                    whaleSigWeap and players[phase][comp.player].owned[comp_tuple[char]]["weapon"] in sigWeaps
-                ):
-                    whaleComp = True
-            if whaleComp:
-                whaleCount += 1
-                continue
-        # if len(comp_tuple) < 4:
-        #     lessFour.append(comp.player)
-        #     continue
-        if comp_tuple not in comps_dict:
-            comps_dict[comp_tuple] = {
-                "uses": 1,
-                "owns": 0,
-                "5* count": comp.fivecount,
-                "comp_name": comp.comp_name,
-                "alt_comp_name": comp.alt_comp_name,
-                "deepwood": 0
-            }
-            if floor:
-                # deepwood = False
-                # melt = False
-                # deepwoodEquip = ""
+
+        foundchar = resetfind()
+        for char in comp.characters:
+            findchars(char, foundchar)
+        if find_archetype(foundchar):
+            totalComps += 1
+            if whaleCheck:
+                whaleComp = False
                 for char in range (4):
-                    # if char in ["Thoma","Yoimiya","Yanfei","Hu Tao","Xinyan","Diluc","Amber","Xiangling","Klee","Bennett"]:
-                    #     melt = True
-                    # "weapon" and "artifacts" stores dictionary of
-                    # used gear, key is the name of the gear, value is the app#
-                    comps_dict[comp_tuple][comp_tuple[char]] = {
-                        "weapon" : {},
-                        "artifacts" : {},
-                        "cons": []
-                    }
-                    try:
-                        comps_dict[comp_tuple][comp_tuple[char]]["weapon"][players[phase][comp.player].owned[comp_tuple[char]]["weapon"]] = 1
-                        if players[phase][comp.player].owned[comp_tuple[char]]["artifacts"] != "":
-                            comps_dict[comp_tuple][comp_tuple[char]]["artifacts"][players[phase][comp.player].owned[comp_tuple[char]]["artifacts"]] = 1
-                            # if players[phase][comp.player].owned[comp_tuple[char]]["artifacts"] == "Deepwood Memories":
-                            #     deepwood = True
-                            #     deepwoodEquip = comp_tuple[char]
-                    except Exception as e:
-                        if ('{}: {}'.format(comp.player, e)) not in error_uids:
-                            error_uids.append('{}: {}'.format(comp.player, e))
-                # if deepwood:
-                #     comps_dict[comp_tuple]["deepwood"] += 1
-                #     if ("Tighnari" in comp_tuple):
-                #         deepwoodTighnari += 1
-                #         if deepwoodEquip in deepwoodEquipChars:
-                #             deepwoodEquipChars[deepwoodEquip] += 1
-                #         else:
-                #             deepwoodEquipChars[deepwoodEquip] = 1
-                # if melt and "Ganyu" in comp_tuple:
-                #     meltGanyu += 1
-        else:
-            comps_dict[comp_tuple]["uses"] +=1
-            if floor:
-                # deepwood = False
-                # deepwoodEquip = ""
-                for i in range(4):
-                    try:
-                        if players[phase][comp.player].owned[comp_tuple[i]]["weapon"] in comps_dict[comp_tuple][comp_tuple[i]]["weapon"]:
-                            comps_dict[comp_tuple][comp_tuple[i]]["weapon"][players[phase][comp.player].owned[comp_tuple[i]]["weapon"]] += 1
-                        else:
-                            comps_dict[comp_tuple][comp_tuple[i]]["weapon"][players[phase][comp.player].owned[comp_tuple[i]]["weapon"]] = 1
-                        if players[phase][comp.player].owned[comp_tuple[i]]["artifacts"] != "":
-                            if players[phase][comp.player].owned[comp_tuple[i]]["artifacts"] in comps_dict[comp_tuple][comp_tuple[i]]["artifacts"]:
-                                comps_dict[comp_tuple][comp_tuple[i]]["artifacts"][players[phase][comp.player].owned[comp_tuple[i]]["artifacts"]] += 1
+                    if (
+                        players[phase][comp.player].owned[comp_tuple[char]]["cons"] != 0
+                        and CHARACTERS[comp_tuple[char]]["availability"] in ["Limited 5*"]
+                    ) or (
+                        whaleSigWeap and players[phase][comp.player].owned[comp_tuple[char]]["weapon"] in sigWeaps
+                    ):
+                        whaleComp = True
+                if whaleComp:
+                    whaleCount += 1
+                    continue
+            # if len(comp_tuple) < 4:
+            #     lessFour.append(comp.player)
+            #     continue
+            if comp_tuple not in comps_dict:
+                comps_dict[comp_tuple] = {
+                    "uses": 1,
+                    "owns": 0,
+                    "5* count": comp.fivecount,
+                    "comp_name": comp.comp_name,
+                    "alt_comp_name": comp.alt_comp_name,
+                    "deepwood": 0
+                }
+                if floor:
+                    # deepwood = False
+                    # melt = False
+                    # deepwoodEquip = ""
+                    for char in range (4):
+                        # if char in ["Thoma","Yoimiya","Yanfei","Hu Tao","Xinyan","Diluc","Amber","Xiangling","Klee","Bennett"]:
+                        #     melt = True
+                        # "weapon" and "artifacts" stores dictionary of
+                        # used gear, key is the name of the gear, value is the app#
+                        comps_dict[comp_tuple][comp_tuple[char]] = {
+                            "weapon" : {},
+                            "artifacts" : {},
+                            "cons": []
+                        }
+                        try:
+                            comps_dict[comp_tuple][comp_tuple[char]]["weapon"][players[phase][comp.player].owned[comp_tuple[char]]["weapon"]] = 1
+                            if players[phase][comp.player].owned[comp_tuple[char]]["artifacts"] != "":
+                                comps_dict[comp_tuple][comp_tuple[char]]["artifacts"][players[phase][comp.player].owned[comp_tuple[char]]["artifacts"]] = 1
+                                # if players[phase][comp.player].owned[comp_tuple[char]]["artifacts"] == "Deepwood Memories":
+                                #     deepwood = True
+                                #     deepwoodEquip = comp_tuple[char]
+                        except Exception as e:
+                            if ('{}: {}'.format(comp.player, e)) not in error_uids:
+                                error_uids.append('{}: {}'.format(comp.player, e))
+                    # if deepwood:
+                    #     comps_dict[comp_tuple]["deepwood"] += 1
+                    #     if ("Tighnari" in comp_tuple):
+                    #         deepwoodTighnari += 1
+                    #         if deepwoodEquip in deepwoodEquipChars:
+                    #             deepwoodEquipChars[deepwoodEquip] += 1
+                    #         else:
+                    #             deepwoodEquipChars[deepwoodEquip] = 1
+                    # if melt and "Ganyu" in comp_tuple:
+                    #     meltGanyu += 1
+            else:
+                comps_dict[comp_tuple]["uses"] +=1
+                if floor:
+                    # deepwood = False
+                    # deepwoodEquip = ""
+                    for i in range(4):
+                        try:
+                            if players[phase][comp.player].owned[comp_tuple[i]]["weapon"] in comps_dict[comp_tuple][comp_tuple[i]]["weapon"]:
+                                comps_dict[comp_tuple][comp_tuple[i]]["weapon"][players[phase][comp.player].owned[comp_tuple[i]]["weapon"]] += 1
                             else:
-                                comps_dict[comp_tuple][comp_tuple[i]]["artifacts"][players[phase][comp.player].owned[comp_tuple[i]]["artifacts"]] = 1
-                            # if players[phase][comp.player].owned[comp_tuple[i]]["artifacts"] == "Deepwood Memories":
-                            #     deepwood = True
-                            #     deepwoodEquip = comp_tuple[i]
-                    except Exception as e:
-                        if ('{}: {}'.format(comp.player, e)) not in error_uids:
-                            error_uids.append('{}: {}'.format(comp.player, e))
-                # if deepwood:
-                #     comps_dict[comp_tuple]["deepwood"] += 1
-                #     if ("Tighnari" in comp_tuple):
-                #         deepwoodTighnari += 1
-                #         if deepwoodEquip in deepwoodEquipChars:
-                #             deepwoodEquipChars[deepwoodEquip] += 1
-                #         else:
-                #             deepwoodEquipChars[deepwoodEquip] = 1
+                                comps_dict[comp_tuple][comp_tuple[i]]["weapon"][players[phase][comp.player].owned[comp_tuple[i]]["weapon"]] = 1
+                            if players[phase][comp.player].owned[comp_tuple[i]]["artifacts"] != "":
+                                if players[phase][comp.player].owned[comp_tuple[i]]["artifacts"] in comps_dict[comp_tuple][comp_tuple[i]]["artifacts"]:
+                                    comps_dict[comp_tuple][comp_tuple[i]]["artifacts"][players[phase][comp.player].owned[comp_tuple[i]]["artifacts"]] += 1
+                                else:
+                                    comps_dict[comp_tuple][comp_tuple[i]]["artifacts"][players[phase][comp.player].owned[comp_tuple[i]]["artifacts"]] = 1
+                                # if players[phase][comp.player].owned[comp_tuple[i]]["artifacts"] == "Deepwood Memories":
+                                #     deepwood = True
+                                #     deepwoodEquip = comp_tuple[i]
+                        except Exception as e:
+                            if ('{}: {}'.format(comp.player, e)) not in error_uids:
+                                error_uids.append('{}: {}'.format(comp.player, e))
+                    # if deepwood:
+                    #     comps_dict[comp_tuple]["deepwood"] += 1
+                    #     if ("Tighnari" in comp_tuple):
+                    #         deepwoodTighnari += 1
+                    #         if deepwoodEquip in deepwoodEquipChars:
+                    #             deepwoodEquipChars[deepwoodEquip] += 1
+                    #         else:
+                    #             deepwoodEquipChars[deepwoodEquip] = 1
     if floor:
         for comp in comps_dict:
             for char in comp:
@@ -386,12 +403,13 @@ def comp_owned(players, comps_dict, whaleCheck, whaleSigWeap, sigWeaps, phase=RE
                     for char in comp:
                         if char not in CHARACTERS:
                             continue
-                        if player.owned[char] == None:
+                        if char not in player.owned:
                             if whaleSigWeap:
-                                for trav in ["Traveler-A", "Traveler-G", "Traveler-E", "Traveler-D"]:
-                                    if player.owned[trav] != None:
+                                for trav in ["Traveler-G", "Traveler-A", "Traveler-E", "Traveler-D", "Traveler-H", "Traveler-P", "Traveler-C"]:
+                                    if trav in player.owned:
                                         if player.owned[trav]["weapon"] in sigWeaps:
                                             whaleComp = True
+                                            break
                             continue
                         if (
                             player.owned[char]["cons"] != 0
@@ -454,72 +472,16 @@ def duo_usages(comps,
 def used_duos(players, comps, rooms, usage, archetype, phase=RECENT_PHASE):
     # Returns dictionary of all the duos used and how many times they were used
     duos_dict = {}
-    pyroChars = ["Bennett","Xiangling","Hu Tao","Thoma","Yoimiya","Yanfei","Xinyan","Diluc","Amber","Klee"]
-    hydroChars = ["Mona","Sangonomiya Kokomi","Barbara","Xingqiu","Nilou","Candace","Yelan","Kamisato Ayato","Tartaglia"]
-    dendroChars = ["Alhaitham","Collei","Nahida","Tighnari","Traveler-D","Yaoyao","Baizhu","Kaveh","Kirara"]
-    onField = ["Alhaitham", "Arataki Itto", "Cyno", "Dehya", "Diluc", "Eula", "Ganyu", "Hu Tao", "Kamisato Ayaka", "Kamisato Ayato", "Keqing", "Klee", "Ningguang", "Noelle", "Razor", "Shikanoin Heizou", "Tartaglia", "Tighnari", "Wanderer", "Xiao", "Yanfei", "Yoimiya","Kaveh"]
 
     for comp in comps:
         if len(comp.characters) < 2 or comp.room not in rooms:
             continue
 
-        foundPyro = False
-        foundHydro = False
-        foundDendro = False
-        foundNilou = False
-        foundOnField = False
-
-        testChar = 0
-        while not foundPyro and testChar < len(pyroChars):
-            if comp.char_presence[pyroChars[testChar]]:
-                foundPyro = True
-            testChar += 1
-
-        testChar = 0
-        while not foundHydro and testChar < len(hydroChars):
-            if comp.char_presence[hydroChars[testChar]]:
-                foundHydro = True
-            testChar += 1
-
-        testChar = 0
-        while not foundDendro and testChar < len(dendroChars):
-            if comp.char_presence[dendroChars[testChar]]:
-                foundDendro = True
-            testChar += 1
-
-        testChar = 0
-        while not foundOnField and testChar < len(onField):
-            if comp.char_presence[onField[testChar]]:
-                foundOnField = True
-            testChar += 1
-
-        if comp.char_presence["Nilou"]:
-            foundNilou = True
-
-        match archetype:
-            case "Nilou":
-                if not (foundNilou):
-                    continue
-            case "dendro":
-                if not (foundDendro):
-                    continue
-            case "nondendro":
-                if not (not foundDendro):
-                    continue
-            case "off-field":
-                if not (not foundOnField and not foundNilou):
-                    continue
-            case "on-field":
-                if not (foundOnField and not foundNilou):
-                    continue
-            case "melt":
-                if not (foundPyro):
-                    continue
-            case "freeze":
-                if not (not foundPyro and foundHydro):
-                    continue
-            case _:
-                pass
+        foundchar = resetfind()
+        for char in comp.characters:
+            findchars(char, foundchar)
+        if not find_archetype(foundchar):
+            continue
 
         # Permutate the duos, for example if Ganyu and Xiangling are used,
         # two duos are used, Ganyu/Xiangling and Xiangling/Ganyu
@@ -566,7 +528,7 @@ def char_usages(players,
     char_usages_write(chars_dict[RECENT_PHASE], filename, floor, archetype)
     return chars_dict
 
-def comp_usages_write(comps_dict, filename, floor, info_char):
+def comp_usages_write(comps_dict, filename, floor, info_char, whaleCheck):
     out_json = []
     out_comps = []
     outvar_comps = []
@@ -708,19 +670,25 @@ def comp_usages_write(comps_dict, filename, floor, info_char):
     if info_char:
         out_comps += var_comps
 
+    if archetype != "all":
+        filename = filename + "_" + archetype
+
+    if not(whaleCheck):
+        filename = filename + "_C1"
+
     if floor and not info_char:
         csv_writer = csv.writer(open("../comp_results/f2p_app_" + filename + ".csv", 'w', newline=''))
         for comps in f2p_comps:
             csv_writer.writerow(comps.values())
-        with open("../comp_results/var_" + filename + ".json", "w") as out_file:
-            out_file.write(json.dumps(outvar_comps,indent=4))
+        # with open("../comp_results/var_" + filename + ".json", "w") as out_file:
+        #     out_file.write(json.dumps(outvar_comps,indent=4))
 
     if floor:
         csv_writer = csv.writer(open("../comp_results/comps_usage_" + filename + ".csv", 'w', newline=''))
         for comps in out_comps:
             csv_writer.writerow(comps.values())
-        with open("../comp_results/exc_" + filename + ".json", "w") as out_file:
-            out_file.write(json.dumps(exc_comps,indent=4))
+        # with open("../comp_results/exc_" + filename + ".json", "w") as out_file:
+        #     out_file.write(json.dumps(exc_comps,indent=4))
 
     if not info_char:
         with open("../comp_results/json/" + filename + ".json", "w") as out_file:
@@ -834,20 +802,18 @@ def name_filter(comp, mode="out"):
     return filtered
     #TODO Need to create a structure for bad names --> names 
 
-def comp_chars(row, cols):
+def comp_chars(row):
     comp = []
-    for i in range(3, 3 + len(CHARACTERS)):
-        if row[i] == '1':
-            comp.append(cols[i])
+    for i in range(4, 8):
+        comp.append(row[i])
     return comp
 
 def form_comps(col_names, table, info_char):
-    room = col_names.index('room')
-    phase = col_names.index('phase')
+    room = col_names.index('half')
     comps = []
 
     for row in table:
-        comp = Composition(row[0], comp_chars(row, col_names), row[phase], row[room], info_char)
+        comp = Composition(row[0], comp_chars(row), RECENT_PHASE, row[room], info_char)
         comps.append(comp)
 
     return comps

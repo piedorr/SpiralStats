@@ -1,0 +1,53 @@
+{
+    "ATK +18%": [
+        "Resolution of Sojourner",
+        "Brave Heart",
+        "Gladiator's Finale",
+        "Shimenawa's Reminiscence",
+        "Vermillion Hereafter",
+        "Echoes of an Offering"
+    ],
+    "DEF +30%": [
+        "Defender's Will",
+        "Husk of Opulent Dreams"
+    ],
+    "NA, CA +15%": [
+        "Martial Artist",
+        "Marechaussee Hunter"
+    ],
+    "EM +80": [
+        "Instructor",
+        "Wanderer's Troupe",
+        "Gilded Dreams",
+        "Flower of Paradise Lost"
+    ],
+    "Skill +20%": [
+        "Gambler",
+        "Golden Troupe"
+    ],
+    "ER +20%": [
+        "The Exile",
+        "Scholar",
+        "Emblem of Severed Fate"
+    ],
+    "Heal +15%": [
+        "Maiden Beloved",
+        "Ocean-Hued Clam"
+    ],
+    "Anemo +15%": [
+        "Viridescent Venerer",
+        "Desert Pavilion Chronicle"
+    ],
+    "Phys +25%": [
+        "Bloodstained Chivalry",
+        "Pale Flame"
+    ],
+    "Hydro +15%": [
+        "Heart of Depth",
+        "Nymph's Dream"
+    ],
+    "HP +20%": [
+        "Tenacity of the Millelith",
+        "Vourukasha's Glow"
+    ]
+}
