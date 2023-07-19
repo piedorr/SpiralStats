@@ -5,14 +5,14 @@ import os
 import operator
 import statistics
 import matplotlib
-# matplotlib.use('TkAgg')
+matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 from scipy.stats import skew
 from pynput import keyboard
 from archetypes import *
-from enka_config import current_phase, phase_num
+from enka_config import phase_num
 
-with open("output.csv", 'r', encoding='UTF8') as f:
+with open("output1.csv", 'r', encoding='UTF8') as f:
     reader = csv.reader(f, delimiter=',')
     headers = next(reader)
 
@@ -48,7 +48,7 @@ reader = csv.reader(f, delimiter=',')
 headers = next(reader)
 spiral = list(reader)
 
-with open("../char_results/" + current_phase + "/12 build.csv", 'r', encoding='UTF8') as f:
+with open("../char_results/12 build.csv", 'r', encoding='UTF8') as f:
     reader = csv.reader(f, delimiter=',')
     headers = next(reader)
     build = list(reader)
@@ -175,6 +175,8 @@ statkeys = list(stats[chars[0]].keys())
 mainstatkeys = list(mainstats[chars[0]].keys())
 
 for row in data:
+    if not(row):
+        continue
     # if (row[2].isnumeric()):
     #     row.insert(2,"Nilou")
     if row[0] not in uids and row[0] in spiral_rows:
@@ -185,6 +187,8 @@ for row in data:
             ar_compile[str(row[22])] += 1
         else:
             ar_compile["56"] += 1
+    if row[2] == "":
+        continue
     if row[2] == "Traveler":
         match row[23]:
             case "Rock":

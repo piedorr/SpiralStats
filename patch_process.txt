@@ -3,12 +3,14 @@ In case of new artifact/character:
     Add comp role at composition.py line 61
 
 
-Change RECENT_PHASE at comp_rates_config.py
+Change RECENT_PHASE and run_commands at comp_rates_config.py
 If data is older than 3.7c:
     Run char_csv_filterer.py
     Copy data/phase_characters.csv to data/raw_csvs/{version}_char.csv
 Run comp_rates.py
 
-New chars, weapon, artifacts:
-https://ambr.top/en/archive/avatar
-https://ambr.top/en/archive/reliquary
+Change current phase in mihomo/enka_config.py
+Update enka: pip install git+https://github.com/mrwan200/EnkaNetwork.py
+Run mihomo/enka.py
+Run mihomo/stats.py
+Run mihomo/stat.py

@@ -10,9 +10,9 @@ import matplotlib.pyplot as plt
 from scipy.stats import skew
 from pynput import keyboard
 from archetypes import *
-from enka_config import current_phase, phase_num
+from enka_config import phase_num
 
-with open("output.csv", 'r', encoding='UTF8') as f:
+with open("output1.csv", 'r', encoding='UTF8') as f:
     reader = csv.reader(f, delimiter=',')
     headers = next(reader)
 
@@ -48,7 +48,7 @@ reader = csv.reader(f, delimiter=',')
 headers = next(reader)
 spiral = list(reader)
 
-with open("../char_results/" + current_phase + "/12 build.csv", 'r', encoding='UTF8') as f:
+with open("../char_results/12 build.csv", 'r', encoding='UTF8') as f:
     reader = csv.reader(f, delimiter=',')
     headers = next(reader)
     build = list(reader)

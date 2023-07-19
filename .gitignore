@@ -302,7 +302,6 @@ enka.network/unused
 enka.network/results
 enka.network/data
 enka.network/watermark.png
-enka.network/output.csv
+enka.network/output*
 enka.network/readme_real.txt
 patch_process_real.txt
-enka.network/output1.csv

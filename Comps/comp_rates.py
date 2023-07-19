@@ -1,7 +1,7 @@
 import csv
 import json
 import operator
-import os
+import os.path
 import char_usage as cu
 from itertools import permutations
 from composition import Composition
@@ -144,56 +144,53 @@ def main():
 
     if "Char usages all chambers" in run_commands:
         global usage
-        usage = char_usages(all_players, archetype, past_phase, filename="12", floor=True)
-        char_usages(all_players, archetype, past_phase, filename="12 build", info_char=True, floor=True)
-        char_usages(all_players, archetype, past_phase, rooms=["11-1-1", "11-1-2", "11-2-1", "11-2-2", "11-3-1", "11-3-2"], filename="11")
-        duo_usages(all_comps, all_players, usage, archetype)
+        usage = char_usages(all_players, past_phase, filename="12", floor=True)
+        char_usages(all_players, past_phase, filename="12 build", info_char=True, floor=True)
+        char_usages(all_players, past_phase, rooms=["11-1-1", "11-1-2", "11-2-1", "11-2-2", "11-3-1", "11-3-2"], filename="11")
+        duo_usages(all_comps, all_players, usage)
         print("done char")
 
     if "Comp usage floor 12 each half" in run_commands:
-        comp_usages(all_comps, all_players, whaleCheck, whaleSigWeap, sigWeaps, rooms=["12-1-2", "12-2-2", "12-3-2"], filename="12 second", floor=True)
-        comp_usages(all_comps, all_players, whaleCheck, whaleSigWeap, sigWeaps, rooms=["12-1-1", "12-2-1", "12-3-1"], filename="12 first", floor=True)
+        comp_usages(all_comps, all_players, rooms=["12-1-2", "12-2-2", "12-3-2"], filename="12 second", floor=True)
+        comp_usages(all_comps, all_players, rooms=["12-1-1", "12-2-1", "12-3-1"], filename="12 first", floor=True)
         print("done 12 comps")
 
     if "Comp usage floor 11 each half" in run_commands:
-        comp_usages(all_comps, all_players, whaleCheck, whaleSigWeap, sigWeaps, rooms=["11-1-2", "11-2-2", "11-3-2"], filename="11 second", floor=True)
-        comp_usages(all_comps, all_players, whaleCheck, whaleSigWeap, sigWeaps, rooms=["11-1-1", "11-2-1", "11-3-1"], filename="11 first", floor=True)
+        comp_usages(all_comps, all_players, rooms=["11-1-2", "11-2-2", "11-3-2"], filename="11 second", floor=True)
+        comp_usages(all_comps, all_players, rooms=["11-1-1", "11-2-1", "11-3-1"], filename="11 first", floor=True)
         print("done 11 comps")
 
     if "Comp usage floor 12 combined" in run_commands:
-        comp_usages(all_comps, all_players, whaleCheck, whaleSigWeap, sigWeaps, rooms=["12-1-2", "12-2-2", "12-3-2", "12-1-1", "12-2-1", "12-3-1"], filename="12", floor=True)
+        comp_usages(all_comps, all_players, rooms=["12-1-2", "12-2-2", "12-3-2", "12-1-1", "12-2-1", "12-3-1"], filename="12", floor=True)
         print("done 12 comps combined")
 
     if "Comp usage each chamber" in run_commands:
         for room in ["12-1-1", "12-1-2", "12-2-1", "12-2-2", "12-3-1", "12-3-2", "11-1-1", "11-1-2", "11-2-1", "11-2-2", "11-3-1", "11-3-2"]:
-            comp_usages(all_comps, all_players, whaleCheck, whaleSigWeap, sigWeaps, rooms=[room], filename=room, offset=1)
+            comp_usages(all_comps, all_players, rooms=[room], filename=room, offset=1)
         print("done chamber comps")
 
     if "Character specific infographics" in run_commands:
-        comp_usages(all_comps, all_players, whaleCheck, whaleSigWeap, sigWeaps, filename=char_infographics, info_char=True, floor=True)
+        comp_usages(all_comps, all_players, filename=char_infographics, info_char=True, floor=True)
         print("char infographics")
 
     if "Char usages for each chamber" in run_commands:
         for room in ["12-1-1", "12-1-2", "12-2-1", "12-2-2", "12-3-1", "12-3-2", "11-1-1", "11-1-2", "11-2-1", "11-2-2", "11-3-1", "11-3-2"]:
-            char_usages(all_players, archetype, past_phase, rooms=[room], filename=room, offset=1)
+            char_usages(all_players, past_phase, rooms=[room], filename=room, offset=1)
         print("done char chambers")
 
 def comp_usages(comps, 
                 players, 
-                whaleCheck,
-                whaleSigWeap,
-                sigWeaps,
                 rooms=["12-1-1", "12-1-2", "12-2-1", "12-2-2", "12-3-1", "12-3-2"],
                 filename="comp_usages",
                 offset=3,
                 info_char=False,
                 floor=False):
-    comps_dict = used_comps(players, comps, rooms, whaleCheck, whaleSigWeap, sigWeaps, floor=floor)
-    comp_owned(players, comps_dict, whaleCheck, whaleSigWeap, sigWeaps, owns_offset=offset)
+    comps_dict = used_comps(players, comps, rooms, floor=floor)
+    comp_owned(players, comps_dict, owns_offset=offset)
     rank_usages(comps_dict, owns_offset=offset)
-    comp_usages_write(comps_dict, filename, floor, info_char, whaleCheck)
+    comp_usages_write(comps_dict, filename, floor, info_char)
 
-def used_comps(players, comps, rooms, whaleCheck, whaleSigWeap, sigWeaps, phase=RECENT_PHASE, floor=False):
+def used_comps(players, comps, rooms, phase=RECENT_PHASE, floor=False):
     # Returns the dictionary of all the comps used and how many times they were used
     comps_dict = {}
     error_uids = []
@@ -227,8 +224,10 @@ def used_comps(players, comps, rooms, whaleCheck, whaleSigWeap, sigWeaps, phase=
                         whaleSigWeap and players[phase][comp.player].owned[comp_tuple[char]]["weapon"] in sigWeaps
                     ):
                         whaleComp = True
-                if whaleComp:
+                if whaleComp and not(whaleCheckOnly):
                     whaleCount += 1
+                    continue
+                elif not(whaleComp) and whaleCheckOnly:
                     continue
             # if len(comp_tuple) < 4:
             #     lessFour.append(comp.player)
@@ -386,13 +385,13 @@ def used_comps(players, comps, rooms, whaleCheck, whaleSigWeap, sigWeaps, phase=
                 comps_dict[comp][char]["artifacts"] = {k: v for k, v in sorted_artifacts}
     # print("Less than four: " + str(lessFour))
     # print("Less than four: " + str(len(lessFour)/totalComps))
-    if whaleCheck:
+    if whaleCheck and not(whaleCheckOnly):
         print("Whale percentage: " + str(whaleCount/totalComps))
     # print("Tighnari with deepwood: " + str(deepwoodTighnari))
     # print(deepwoodEquipChars)
     return comps_dict
 
-def comp_owned(players, comps_dict, whaleCheck, whaleSigWeap, sigWeaps, phase=RECENT_PHASE, owns_offset=3):
+def comp_owned(players, comps_dict, phase=RECENT_PHASE, owns_offset=3):
     # For every comp that is used, calculate the ownership rate,
     # i.e. how many players own all four characters in the comp
     for player in players[phase].values():
@@ -418,7 +417,10 @@ def comp_owned(players, comps_dict, whaleCheck, whaleSigWeap, sigWeaps, phase=RE
                             whaleSigWeap and player.owned[char]["weapon"] in sigWeaps
                         ):
                             whaleComp = True
-                    if whaleComp:
+                    if whaleComp and not(whaleCheckOnly):
+                        whaleCount += 1
+                        continue
+                    elif not(whaleComp) and whaleCheckOnly:
                         continue
                 comps_dict[comp]["owns"] += owns_offset
 
@@ -463,13 +465,12 @@ def rank_usages(comps_dict, owns_offset=3):
 def duo_usages(comps,
                 players,
                 usage,
-                archetype,
                 rooms=["12-1-1", "12-1-2", "12-2-1", "12-2-2", "12-3-1", "12-3-2"],
                 filename="duo_usages"):
-    duos_dict = used_duos(players, comps, rooms, usage, archetype)
-    duo_write(duos_dict, usage, filename, archetype)
+    duos_dict = used_duos(players, comps, rooms, usage)
+    duo_write(duos_dict, usage, filename)
 
-def used_duos(players, comps, rooms, usage, archetype, phase=RECENT_PHASE):
+def used_duos(players, comps, rooms, usage, phase=RECENT_PHASE):
     # Returns dictionary of all the duos used and how many times they were used
     duos_dict = {}
 
@@ -512,7 +513,6 @@ def used_duos(players, comps, rooms, usage, archetype, phase=RECENT_PHASE):
     return sorted_duos
 
 def char_usages(players,
-                archetype,
                 past_phase,
                 rooms=["12-1-1", "12-1-2", "12-2-1", "12-2-2", "12-3-1", "12-3-2"],
                 filename="char_usages",
@@ -520,15 +520,15 @@ def char_usages(players,
                 info_char=False,
                 floor=False):
     own = cu.ownership(players, chambers = rooms)
-    app = cu.appearances(players, own, archetype, chambers = rooms, offset = offset, info_char = info_char)
+    app = cu.appearances(players, own, chambers = rooms, offset = offset, info_char = info_char)
     chars_dict = cu.usages(own, app, past_phase, filename, chambers = rooms, offset = offset)
     # # Print the list of weapons and artifacts used for a character
     # if floor:
     #     print(app[RECENT_PHASE][filename])
-    char_usages_write(chars_dict[RECENT_PHASE], filename, floor, archetype)
+    char_usages_write(chars_dict[RECENT_PHASE], filename, floor)
     return chars_dict
 
-def comp_usages_write(comps_dict, filename, floor, info_char, whaleCheck):
+def comp_usages_write(comps_dict, filename, floor, info_char):
     out_json = []
     out_comps = []
     outvar_comps = []
@@ -673,13 +673,17 @@ def comp_usages_write(comps_dict, filename, floor, info_char, whaleCheck):
     if archetype != "all":
         filename = filename + "_" + archetype
 
-    if not(whaleCheck):
-        filename = filename + "_C1"
+    if whaleCheck:
+        if not(whaleCheckOnly):
+            filename = filename + "_C0"
+        else:
+            filename = filename + "_C1"
 
     if floor and not info_char:
-        csv_writer = csv.writer(open("../comp_results/f2p_app_" + filename + ".csv", 'w', newline=''))
-        for comps in f2p_comps:
-            csv_writer.writerow(comps.values())
+        pass
+        # csv_writer = csv.writer(open("../comp_results/f2p_app_" + filename + ".csv", 'w', newline=''))
+        # for comps in f2p_comps:
+        #     csv_writer.writerow(comps.values())
         # with open("../comp_results/var_" + filename + ".json", "w") as out_file:
         #     out_file.write(json.dumps(outvar_comps,indent=4))
 
@@ -694,7 +698,7 @@ def comp_usages_write(comps_dict, filename, floor, info_char, whaleCheck):
         with open("../comp_results/json/" + filename + ".json", "w") as out_file:
             out_file.write(json.dumps(out_json,indent=4))
 
-def duo_write(duos_dict, usage, filename, archetype):
+def duo_write(duos_dict, usage, filename):
     out_duos = []
     for char in duos_dict:
         if usage[RECENT_PHASE][char]["app"] > 1:
@@ -718,7 +722,7 @@ def duo_write(duos_dict, usage, filename, archetype):
     for duos in out_duos:
         csv_writer.writerow(duos.values())
 
-def char_usages_write(chars_dict, filename, floor, archetype):
+def char_usages_write(chars_dict, filename, floor):
     out_chars = []
     weap_len = 8
     arti_len = 4

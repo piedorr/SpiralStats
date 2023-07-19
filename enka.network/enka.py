@@ -55,7 +55,7 @@ async def main():
         header.append('element')
         header.append('weapon')
         header.append('artifacts')
-        writer = csv.writer(open('output1.csv', 'w', encoding='UTF8', newline=''))
+        writer = csv.writer(open(filename + '.csv', 'w', encoding='UTF8', newline=''))
         writer.writerow(header)
 
         for uid in uids:
@@ -153,7 +153,17 @@ async def main():
                     time.sleep(1)
                     pass
                 except TypeError as e:
-                    break
+                    try:
+                        line = []
+                        line.append(uid)
+                        line.append(data.player.nickname)
+                        for j in range(20):
+                            line.append("")
+                        line.append(data.player.level)
+                        writer.writerow(line)
+                    except Exception as e:
+                        error_uids.append('{}: {}'.format(uid, e))
+                        break
                 except Exception as e:
                     error_uids.append('{}: {}'.format(uid, e))
                     break

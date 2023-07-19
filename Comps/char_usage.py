@@ -73,7 +73,7 @@ def ownership(players, chambers=ROOMS):
 
     return owns
 
-def appearances(players, owns, archetype, chambers=ROOMS, offset=3, info_char=False):
+def appearances(players, owns, chambers=ROOMS, offset=3, info_char=False):
     appears = {}
     num_players = {}
     players_chars = {}

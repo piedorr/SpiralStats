@@ -3,8 +3,8 @@ import json
 with open('../data/characters.json') as char_file:
     CHARACTERS = json.load(char_file)
 
-RECENT_PHASE = "3.7c"
-past_phase = "Jun2"
+RECENT_PHASE = "3.8a"
+past_phase = "Jul1"
 char_infographics = "Klee"
 
 # threshold for comps, not inclusive
@@ -19,7 +19,8 @@ char_app_rate_threshold = 0
 
 # archetypes: all, Nilou, dendro, nondendro, off-field, on-field, melt, freeze, hyperbloom, spread
 archetype = "all"
-whaleCheck = True
+whaleCheck = False
+whaleCheckOnly = True
 whaleSigWeap = False
 sigWeaps = []
 standWeaps = []
@@ -27,15 +28,15 @@ standWeaps = []
 # Char infographics should be separated from overall comp rankings
 run_commands = [
     "Char usages all chambers",
-    "Character specific infographics"
+    "Comp usage floor 12 combined",
+    "Comp usage floor 12 each half",
+    "Comp usage floor 11 each half"
 ]
 
 alt_comps = "Character specific infographics" in run_commands
 
 commands = [
-    "Comp usage floor 12 each half",
-    "Comp usage floor 11 each half",
     "Comp usage each chamber",
-    "Comp usage floor 12 combined",
+    "Character specific infographics",
     "Char usages for each chamber"
 ]
