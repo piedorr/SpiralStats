@@ -56,7 +56,7 @@ with open("../char_results/12 build.csv", 'r', encoding='UTF8') as f:
 chars = []
 # for row in build:
 #     chars.append(row[0])
-chars = ["Eula", "Klee", "Xiangling", "Razor", "Thoma"]
+chars = ["Lyney", "Lynette", "Barbara", "Bennett", "Yelan", "Tartaglia", "Zhongli", "Noelle", "Freminet", "Sayu"]
 stats = {}
 median = {}
 mean = {}
@@ -155,6 +155,8 @@ for char in chars:
 statkeys = list(stats[chars[0]][weapons[chars[0]][0]].keys())
 
 for row in data:
+    if row[2] == "":
+        continue
     # if (row[2].isnumeric()):
     #     row.insert(2,"Nilou")
     if row[2] == "Traveler":
@@ -195,16 +197,16 @@ for row in data:
                 for char in spiral_rows[row[0]][chamber_chars]:
                     findchars(char, foundchar)
 
-            # if found and char_arti == "Gilded Dreams":
-            # if found and ((float(row[9]) * 2) + float(row[10]) > 1.8 and float(row[18]) > 0.4):
-            if foundchar["found"] and find_archetype(foundchar):
-                if row[24] in weapons[row[2]]:
-                    sample[row[2]][row[24]] += 1
-                    i = 3
-                    for stat in stats[row[2]][row[24]]:
-                        if stat != "name":
-                            stats[row[2]][row[24]][stat].append(float(row[i]))
-                            i += 1
+                # if found and char_arti == "Gilded Dreams":
+                # if found and ((float(row[9]) * 2) + float(row[10]) > 1.8 and float(row[18]) > 0.4):
+                if foundchar["found"] and find_archetype(foundchar):
+                    if row[24] in weapons[row[2]]:
+                        sample[row[2]][row[24]] += 1
+                        i = 3
+                        for stat in stats[row[2]][row[24]]:
+                            if stat != "name":
+                                stats[row[2]][row[24]][stat].append(float(row[i]))
+                                i += 1
 
 for char in chars:
     copy_weapons[char] = weapons[char].copy()

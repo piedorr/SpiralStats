@@ -226,7 +226,9 @@ for row in data:
             # if foundchar["found"] and char_arti == "Gilded Dreams":
             # if foundchar["found"] and ((float(row[9]) * 2) + float(row[10]) > 1.8 and float(row[18]) > 0.4):
             if foundchar["found"] and find_archetype(foundchar):
-                stats[row[2]]["sample_size"][row[0]] = 1
+                if row[0] not in stats[row[2]]["sample_size"]:
+                    stats[row[2]]["sample_size"][row[0]] = 0
+                stats[row[2]]["sample_size"][row[0]] += 1
                 stats[row[2]]["em_sub"].append(float(row[32]))
                 for i in range(1,20):
                     stats[row[2]][statkeys[i]].append(float(row[i+2]))
@@ -240,6 +242,7 @@ for row in data:
 copy_chars = chars.copy()
 for char in copy_chars:
     # print(artifacts[char])
+    sample_size_all = sum(stats[char]["sample_size"].values())
     stats[char]["sample_size"] = len(stats[char]["sample_size"].keys())
     if stats[char]["sample_size"] > 0:
         # print(char + ": " + str(stats[char]["sample_size"]))
@@ -285,7 +288,7 @@ for char in copy_chars:
             mainstats[char][stat] = {k: v for k, v in sorted_stats}
             for mainstat in mainstats[char][stat]:
                 mainstats[char][stat][mainstat] = round(
-                    mainstats[char][stat][mainstat] / stats[char]["sample_size"], 4
+                    mainstats[char][stat][mainstat] / sample_size_all, 4
                 )
             mainstatlist = list(mainstats[char][stat])
             i = 0

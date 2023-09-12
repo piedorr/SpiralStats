@@ -1,8 +1,11 @@
 import csv
 import json
 import os.path
+import sys
+sys.path.append('../Comps/')
 
-phase_num = "3.8a"
+from comp_rates_config import RECENT_PHASE
+phase_num = RECENT_PHASE
 
 # UIDS TO FETCH
 
@@ -42,7 +45,7 @@ for char in characters:
     char_ids[str(characters[char]["id"])] = characters[char].copy()
 characters = char_ids
 
-traveler_ids = [10000005]
+traveler_ids = [10000007]
 for char in characters.values():
     if "Traveler" in char["name"]:
         traveler_ids.append(int(char["id"].split("-")[0]))

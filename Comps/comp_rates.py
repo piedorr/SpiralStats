@@ -239,7 +239,8 @@ def used_comps(players, comps, rooms, phase=RECENT_PHASE, floor=False):
                     "5* count": comp.fivecount,
                     "comp_name": comp.comp_name,
                     "alt_comp_name": comp.alt_comp_name,
-                    "deepwood": 0
+                    "deepwood": 0,
+                    "players": set(),
                 }
                 if floor:
                     # deepwood = False
@@ -305,6 +306,7 @@ def used_comps(players, comps, rooms, phase=RECENT_PHASE, floor=False):
                     #             deepwoodEquipChars[deepwoodEquip] += 1
                     #         else:
                     #             deepwoodEquipChars[deepwoodEquip] = 1
+            comps_dict[comp_tuple]["players"].add(comp.player)
     if floor:
         for comp in comps_dict:
             for char in comp:
@@ -418,7 +420,6 @@ def comp_owned(players, comps_dict, phase=RECENT_PHASE, owns_offset=3):
                         ):
                             whaleComp = True
                     if whaleComp and not(whaleCheckOnly):
-                        whaleCount += 1
                         continue
                     elif not(whaleComp) and whaleCheckOnly:
                         continue
@@ -597,6 +598,7 @@ def comp_usages_write(comps_dict, filename, floor, info_char):
                     "own_rate": str(comps_dict[comp]["own_rate"]) + "%",
                     "usage_rate": str(comps_dict[comp]["usage_rate"]) + "%"
                 }
+                # out_comps_append["app_flat"] = str(len(comps_dict[comp]["players"]))
                 j = 1
                 if floor:
                     for i in comp:
@@ -809,7 +811,8 @@ def name_filter(comp, mode="out"):
 def comp_chars(row):
     comp = []
     for i in range(4, 8):
-        comp.append(row[i])
+        if row[i] != "":
+            comp.append(row[i])
     return comp
 
 def form_comps(col_names, table, info_char):
