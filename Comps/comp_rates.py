@@ -18,6 +18,12 @@ def main():
     sample_size = 0
     print("start")
 
+    global comps_list
+    comps_list = []
+    reader = csv.reader(open("../data/comps_list.csv"))
+    for line in reader:
+        comps_list.append(tuple(line))
+
     if os.path.exists("../data/raw_csvs_real/"):
         stats = open("../data/raw_csvs_real/" + RECENT_PHASE + "_char.csv")
     else:
@@ -540,6 +546,7 @@ def comp_usages_write(comps_dict, filename, floor, info_char):
     # A separate dictionary is used for the F2P comps,
     # which sorts the comps according to their appearance rate
     f2p_comps_dict = dict(sorted(comps_dict.items(), key=lambda t: t[1]["app_rate"], reverse=True))
+    comps_list_csv_writer = csv.writer(open("../data/comps_list.csv", 'a', newline=''))
     if floor and not info_char:
         f2p_comps = []
         comp_names = []
@@ -551,6 +558,10 @@ def comp_usages_write(comps_dict, filename, floor, info_char):
                 and (comp_name not in comp_names or comp_name == "-")
                 and f2p_comps_dict[comp]["app_rate"] > f2p_app_rate_threshold
             ):
+                if comp not in comps_list:
+                    add_comp_list = input("Input " + str(comp) + " / " + comp_name + "? (y/n)")
+                    if add_comp_list == "y":
+                        comps_list_csv_writer.writerow(comp)
                 comp_names.append(comp_name)
                 if f2p_comps_dict[comp]["alt_comp_name"] != "-":
                     comp_name = f2p_comps_dict[comp]["alt_comp_name"]
@@ -583,6 +594,10 @@ def comp_usages_write(comps_dict, filename, floor, info_char):
         # unless if it's used for a character's infographic
         if comp_name not in comp_names or comp_name == "-" or info_char:
             if comps_dict[comp]["app_rate"] > app_rate_threshold or (info_char and comps_dict[comp]["app_rate"] > char_app_rate_threshold):
+                if comp not in comps_list:
+                    add_comp_list = input("Input " + str(comp) + " / " + comp_name + "? (y/n)")
+                    if add_comp_list == "y":
+                        comps_list_csv_writer.writerow(comp)
                 temp_comp_name = "-"
                 if alt_comp_name != "-":
                     temp_comp_name = alt_comp_name
