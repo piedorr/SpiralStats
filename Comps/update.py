@@ -1,6 +1,6 @@
-import csv
 import json
 import requests
+import csv
 
 response = requests.get("https://api.ambr.top/v2/en/reliquary")
 artifacts = response.json()["data"]["items"]
@@ -52,6 +52,9 @@ for artifact in list(artifacts_affixes.keys()):
     else:
         del artifacts_affixes[artifact]
 print()
+
+with open("../data/artifact_sets.json", "w") as out_file:
+    out_file.write(json.dumps(artifacts,indent=4))
 
 with open("../data/artifacts.json", "w") as out_file:
     out_file.write(json.dumps(artifacts2,indent=4))

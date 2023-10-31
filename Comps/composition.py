@@ -25,7 +25,7 @@ class Composition:
         char_elemeent_list: returns the list of character's elements.
     """
 
-    def __init__(self, uid, comp_chars, phase, room, info_char):
+    def __init__(self, uid, comp_chars, phase, room, duration, info_char):
         """Composition constructor. Takes in:
             A player, as a UID string
             A composition, as a length-four list of character strings
@@ -35,6 +35,7 @@ class Composition:
         self.player = str(uid)
         self.phase = phase
         self.room = room
+        self.duration = duration
         self.char_structs(comp_chars)
         self.name_structs(self.characters, info_char, self.len_element, self.quick_apply, self.slow_apply, self.dps, self.sub, self.anemo, self.healer)
         self.comp_elements()
@@ -103,7 +104,7 @@ class Composition:
                 self.quick_apply["Hydro"] += 1
             if character in ["Sangonomiya Kokomi", "Barbara"]:
                 self.slow_apply["Hydro"] += 1
-            if character in ["Ganyu", "Kamisato Ayaka", "Kaeya", "Rosaria", "Layla", "Chongyun"]:
+            if character in ["Ganyu", "Kamisato Ayaka", "Kaeya", "Rosaria", "Layla", "Chongyun", "Wriothesley"]:
                 self.quick_apply["Cryo"] += 1
             if character in ["Eula", "Diona"]:
                 self.slow_apply["Cryo"] += 1
@@ -114,7 +115,7 @@ class Composition:
             if character in ["Raiden Shogun", "Kuki Shinobu"]:
                 self.quick_apply["Electro"] += 1
 
-            if character in ["Tartaglia","Kamisato Ayaka","Tighnari","Hu Tao","Xiao","Eula","Arataki Itto","Razor","Diluc","Yoimiya","Keqing","Noelle","Klee","Shikanoin Heizou","Cyno","Wanderer","Alhaitham","Dehya","Kaveh","Lyney","Freminet"]:
+            if character in ["Tartaglia","Kamisato Ayaka","Tighnari","Hu Tao","Xiao","Eula","Arataki Itto","Razor","Diluc","Yoimiya","Keqing","Noelle","Klee","Shikanoin Heizou","Cyno","Wanderer","Alhaitham","Dehya","Kaveh","Lyney","Freminet","Neuvillette","Wriothesley"]:
                 self.dps.insert(0, character)
             elif character in ["Bennett","Qiqi","Diona","Sayu","Kuki Shinobu","Dori","Layla","Yaoyao","Mika","Baizhu","Kirara"]:
                 self.healer.append(character)
@@ -344,8 +345,7 @@ class Composition:
                         slow_apply["Pyro"] > 0 and slow_apply["Pyro"] - len_element["Pyro"] >= 0):
                         if quick_apply["Cryo"] > 0 and len_element["Hydro"] > 0:
                             self.comp_name = "Hyperfridge " + characters[0]
-                        elif slow_apply["Hydro"] > 0 and (
-                            slow_apply["Hydro"] - len_element["Hydro"] >= 0):
+                        elif slow_apply["Hydro"] > 0 and (slow_apply["Hydro"] - len_element["Hydro"] >= 0):
                             self.comp_name = "Quickbloom " + characters[0]
                             if "Yae Miko" in characters and (
                                 "Raiden Shogun" in self.comp_name or "Nahida" in self.comp_name):
@@ -357,7 +357,7 @@ class Composition:
                             if slow_apply["Pyro"] > 0 and "Razor" in characters:
                                 self.comp_name = "Thundering Furry"
                             elif len(dps) < 2 or (
-                                "Nahida" in dps or "Raiden Shogun" in dps or "Yelan" in dps or "Yae Miko" in dps):
+                                "Nahida" in dps or "Raiden Shogun" in dps or "Yelan" in dps or "Xingqiu" in dps or "Yae Miko" in dps):
                                 if characters[0] in ["Raiden Shogun", "Lisa", "Sucrose", "Xingqiu", "Yelan", "Fischl", "Traveler-D"]:
                                     self.comp_name = "Hyperbloom Quickswap"
                                 else:
@@ -389,7 +389,8 @@ class Composition:
                             self.comp_name = "Thundering Furry"
                         elif "Cyno" in characters:
                             self.comp_name = "Chaos Cyno"
-                        else:
+                        elif len(dps) < 2 or (
+                            "Nahida" in dps or "Raiden Shogun" in dps or "Yelan" in dps or "Yae Miko" in dps):
                             self.comp_name = characters[0] + " Curry"
                             if not(CHARACTERS[characters[0]]["element"] == "Dendro" and slow_apply["Hydro"] > 0
                                 and slow_apply["Hydro"] - len_element["Hydro"] >= 0):

@@ -98,7 +98,7 @@ for char in chars:
         "cdmg_sub": [],
         "charge_sub": [],
         "em_sub": [],
-        "sample_size": {}
+        "sample_size_enka": {}
     }
     mean[char] = {
         "attack_lvl": 0,
@@ -226,9 +226,9 @@ for row in data:
             # if foundchar["found"] and char_arti == "Gilded Dreams":
             # if foundchar["found"] and ((float(row[9]) * 2) + float(row[10]) > 1.8 and float(row[18]) > 0.4):
             if foundchar["found"] and find_archetype(foundchar):
-                if row[0] not in stats[row[2]]["sample_size"]:
-                    stats[row[2]]["sample_size"][row[0]] = 0
-                stats[row[2]]["sample_size"][row[0]] += 1
+                if row[0] not in stats[row[2]]["sample_size_enka"]:
+                    stats[row[2]]["sample_size_enka"][row[0]] = 0
+                stats[row[2]]["sample_size_enka"][row[0]] += 1
                 stats[row[2]]["em_sub"].append(float(row[32]))
                 for i in range(1,20):
                     stats[row[2]][statkeys[i]].append(float(row[i+2]))
@@ -242,23 +242,23 @@ for row in data:
 copy_chars = chars.copy()
 for char in copy_chars:
     # print(artifacts[char])
-    sample_size_all = sum(stats[char]["sample_size"].values())
-    stats[char]["sample_size"] = len(stats[char]["sample_size"].keys())
-    if stats[char]["sample_size"] > 0:
-        # print(char + ": " + str(stats[char]["sample_size"]))
+    sample_size_all = sum(stats[char]["sample_size_enka"].values())
+    stats[char]["sample_size_enka"] = len(stats[char]["sample_size_enka"].keys())
+    if stats[char]["sample_size_enka"] > 0:
+        # print(char + ": " + str(stats[char]["sample_size_enka"]))
         # print()
         for stat in stats[char]:
             skewness = 0
             if not stats[char][stat]:
                 stats[char][stat] = 0
-            elif stat != "name" and stat != "sample_size":
+            elif stat != "name" and stat != "sample_size_enka":
                 if stat in ["attack_lvl", "skill_lvl", "burst_lvl", "max_hp", "atk", "dfns", "em"]:
                     median[char][stat] = round(statistics.median(stats[char][stat]), 2)
                     mean[char][stat] = round(statistics.mean(stats[char][stat]), 2)
                 else:
                     median[char][stat] = round(statistics.median(stats[char][stat]), 4)
                     mean[char][stat] = round(statistics.mean(stats[char][stat]), 4)
-                if mean[char][stat] > 0 and median[char][stat] > 0 and stats[char]["sample_size"] > 5:
+                if mean[char][stat] > 0 and median[char][stat] > 0 and stats[char]["sample_size_enka"] > 5:
                     if stat not in ["attack_lvl", "skill_lvl", "burst_lvl","heal", "phys","pyro","electro","hydro","dendro","anemo","geo","cryo"]:
                         skewness = round(skew(stats[char][stat], axis=0, bias=True), 2)
                 if skewness > 1:
@@ -310,7 +310,7 @@ csv_writer.writerow(stats[chars[0]].keys())
 csv_writer2 = csv.writer(open("results/demographic.csv", 'w', newline=''))
 for char in chars:
     csv_writer.writerow(stats[char].values())
-    csv_writer2.writerow([char + ": " + str(stats[char]["sample_size"])])
+    csv_writer2.writerow([char + ": " + str(stats[char]["sample_size_enka"])])
 
 csv_writer = csv.writer(open("results/ar_compile.csv", 'w', newline=''))
 csv_writer.writerow(ar_compile.keys())

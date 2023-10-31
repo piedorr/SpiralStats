@@ -1,6 +1,7 @@
 import json
 import pandas as pd
 import operator
+import statistics
 from archetypes import *
 
 ROOMS = ["12-1-1", "12-1-2", "12-2-1", "12-2-2", "12-3-1", "12-3-2"]
@@ -88,9 +89,13 @@ def appearances(players, owns, chambers=ROOMS, offset=3, info_char=False):
             players_chars[phase][character] = []
             appears[phase][character] = {
                 "flat": 0,
+                "duration": {"1-1": [], "1-2": [], "2-1": [], "2-2": [], "3-1": []},
+                "avg_duration": 0.00,
                 "percent": 0.00,
                 "weap_freq": {},
+                "weap_duration": {},
                 "arti_freq": {},
+                "arti_duration": {},
                 "cons_freq": {},
                 "cons_avg": 0.00,
                 "sample": 0
@@ -98,6 +103,8 @@ def appearances(players, owns, chambers=ROOMS, offset=3, info_char=False):
             for i in range (7):
                 appears[phase][character]["cons_freq"][i] = {
                     "flat": 0,
+                    "duration": {"1-1": [], "1-2": [], "2-1": [], "2-2": [], "3-1": []},
+                    "avg_duration": 0.00,
                     "percent": 0,
                 }
 
@@ -125,20 +132,37 @@ def appearances(players, owns, chambers=ROOMS, offset=3, info_char=False):
                                 error_comps.append(player.player)
                             comp_error = True
                             continue
+                        if CHARACTERS[char]["availability"] in ["Limited 5*"]:
+                            if player.owned[char]["cons"] < 4 and player.chambers[chamber].duration:
+                                appears[phase][char_name]["duration"][chamber[-3:]].append(player.chambers[chamber].duration)
+                        elif player.chambers[chamber].duration:
+                            appears[phase][char_name]["duration"][chamber[-3:]].append(player.chambers[chamber].duration)
                         appears[phase][char_name]["cons_freq"][player.owned[char]["cons"]]["flat"] += 1
+                        if player.chambers[chamber].duration:
+                            appears[phase][char_name]["cons_freq"][player.owned[char]["cons"]]["duration"][chamber[-3:]].append(player.chambers[chamber].duration)
                         appears[phase][char_name]["cons_avg"] += player.owned[char]["cons"]
 
                         if player.owned[char]["weapon"] != "":
-                            if player.owned[char]["weapon"] in appears[phase][char_name]["weap_freq"]:
-                                appears[phase][char_name]["weap_freq"][player.owned[char]["weapon"]] += 1
-                            else:
-                                appears[phase][char_name]["weap_freq"][player.owned[char]["weapon"]] = 1
+                            if player.owned[char]["weapon"] not in appears[phase][char_name]["weap_freq"]:
+                                appears[phase][char_name]["weap_freq"][player.owned[char]["weapon"]] = 0
+                                appears[phase][char_name]["weap_duration"][player.owned[char]["weapon"]] = {"1-1": [], "1-2": [], "2-1": [], "2-2": [], "3-1": []}
+                            appears[phase][char_name]["weap_freq"][player.owned[char]["weapon"]] += 1
+                            if CHARACTERS[char]["availability"] in ["Limited 5*"]:
+                                if player.owned[char]["cons"] < 4 and player.chambers[chamber].duration:
+                                    appears[phase][char_name]["weap_duration"][player.owned[char]["weapon"]][chamber[-3:]].append(player.chambers[chamber].duration)
+                            elif player.chambers[chamber].duration:
+                                appears[phase][char_name]["weap_duration"][player.owned[char]["weapon"]][chamber[-3:]].append(player.chambers[chamber].duration)
 
                         if player.owned[char]["artifacts"] != "":
-                            if player.owned[char]["artifacts"] in appears[phase][char_name]["arti_freq"]:
-                                appears[phase][char_name]["arti_freq"][player.owned[char]["artifacts"]] += 1
-                            else:
-                                appears[phase][char_name]["arti_freq"][player.owned[char]["artifacts"]] = 1
+                            if player.owned[char]["artifacts"] not in appears[phase][char_name]["arti_freq"]:
+                                appears[phase][char_name]["arti_freq"][player.owned[char]["artifacts"]] = 0
+                                appears[phase][char_name]["arti_duration"][player.owned[char]["artifacts"]] = {"1-1": [], "1-2": [], "2-1": [], "2-2": [], "3-1": []}
+                            appears[phase][char_name]["arti_freq"][player.owned[char]["artifacts"]] += 1
+                            if CHARACTERS[char]["availability"] in ["Limited 5*"]:
+                                if player.owned[char]["cons"] < 4 and player.chambers[chamber].duration:
+                                    appears[phase][char_name]["arti_duration"][player.owned[char]["artifacts"]][chamber[-3:]].append(player.chambers[chamber].duration)
+                            elif player.chambers[chamber].duration:
+                                appears[phase][char_name]["arti_duration"][player.owned[char]["artifacts"]][chamber[-3:]].append(player.chambers[chamber].duration)
 
         if comp_error:
             df_char = pd.read_csv('../data/phase_characters.csv')
@@ -156,6 +180,30 @@ def appearances(players, owns, chambers=ROOMS, offset=3, info_char=False):
             appears[phase][char]["percent"] = round(
                 appears[phase][char]["flat"] / total, 2
             )
+
+            if appears[phase][char]["flat"] > 0:
+                avg_duration = {"1": [], "2": []}
+                for room_num in appears[phase][char]["duration"]:
+                    if appears[phase][char]["duration"][room_num]:
+                        if room_num[-1:] == "1":
+                            avg_duration["1"].append(statistics.mean(appears[phase][char]["duration"][room_num]))
+                        elif room_num[-1:] == "2":
+                            avg_duration["2"].append(statistics.median(appears[phase][char]["duration"][room_num]))
+                for i in range(2):
+                    if avg_duration[str(i + 1)]:
+                        avg_duration[str(i + 1)] = statistics.mean(avg_duration[str(i + 1)])
+                    else:
+                        avg_duration[str(i + 1)] = None
+                if avg_duration["1"] and avg_duration["2"]:
+                    appears[phase][char]["avg_duration"] = round(statistics.mean([avg_duration["1"], avg_duration["2"]]), 1)
+                elif avg_duration["1"]:
+                    appears[phase][char]["avg_duration"] = round(avg_duration["1"], 1)
+                elif avg_duration["2"]:
+                    appears[phase][char]["avg_duration"] = round(avg_duration["2"], 1)
+                else:
+                    appears[phase][char]["avg_duration"] = 999
+            else:
+                appears[phase][char]["avg_duration"] = 999
 
             if (chambers == ["12-1-1", "12-1-2", "12-2-1", "12-2-2", "12-3-1", "12-3-2"]):
                 appears[phase][char]["sample"] = len(players_chars[phase][char])
@@ -239,6 +287,7 @@ def usages(owns, appears, past_phase, filename, chambers=ROOMS, offset=3):
                 uses[phase][char] = {
                     "app": appears[phase][char]["percent"],
                     "app_flat": appears[phase][char]["flat"],
+                    "duration": appears[phase][char]["avg_duration"],
                     "own": owns[phase][char]["percent"],
                     "usage" : rate,
                     "diff": "-",

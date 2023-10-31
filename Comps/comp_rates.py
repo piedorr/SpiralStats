@@ -1,18 +1,26 @@
 import csv
 import json
-import operator
 import os.path
+import operator
 import char_usage as cu
+import statistics
+import matplotlib
+import matplotlib.pyplot as plt
+from datetime import datetime, timedelta
 from itertools import permutations
 from composition import Composition
 from player_phase import PlayerPhase
 from comp_rates_config import *
 from archetypes import *
 
-with open('../data/characters.json') as char_file:
-    CHARACTERS = json.load(char_file)
-
 def main():
+    for make_path in [
+        "../comp_results", "../enka.network/results",
+        "../char_results"
+    ]:
+        if not os.path.exists(make_path):
+            os.makedirs(make_path)
+
     # Sample size will be needed to calculate the comp app and own rate
     global sample_size
     sample_size = 0
@@ -262,16 +270,6 @@ def used_comps(players, comps, rooms, phase=RECENT_PHASE, floor=False):
                             "artifacts" : {},
                             "cons": []
                         }
-                        try:
-                            comps_dict[comp_tuple][comp_tuple[char]]["weapon"][players[phase][comp.player].owned[comp_tuple[char]]["weapon"]] = 1
-                            if players[phase][comp.player].owned[comp_tuple[char]]["artifacts"] != "":
-                                comps_dict[comp_tuple][comp_tuple[char]]["artifacts"][players[phase][comp.player].owned[comp_tuple[char]]["artifacts"]] = 1
-                                # if players[phase][comp.player].owned[comp_tuple[char]]["artifacts"] == "Deepwood Memories":
-                                #     deepwood = True
-                                #     deepwoodEquip = comp_tuple[char]
-                        except Exception as e:
-                            if ('{}: {}'.format(comp.player, e)) not in error_uids:
-                                error_uids.append('{}: {}'.format(comp.player, e))
                     # if deepwood:
                     #     comps_dict[comp_tuple]["deepwood"] += 1
                     #     if ("Tighnari" in comp_tuple):
@@ -543,49 +541,53 @@ def comp_usages_write(comps_dict, filename, floor, info_char):
 
     # Sort the comps according to their usage rate
     comps_dict = dict(sorted(comps_dict.items(), key=lambda t: t[1]["usage_rate"], reverse=True))
-    # A separate dictionary is used for the F2P comps,
-    # which sorts the comps according to their appearance rate
-    f2p_comps_dict = dict(sorted(comps_dict.items(), key=lambda t: t[1]["app_rate"], reverse=True))
-    comps_list_csv_writer = csv.writer(open("../data/comps_list.csv", 'a', newline=''))
-    if floor and not info_char:
-        f2p_comps = []
-        comp_names = []
-        for comp in f2p_comps_dict:
-            comp_name = f2p_comps_dict[comp]["comp_name"]
-            # Only one variation of each comp name is included
-            if (
-                f2p_comps_dict[comp]["5* count"] <= 1
-                and (comp_name not in comp_names or comp_name == "-")
-                and f2p_comps_dict[comp]["app_rate"] > f2p_app_rate_threshold
-            ):
-                if comp not in comps_list:
-                    add_comp_list = input("Input " + str(comp) + " / " + comp_name + "? (y/n)")
-                    if add_comp_list == "y":
-                        comps_list_csv_writer.writerow(comp)
-                comp_names.append(comp_name)
-                if f2p_comps_dict[comp]["alt_comp_name"] != "-":
-                    comp_name = f2p_comps_dict[comp]["alt_comp_name"]
-                f2p_comps_append = {
-                    "comp_name": comp_name,
-                    "char_one": comp[0],
-                    "char_two": comp[1],
-                    "char_three": comp[2],
-                    "char_four": comp[3],
-                    "app_rate": str(f2p_comps_dict[comp]["app_rate"]) + "%"
-                }
-                j = 1
-                for i in comp:
-                    f2p_comps_append["weapon_" + str(j)] = list(f2p_comps_dict[comp][i]["weapon"])[0]
-                    if len(list(f2p_comps_dict[comp][i]["artifacts"])):
-                        f2p_comps_append["artifact_" + str(j)] = list(f2p_comps_dict[comp][i]["artifacts"])[0]
-                    else:
-                        f2p_comps_append["artifact_" + str(j)] = "-"
-                    j += 1
-                f2p_comps.append(f2p_comps_append)
+
+    # # A separate dictionary is used for the F2P comps,
+    # # which sorts the comps according to their appearance rate
+    # f2p_comps_dict = dict(sorted(comps_dict.items(), key=lambda t: t[1]["app_rate"], reverse=True))
+    # comps_list_csv_writer = csv.writer(open("../data/comps_list.csv", 'a', newline=''))
+    # if floor and not info_char:
+    #     f2p_comps = []
+    #     comp_names = []
+    #     for comp in f2p_comps_dict:
+    #         comp_name = f2p_comps_dict[comp]["comp_name"]
+    #         # Only one variation of each comp name is included
+    #         if (
+    #             f2p_comps_dict[comp]["5* count"] <= 1
+    #             and (comp_name not in comp_names or comp_name == "-")
+    #             and f2p_comps_dict[comp]["app_rate"] > f2p_app_rate_threshold
+    #         ):
+    #             if comp not in comps_list:
+    #                 add_comp_list = input("Input " + str(comp) + " / " + comp_name + "? (y/n)")
+    #                 if add_comp_list == "y":
+    #                     comps_list_csv_writer.writerow(comp)
+    #             comp_names.append(comp_name)
+    #             if f2p_comps_dict[comp]["alt_comp_name"] != "-":
+    #                 comp_name = f2p_comps_dict[comp]["alt_comp_name"]
+    #             f2p_comps_append = {
+    #                 "comp_name": comp_name,
+    #                 "char_one": comp[0],
+    #                 "char_two": comp[1],
+    #                 "char_three": comp[2],
+    #                 "char_four": comp[3],
+    #                 "app_rate": str(f2p_comps_dict[comp]["app_rate"]) + "%"
+    #             }
+    #             j = 1
+    #             for i in comp:
+    #                 f2p_comps_append["weapon_" + str(j)] = list(f2p_comps_dict[comp][i]["weapon"])[0]
+    #                 if len(list(f2p_comps_dict[comp][i]["artifacts"])):
+    #                     f2p_comps_append["artifact_" + str(j)] = list(f2p_comps_dict[comp][i]["artifacts"])[0]
+    #                 else:
+    #                     f2p_comps_append["artifact_" + str(j)] = "-"
+    #                 j += 1
+    #             f2p_comps.append(f2p_comps_append)
+
     exc_comps = []
     comp_names = []
     variations = {}
     for comp in comps_dict:
+        if comp in skip_comps:
+            continue
         if info_char and filename not in comp:
             continue
         comp_name = comps_dict[comp]["comp_name"]
@@ -616,13 +618,20 @@ def comp_usages_write(comps_dict, filename, floor, info_char):
                 # out_comps_append["app_flat"] = str(len(comps_dict[comp]["players"]))
                 j = 1
                 if floor:
-                    for i in comp:
-                        out_comps_append["weapon_" + str(j)] = list(comps_dict[comp][i]["weapon"])[0]
-                        if len(list(comps_dict[comp][i]["artifacts"])):
-                            out_comps_append["artifact_" + str(j)] = list(comps_dict[comp][i]["artifacts"])[0]
-                        else:
-                            out_comps_append["artifact_" + str(j)] = "-"
-                        j += 1
+                    try:
+                        for i in comp:
+                            out_comps_append["weapon_" + str(j)] = list(comps_dict[comp][i]["weapon"])[0]
+                            if len(list(comps_dict[comp][i]["artifacts"])):
+                                out_comps_append["artifact_" + str(j)] = list(comps_dict[comp][i]["artifacts"])[0]
+                            else:
+                                out_comps_append["artifact_" + str(j)] = "-"
+                            j += 1
+                    except Exception as e:
+                        print(comp)
+                        print(comps_dict[comp])
+                        print(i)
+                        print(j)
+                        print('{}, {}'.format(e, type(e)))
                 if info_char:
                     if comp_name not in comp_names:
                         variations[comp_name] = 1
@@ -717,11 +726,13 @@ def comp_usages_write(comps_dict, filename, floor, info_char):
 
 def duo_write(duos_dict, usage, filename):
     out_duos = []
+    temp_out_duos = []
     for char in duos_dict:
         if usage[RECENT_PHASE][char]["app"] > 1:
             out_duos_append = {
                 "char": char,
-                "usage_rate": usage[RECENT_PHASE][char]["usage"],
+                "duration": usage[RECENT_PHASE][char]["duration"],
+                "app": usage[RECENT_PHASE][char]["app"],
             }
             for i in range(8):
                 if i < len(duos_dict[char]):
@@ -731,19 +742,38 @@ def duo_write(duos_dict, usage, filename):
                     out_duos_append["app_rate_" + str(i + 1)] = "0%"
                     out_duos_append["char_" + str(i + 1)] = "-"
             out_duos.append(out_duos_append)
-    out_duos = sorted(out_duos, key=lambda t: t["usage_rate"], reverse = True)
+    out_duos = sorted(out_duos, key=lambda t: t["duration"], reverse = False)
+
+    for char in out_duos:
+        del char["duration"]
+        if char["app"] > 5:
+            temp_out_duos.append(char.copy())
+    for char in out_duos:
+        if char["app"] <= 5:
+            temp_out_duos.append(char.copy())
+    out_duos = temp_out_duos.copy()
 
     if archetype != "all":
         filename = filename + "_" + archetype
-    csv_writer = csv.writer(open("../comp_results/" + filename + ".csv", 'w', newline=''))
+    csv_writer = csv.writer(open("../char_results/" + filename + ".csv", 'w', newline=''))
     for duos in out_duos:
         csv_writer.writerow(duos.values())
 
 def char_usages_write(chars_dict, filename, floor):
     out_chars = []
+    temp_chars_dict = {}
     weap_len = 8
     arti_len = 4
-    chars_dict = dict(sorted(chars_dict.items(), key=lambda t: t[1]["usage"], reverse=True))
+    chars_dict = dict(sorted(chars_dict.items(), key=lambda t: t[1]["duration"], reverse=False))
+
+    for char in chars_dict:
+        if chars_dict[char]["app"] > 5:
+            temp_chars_dict[char] = chars_dict[char].copy()
+    for char in chars_dict:
+        if chars_dict[char]["app"] <= 5:
+            temp_chars_dict[char] = chars_dict[char].copy()
+    chars_dict = temp_chars_dict.copy()
+
     for char in chars_dict:
         if floor:
             if "12 build" == filename:
@@ -754,6 +784,7 @@ def char_usages_write(chars_dict, filename, floor):
                 "usage_rate": str(chars_dict[char]["usage"]) + "%",
                 "app_rate": str(chars_dict[char]["app"]) + "%",
                 "own_rate": str(chars_dict[char]["own"]) + "%",
+                "duration": chars_dict[char]["duration"],
                 "rarity": chars_dict[char]["rarity"],
                 "diff": str(chars_dict[char]["diff"]) + "%"
             }
@@ -793,6 +824,7 @@ def char_usages_write(chars_dict, filename, floor):
                 "usage_rate": str(chars_dict[char]["usage"]) + "%",
                 "app_rate": str(chars_dict[char]["app"]) + "%",
                 "own_rate": str(chars_dict[char]["own"]) + "%",
+                "duration": chars_dict[char]["duration"],
                 "rarity": chars_dict[char]["rarity"],
                 "diff": str(chars_dict[char]["diff"]) + "%",
             }
@@ -833,10 +865,30 @@ def comp_chars(row):
 def form_comps(col_names, table, info_char):
     room = col_names.index('half')
     comps = []
+    duration_array = []
 
-    for row in table:
-        comp = Composition(row[0], comp_chars(row), RECENT_PHASE, row[room], info_char)
+    for i in range(len(table)):
+        if "3-2" != table[i][room][-3:]:
+            date_format = "%Y-%m-%d %H:%M:%S"
+            date_start = datetime.strptime(table[i][8].split("+")[0], date_format)
+            date_end = datetime.strptime(table[i + 1][8].split("+")[0], date_format)
+            duration = int((date_end - date_start).seconds)
+            if duration > 150 or duration == 0:
+                duration = None
+            # elif table[i][room][-1:] == "1":
+            #     duration_array.append(duration)
+        else:
+            duration = None
+        comp = Composition(table[i][0], comp_chars(table[i]), RECENT_PHASE, table[i][room], duration, info_char)
         comps.append(comp)
+    # print(len(duration_array))
+    # try:
+    #     plt.hist(duration_array)
+    #     plt.show()
+    # except Exception:
+    #     pass
+    # print(statistics.median(duration_array))
+    # exit()
 
     return comps
 

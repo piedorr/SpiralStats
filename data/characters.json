@@ -973,5 +973,31 @@
         "out_name": false,
         "availability": "Free",
         "on_field": false
+    },
+    "Neuvillette": {
+        "id": 10000087,
+        "name": "Neuvillette",
+        "weapon": "Catalyst",
+        "element": "Hydro",
+        "rarity": 5,
+        "icon": "UI_AvatarIcon_Neuvillette",
+        "route": "Neuvillette",
+        "alt_name": null,
+        "out_name": false,
+        "availability": "Limited 5*",
+        "on_field": true
+    },
+    "Wriothesley": {
+        "id": 10000086,
+        "name": "Wriothesley",
+        "weapon": "Catalyst",
+        "element": "Cryo",
+        "rarity": 5,
+        "icon": "UI_AvatarIcon_Wriothesley",
+        "route": "Wriothesley",
+        "alt_name": null,
+        "out_name": false,
+        "availability": "Limited 5*",
+        "on_field": true
     }
 }
