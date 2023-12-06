@@ -3,6 +3,7 @@ import time
 from enkanetwork import EnkaNetworkAPI
 from enkanetwork import EquipmentsType, DigitType
 from enka_config import *
+from pydantic import ValidationError
 client = EnkaNetworkAPI()
 
 # UNCOMMENT THE DESIRED STATS IN THE CSV
@@ -148,10 +149,8 @@ async def main():
                             char_set += ", Flex"
                         line.append(char_set)
                         writer.writerow(line)
+                    writer = csv.writer(open(filename + '.csv', 'a', encoding='UTF8', newline=''))
                     break
-                except asyncio.exceptions.TimeoutError as e:
-                    time.sleep(1)
-                    pass
                 except TypeError as e:
                     try:
                         line = []
@@ -161,9 +160,17 @@ async def main():
                             line.append("")
                         line.append(data.player.level)
                         writer.writerow(line)
+                        writer = csv.writer(open(filename + '.csv', 'a', encoding='UTF8', newline=''))
+                        break
                     except Exception as e:
                         error_uids.append('{}: {}'.format(uid, e))
                         break
+                except asyncio.exceptions.TimeoutError as e:
+                    time.sleep(1)
+                    pass
+                except ValidationError as e:
+                    print('{}: {}'.format(uid, e))
+                    exit()
                 except Exception as e:
                     error_uids.append('{}: {}'.format(uid, e))
                     break

@@ -56,7 +56,7 @@ with open("../char_results/12 build.csv", 'r', encoding='UTF8') as f:
 chars = []
 # for row in build:
 #     chars.append(row[0])
-chars = ["Lyney", "Lynette", "Barbara", "Bennett", "Yelan", "Tartaglia", "Zhongli", "Noelle", "Freminet", "Sayu"]
+chars = ["Furina", "Baizhu", "Charlotte", "Beidou", "Collei", "Cyno", "Kamisato Ayato", "Kirara", "Xiangling", "Kuki Shinobu"]
 stats = {}
 median = {}
 mean = {}
@@ -80,7 +80,7 @@ for char in chars:
 
     for row in build:
         if row[0] == char:
-            for j in range (13,28,2):
+            for j in range (14,29,2):
                 if row[j]!="-":
                     weapons[char].append(row[j])
                     stats[char][row[j]] = {
@@ -226,7 +226,7 @@ for char in chars:
                     if mean[char][weapon][stat] > 0 and median[char][weapon][stat] > 0 and sample[char][weapon] > 5:
                         if stat not in ["attack_lvl", "skill_lvl", "burst_lvl","heal", "phys","pyro","electro","hydro","dendro","anemo","geo","cryo"]:
                             skewness = round(skew(stats[char][weapon][stat], axis=0, bias=True), 2)
-                    if skewness > 1:
+                    if skewness < -1 or skewness > 1:
                         stats[char][weapon][stat] = str(median[char][weapon][stat])
                         # print(stat + ": " + str(mean[char][weapon][stat]) + ", " + str(median[char][weapon][stat]))
                         # # try:
@@ -248,7 +248,8 @@ for char in chars:
             weapons[char].remove(weapon)
 
     csv_writer = csv.writer(open("results/" + char + "_weapons.csv", 'w', newline=''))
-    csv_writer.writerow(stats[char][weapons[char][0]].keys())
-    for weapon in weapons[char]:
-        print(weapon + ": " + str(sample[char][weapon]))
-        csv_writer.writerow(stats[char][weapon].values())
+    if weapons[char] and stats[char]:
+        csv_writer.writerow(stats[char][weapons[char][0]].keys())
+        for weapon in weapons[char]:
+            print(weapon + ": " + str(sample[char][weapon]))
+            csv_writer.writerow(stats[char][weapon].values())

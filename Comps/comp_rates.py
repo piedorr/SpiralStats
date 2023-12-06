@@ -541,11 +541,11 @@ def comp_usages_write(comps_dict, filename, floor, info_char):
 
     # Sort the comps according to their usage rate
     comps_dict = dict(sorted(comps_dict.items(), key=lambda t: t[1]["usage_rate"], reverse=True))
+    comps_list_csv_writer = csv.writer(open("../data/comps_list.csv", 'a', newline=''))
 
     # # A separate dictionary is used for the F2P comps,
     # # which sorts the comps according to their appearance rate
     # f2p_comps_dict = dict(sorted(comps_dict.items(), key=lambda t: t[1]["app_rate"], reverse=True))
-    # comps_list_csv_writer = csv.writer(open("../data/comps_list.csv", 'a', newline=''))
     # if floor and not info_char:
     #     f2p_comps = []
     #     comp_names = []
@@ -731,8 +731,9 @@ def duo_write(duos_dict, usage, filename):
         if usage[RECENT_PHASE][char]["app"] > 1:
             out_duos_append = {
                 "char": char,
-                "duration": usage[RECENT_PHASE][char]["duration"],
+                # "duration": usage[RECENT_PHASE][char]["duration"],
                 "app": usage[RECENT_PHASE][char]["app"],
+                "usage": usage[RECENT_PHASE][char]["usage"],
             }
             for i in range(8):
                 if i < len(duos_dict[char]):
@@ -742,16 +743,16 @@ def duo_write(duos_dict, usage, filename):
                     out_duos_append["app_rate_" + str(i + 1)] = "0%"
                     out_duos_append["char_" + str(i + 1)] = "-"
             out_duos.append(out_duos_append)
-    out_duos = sorted(out_duos, key=lambda t: t["duration"], reverse = False)
+    out_duos = sorted(out_duos, key=lambda t: t["usage"], reverse = True)
 
     for char in out_duos:
-        del char["duration"]
-        if char["app"] > 5:
-            temp_out_duos.append(char.copy())
-    for char in out_duos:
-        if char["app"] <= 5:
-            temp_out_duos.append(char.copy())
-    out_duos = temp_out_duos.copy()
+        del char["app"]
+    #     if char["app"] > 5:
+    #         temp_out_duos.append(char.copy())
+    # for char in out_duos:
+    #     if char["app"] <= 5:
+    #         temp_out_duos.append(char.copy())
+    # out_duos = temp_out_duos.copy()
 
     if archetype != "all":
         filename = filename + "_" + archetype
@@ -763,16 +764,16 @@ def char_usages_write(chars_dict, filename, floor):
     out_chars = []
     temp_chars_dict = {}
     weap_len = 8
-    arti_len = 4
-    chars_dict = dict(sorted(chars_dict.items(), key=lambda t: t[1]["duration"], reverse=False))
+    arti_len = 6
+    chars_dict = dict(sorted(chars_dict.items(), key=lambda t: t[1]["usage"], reverse=True))
 
-    for char in chars_dict:
-        if chars_dict[char]["app"] > 5:
-            temp_chars_dict[char] = chars_dict[char].copy()
-    for char in chars_dict:
-        if chars_dict[char]["app"] <= 5:
-            temp_chars_dict[char] = chars_dict[char].copy()
-    chars_dict = temp_chars_dict.copy()
+    # for char in chars_dict:
+    #     if chars_dict[char]["app"] > 5:
+    #         temp_chars_dict[char] = chars_dict[char].copy()
+    # for char in chars_dict:
+    #     if chars_dict[char]["app"] <= 5:
+    #         temp_chars_dict[char] = chars_dict[char].copy()
+    # chars_dict = temp_chars_dict.copy()
 
     for char in chars_dict:
         if floor:
@@ -784,17 +785,15 @@ def char_usages_write(chars_dict, filename, floor):
                 "usage_rate": str(chars_dict[char]["usage"]) + "%",
                 "app_rate": str(chars_dict[char]["app"]) + "%",
                 "own_rate": str(chars_dict[char]["own"]) + "%",
-                "duration": chars_dict[char]["duration"],
+                "duration_1": chars_dict[char]["duration_1"],
+                "duration_2": chars_dict[char]["duration_2"],
+                "role": chars_dict[char]["role"],
                 "rarity": chars_dict[char]["rarity"],
                 "diff": str(chars_dict[char]["diff"]) + "%"
             }
             for i in ["app_rate","own_rate","usage_rate","diff"]:
                 if out_chars_append[i] == "-%":
                     out_chars_append[i] = "-"
-            for i in range(7):
-                out_chars_append["use_" + str(i)] = str(list(list(chars_dict[char]["cons_usage"].values())[i].values())[2]) + "%"
-                if out_chars_append["use_" + str(i)] == "-%":
-                    out_chars_append["use_" + str(i)] = "-"
             for i in range(weap_len):
                 out_chars_append["weapon_" + str(i + 1)] = list(chars_dict[char]["weapons"])[i]
                 out_chars_append["weapon_" + str(i + 1) + "_app"] = str(list(chars_dict[char]["weapons"].values())[i]) + "%"
@@ -805,6 +804,10 @@ def char_usages_write(chars_dict, filename, floor):
                 out_chars_append["artifact_" + str(i + 1) + "_app"] = str(list(chars_dict[char]["artifacts"].values())[i]) + "%"
                 if out_chars_append["artifact_" + str(i + 1) + "_app"] == "-%":
                     out_chars_append["artifact_" + str(i + 1) + "_app"] = "-"
+            for i in range(7):
+                out_chars_append["use_" + str(i)] = str(list(list(chars_dict[char]["cons_usage"].values())[i].values())[2]) + "%"
+                if out_chars_append["use_" + str(i)] == "-%":
+                    out_chars_append["use_" + str(i)] = "-"
             for i in range(7):
                 out_chars_append["own_" + str(i)] = str(list(list(chars_dict[char]["cons_usage"].values())[i].values())[1]) + "%"
                 if out_chars_append["own_" + str(i)] == "-%":
@@ -824,7 +827,9 @@ def char_usages_write(chars_dict, filename, floor):
                 "usage_rate": str(chars_dict[char]["usage"]) + "%",
                 "app_rate": str(chars_dict[char]["app"]) + "%",
                 "own_rate": str(chars_dict[char]["own"]) + "%",
-                "duration": chars_dict[char]["duration"],
+                "duration_1": chars_dict[char]["duration_1"],
+                "duration_2": chars_dict[char]["duration_2"],
+                "role": chars_dict[char]["role"],
                 "rarity": chars_dict[char]["rarity"],
                 "diff": str(chars_dict[char]["diff"]) + "%",
             }
@@ -843,6 +848,8 @@ def char_usages_write(chars_dict, filename, floor):
             csv_writer.writerow(header)
             count += 1
         csv_writer.writerow(chars.values())
+    with open("../char_results/" + filename + ".json", "w") as out_file:
+        out_file.write(json.dumps(out_chars,indent=2))
 
 def name_filter(comp, mode="out"):
     filtered = []
@@ -865,7 +872,27 @@ def comp_chars(row):
 def form_comps(col_names, table, info_char):
     room = col_names.index('half')
     comps = []
-    duration_array = []
+    duration_array = {"12": {
+        "1": [],
+        "2": [],
+    }, "11": {
+        "1": [],
+        "2": [],
+    }}
+    lenient = {"12": {
+        "1": 300,
+        "2": 200,
+    }, "11": {
+        "1": 300,
+        "2": 200,
+    }}
+    strict = {"12": {
+        "1": 200,
+        "2": 120,
+    }, "11": {
+        "1": 120,
+        "2": 100,
+    }}
 
     for i in range(len(table)):
         if "3-2" != table[i][room][-3:]:
@@ -873,22 +900,24 @@ def form_comps(col_names, table, info_char):
             date_start = datetime.strptime(table[i][8].split("+")[0], date_format)
             date_end = datetime.strptime(table[i + 1][8].split("+")[0], date_format)
             duration = int((date_end - date_start).seconds)
-            if duration > 150 or duration == 0:
+            # if duration > 200 or duration == 0:
+            #     duration = None
+            if (duration > lenient[str(table[i][room][:2])][str(table[i][room][-1:])] or duration <= 0):
                 duration = None
-            # elif table[i][room][-1:] == "1":
-            #     duration_array.append(duration)
+                continue
+            duration_array[str(table[i][room][:2])][str(table[i][room][-1:])].append(duration)
+            if duration > strict[str(table[i][room][:2])][str(table[i][room][-1:])]:
+                duration = None
         else:
             duration = None
         comp = Composition(table[i][0], comp_chars(table[i]), RECENT_PHASE, table[i][room], duration, info_char)
         comps.append(comp)
-    # print(len(duration_array))
-    # try:
-    #     plt.hist(duration_array)
-    #     plt.show()
-    # except Exception:
-    #     pass
-    # print(statistics.median(duration_array))
-    # exit()
+    # for floor_iter in ["11", "12"]:
+    #     for side_iter in ["1", "2"]:
+    #         plt.hist(duration_array[floor_iter][side_iter])
+    #         plt.title(floor_iter + ' Side ' +  side_iter)
+    #         plt.savefig('../comp_results/' + floor_iter + ' Side ' +  side_iter + '.png')
+    #         plt.close()
 
     return comps
 

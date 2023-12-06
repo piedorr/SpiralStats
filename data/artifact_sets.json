@@ -702,5 +702,37 @@
         "icon": "UI_RelicIcon_15032_4",
         "route": "Golden Troupe",
         "sortOrder": 95
+    },
+    "15033": {
+        "id": 15033,
+        "name": "Song of Days Past",
+        "levelList": [
+            4,
+            5
+        ],
+        "affixList": {
+            "2150330": "Healing Bonus +15%.",
+            "2150331": "When the equipping character heals a party member, the Yearning effect will be created for 6s, which records the total amount of healing provided (including overflow healing). When the duration expires, the Yearning effect will be transformed into the \"Waves of Days Past\" effect: When your active party member hits an opponent with a Normal Attack, Charged Attack, Plunging Attack, Elemental Skill, or Elemental Burst, the DMG dealt will be increased by 8% of the total healing amount recorded by the Yearning effect. The \"Waves of Days Past\" effect is removed after it has taken effect 5 times or after 10s. A single instance of the Yearning effect can record up to 15,000 healing, and only a single instance can exist at once, but it can record the healing from multiple equipping characters. Equipping characters on standby can still trigger this effect."
+        },
+        "icon": "UI_RelicIcon_15033_4",
+        "route": "Song of Days Past",
+        "sortOrder": 98,
+        "beta": true
+    },
+    "15034": {
+        "id": 15034,
+        "name": "Nighttime Whispers in the Echoing Woods",
+        "levelList": [
+            4,
+            5
+        ],
+        "affixList": {
+            "2150340": "ATK +18%.",
+            "2150341": "After using an Elemental Skill, gain a 20% Geo DMG Bonus for 10s. While under a shield granted by the Crystallize reaction, the above effect will be increased by 150%, and this additional increase disappears 1s after that shield is lost."
+        },
+        "icon": "UI_RelicIcon_15034_4",
+        "route": "Nighttime Whispers in the Echoing Woods",
+        "sortOrder": 99,
+        "beta": true
     }
 }

@@ -2,6 +2,9 @@ import json
 import pandas as pd
 import operator
 import statistics
+from numpy import quantile
+from matplotlib import pyplot as plt
+from scipy.stats import skew, trim_mean
 from archetypes import *
 
 ROOMS = ["12-1-1", "12-1-2", "12-2-1", "12-2-2", "12-3-1", "12-3-2"]
@@ -89,8 +92,11 @@ def appearances(players, owns, chambers=ROOMS, offset=3, info_char=False):
             players_chars[phase][character] = []
             appears[phase][character] = {
                 "flat": 0,
+                "flat_1": 0,
+                "flat_2": 0,
                 "duration": {"1-1": [], "1-2": [], "2-1": [], "2-2": [], "3-1": []},
                 "avg_duration": 0.00,
+                "avg_duration_2": 0.00,
                 "percent": 0.00,
                 "weap_freq": {},
                 "weap_duration": {},
@@ -115,8 +121,12 @@ def appearances(players, owns, chambers=ROOMS, offset=3, info_char=False):
                 if player.chambers[chamber] == None:
                     continue
                 foundchar = resetfind()
+                whaleComp = False
                 for char in player.chambers[chamber].characters:
                     findchars(char, foundchar)
+                    if CHARACTERS[char]["availability"] in ["Limited 5*"]:
+                        if player.owned[char]["cons"] > 1:
+                            whaleComp = True
                 if find_archetype(foundchar):
                     for char in player.chambers[chamber].characters:
                         # to print the amount of players using a character, for char infographics
@@ -125,6 +135,10 @@ def appearances(players, owns, chambers=ROOMS, offset=3, info_char=False):
 
                         char_name = char
                         appears[phase][char_name]["flat"] += 1
+                        if chamber[-1:] == "1":
+                            appears[phase][char_name]["flat_1"] += 1
+                        else:
+                            appears[phase][char_name]["flat_2"] += 1
                         # In case of character in comp data missing from character data
                         if char not in player.owned:
                             print("Comp data missing from character data: " + str(player.player) + ", " + str(char))
@@ -132,10 +146,7 @@ def appearances(players, owns, chambers=ROOMS, offset=3, info_char=False):
                                 error_comps.append(player.player)
                             comp_error = True
                             continue
-                        if CHARACTERS[char]["availability"] in ["Limited 5*"]:
-                            if player.owned[char]["cons"] < 4 and player.chambers[chamber].duration:
-                                appears[phase][char_name]["duration"][chamber[-3:]].append(player.chambers[chamber].duration)
-                        elif player.chambers[chamber].duration:
+                        if player.chambers[chamber].duration and not whaleComp:
                             appears[phase][char_name]["duration"][chamber[-3:]].append(player.chambers[chamber].duration)
                         appears[phase][char_name]["cons_freq"][player.owned[char]["cons"]]["flat"] += 1
                         if player.chambers[chamber].duration:
@@ -147,10 +158,7 @@ def appearances(players, owns, chambers=ROOMS, offset=3, info_char=False):
                                 appears[phase][char_name]["weap_freq"][player.owned[char]["weapon"]] = 0
                                 appears[phase][char_name]["weap_duration"][player.owned[char]["weapon"]] = {"1-1": [], "1-2": [], "2-1": [], "2-2": [], "3-1": []}
                             appears[phase][char_name]["weap_freq"][player.owned[char]["weapon"]] += 1
-                            if CHARACTERS[char]["availability"] in ["Limited 5*"]:
-                                if player.owned[char]["cons"] < 4 and player.chambers[chamber].duration:
-                                    appears[phase][char_name]["weap_duration"][player.owned[char]["weapon"]][chamber[-3:]].append(player.chambers[chamber].duration)
-                            elif player.chambers[chamber].duration:
+                            if player.chambers[chamber].duration and not whaleComp:
                                 appears[phase][char_name]["weap_duration"][player.owned[char]["weapon"]][chamber[-3:]].append(player.chambers[chamber].duration)
 
                         if player.owned[char]["artifacts"] != "":
@@ -158,10 +166,7 @@ def appearances(players, owns, chambers=ROOMS, offset=3, info_char=False):
                                 appears[phase][char_name]["arti_freq"][player.owned[char]["artifacts"]] = 0
                                 appears[phase][char_name]["arti_duration"][player.owned[char]["artifacts"]] = {"1-1": [], "1-2": [], "2-1": [], "2-2": [], "3-1": []}
                             appears[phase][char_name]["arti_freq"][player.owned[char]["artifacts"]] += 1
-                            if CHARACTERS[char]["availability"] in ["Limited 5*"]:
-                                if player.owned[char]["cons"] < 4 and player.chambers[chamber].duration:
-                                    appears[phase][char_name]["arti_duration"][player.owned[char]["artifacts"]][chamber[-3:]].append(player.chambers[chamber].duration)
-                            elif player.chambers[chamber].duration:
+                            if player.chambers[chamber].duration and not whaleComp:
                                 appears[phase][char_name]["arti_duration"][player.owned[char]["artifacts"]][chamber[-3:]].append(player.chambers[chamber].duration)
 
         if comp_error:
@@ -180,32 +185,65 @@ def appearances(players, owns, chambers=ROOMS, offset=3, info_char=False):
             appears[phase][char]["percent"] = round(
                 appears[phase][char]["flat"] / total, 2
             )
+            # if appears[phase][char]["flat"] > 0:
+            #     appears[phase][char]["flat_1"] /= appears[phase][char]["flat"]
+            #     appears[phase][char]["flat_2"] /= appears[phase][char]["flat"]
 
-            if appears[phase][char]["flat"] > 0:
-                avg_duration = {"1": [], "2": []}
-                for room_num in appears[phase][char]["duration"]:
-                    if appears[phase][char]["duration"][room_num]:
-                        if room_num[-1:] == "1":
-                            avg_duration["1"].append(statistics.mean(appears[phase][char]["duration"][room_num]))
-                        elif room_num[-1:] == "2":
-                            avg_duration["2"].append(statistics.median(appears[phase][char]["duration"][room_num]))
-                for i in range(2):
-                    if avg_duration[str(i + 1)]:
-                        avg_duration[str(i + 1)] = statistics.mean(avg_duration[str(i + 1)])
-                    else:
-                        avg_duration[str(i + 1)] = None
-                if avg_duration["1"] and avg_duration["2"]:
-                    appears[phase][char]["avg_duration"] = round(statistics.mean([avg_duration["1"], avg_duration["2"]]), 1)
-                elif avg_duration["1"]:
-                    appears[phase][char]["avg_duration"] = round(avg_duration["1"], 1)
-                elif avg_duration["2"]:
-                    appears[phase][char]["avg_duration"] = round(avg_duration["2"], 1)
+            all_duration = []
+            all_duration_1 = []
+            all_duration_2 = []
+            for room_num in appears[phase][char]["duration"]:
+                all_duration.extend(appears[phase][char]["duration"][room_num])
+                if room_num[-1:] == "1":
+                    all_duration_1.extend(appears[phase][char]["duration"][room_num])
                 else:
-                    appears[phase][char]["avg_duration"] = 999
+                    all_duration_2.extend(appears[phase][char]["duration"][room_num])
+
+            avg_duration = {"1": [], "2": []}
+            for room_num in appears[phase][char]["duration"]:
+                if appears[phase][char]["duration"][room_num]:
+                    # if len(all_duration_1) >= 15:
+                    #     print(appears[phase][char]["duration"][room_num])
+                    #     print(list(filter(
+                    #         lambda x: x <= quantile(appears[phase][char]["duration"][room_num], .25), appears[phase][char]["duration"][room_num])))
+                    #     exit()
+                    avg_duration[room_num[-1:]].append(statistics.mean(list(filter(
+                        lambda x: x <= quantile(appears[phase][char]["duration"][room_num], .5), appears[phase][char]["duration"][room_num]))))
+                    # skewness = skew(appears[phase][char]["duration"][room_num], axis=0, bias=True)
+                    # if abs(skewness) > 0.8:
+                    #     avg_duration[room_num[-1:]].append(trim_mean(appears[phase][char]["duration"][room_num], 0.25))
+                    # else:
+                    #     avg_duration[room_num[-1:]].append(statistics.mean(appears[phase][char]["duration"][room_num]))
+
+            if len(all_duration_1) >= 15 and avg_duration["1"]:
+                appears[phase][char]["avg_duration_1"] = round(statistics.mean(avg_duration["1"]), 1)
             else:
-                appears[phase][char]["avg_duration"] = 999
+                appears[phase][char]["avg_duration_1"] = 999
+
+            if len(all_duration_2) >= 5 and avg_duration["2"]:
+                appears[phase][char]["avg_duration_2"] = round(statistics.mean(avg_duration["2"]), 1)
+            else:
+                appears[phase][char]["avg_duration_2"] = 999
 
             if (chambers == ["12-1-1", "12-1-2", "12-2-1", "12-2-2", "12-3-1", "12-3-2"]):
+                # # print("char: " + char)
+                # # print("    " + str(len(all_duration)))
+                # # print("    " + str(statistics.median(all_duration)))
+                # # print("    " + str(statistics.median(all_duration)))
+                # try:
+                #     if len(all_duration_1) >= 5:
+                #         plt.hist(all_duration_1)
+                #         plt.title(char + ' - Side 1')
+                #         plt.savefig('../char_results/' + char + '1.png')
+                #         plt.close()
+                #     if len(all_duration_2) >= 5:
+                #         plt.hist(all_duration_2)
+                #         plt.title(char + ' - Side 2')
+                #         plt.savefig('../char_results/' + char + '2.png')
+                #         plt.close()
+                # except Exception:
+                #     pass
+
                 appears[phase][char]["sample"] = len(players_chars[phase][char])
                 # Calculate constellations
                 if owns[phase][char]["flat"] > 0:
@@ -287,10 +325,12 @@ def usages(owns, appears, past_phase, filename, chambers=ROOMS, offset=3):
                 uses[phase][char] = {
                     "app": appears[phase][char]["percent"],
                     "app_flat": appears[phase][char]["flat"],
-                    "duration": appears[phase][char]["avg_duration"],
+                    "duration_1": appears[phase][char]["avg_duration_1"],
+                    "duration_2": appears[phase][char]["avg_duration_2"],
                     "own": owns[phase][char]["percent"],
                     "usage" : rate,
                     "diff": "-",
+                    "role": CHARACTERS[char]["role"],
                     "rarity": CHARACTERS[char]["availability"],
                     "weapons" : {},
                     "artifacts" : {},

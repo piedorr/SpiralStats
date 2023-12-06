@@ -102,9 +102,9 @@ class Composition:
                 self.len_element["Dendro"] += 1
             if character in ["Xingqiu", "Yelan"]:
                 self.quick_apply["Hydro"] += 1
-            if character in ["Sangonomiya Kokomi", "Barbara"]:
+            if character in ["Sangonomiya Kokomi", "Barbara", "Furina"]:
                 self.slow_apply["Hydro"] += 1
-            if character in ["Ganyu", "Kamisato Ayaka", "Kaeya", "Rosaria", "Layla", "Chongyun", "Wriothesley"]:
+            if character in ["Ganyu", "Kamisato Ayaka", "Kaeya", "Rosaria", "Layla", "Chongyun", "Wriothesley", "Charlotte"]:
                 self.quick_apply["Cryo"] += 1
             if character in ["Eula", "Diona"]:
                 self.slow_apply["Cryo"] += 1
@@ -117,7 +117,7 @@ class Composition:
 
             if character in ["Tartaglia","Kamisato Ayaka","Tighnari","Hu Tao","Xiao","Eula","Arataki Itto","Razor","Diluc","Yoimiya","Keqing","Noelle","Klee","Shikanoin Heizou","Cyno","Wanderer","Alhaitham","Dehya","Kaveh","Lyney","Freminet","Neuvillette","Wriothesley"]:
                 self.dps.insert(0, character)
-            elif character in ["Bennett","Qiqi","Diona","Sayu","Kuki Shinobu","Dori","Layla","Yaoyao","Mika","Baizhu","Kirara"]:
+            elif character in ["Bennett","Qiqi","Diona","Sayu","Kuki Shinobu","Dori","Layla","Yaoyao","Mika","Baizhu","Kirara","Charlotte"]:
                 self.healer.append(character)
             elif character in ["Kaedehara Kazuha","Venti","Traveler-A","Lynette"]:
                 self.anemo.append(character)
@@ -132,7 +132,7 @@ class Composition:
             else:
                 temp.append(character)
         for character in temp:
-            if character in ["Xingqiu", "Yelan"]:
+            if character in ["Xingqiu", "Yelan", "Furina"]:
                 # If Childe is DPS, Xingqiu is ahead of Xiangling
                 if "Tartaglia" in self.dps:
                     self.dps.insert(1, character)
@@ -357,19 +357,19 @@ class Composition:
                             if slow_apply["Pyro"] > 0 and "Razor" in characters:
                                 self.comp_name = "Thundering Furry"
                             elif len(dps) < 2 or (
-                                "Nahida" in dps or "Raiden Shogun" in dps or "Yelan" in dps or "Xingqiu" in dps or "Yae Miko" in dps):
-                                if characters[0] in ["Raiden Shogun", "Lisa", "Sucrose", "Xingqiu", "Yelan", "Fischl", "Traveler-D"]:
+                                "Nahida" in dps or "Raiden Shogun" in dps or "Xingqiu" in dps or "Yelan" in dps or "Furina" in dps or "Yae Miko" in dps):
+                                if characters[0] in ["Raiden Shogun", "Lisa", "Sucrose", "Xingqiu", "Yelan", "Furina", "Fischl", "Traveler-D"]:
                                     self.comp_name = "Hyperbloom Quickswap"
                                 else:
                                     self.comp_name = "Hyperbloom " + characters[0]
                         elif slow_apply["Pyro"] > 0:
-                            if characters[0] in ["Xingqiu", "Yelan", "Fischl", "Traveler-D"]:
+                            if characters[0] in ["Xingqiu", "Yelan", "Furina", "Fischl", "Traveler-D"]:
                                 self.alt_comp_name = "Overburn Quickswap"
                             else:
                                 self.alt_comp_name = "Overburn " + characters[0]
                             self.comp_name = self.alt_comp_name.replace("Overburn", "Burning")
                         elif len(dps) < 2 or (
-                            "Nahida" in dps or "Raiden Shogun" in dps or "Yelan" in dps or "Yae Miko" in dps):
+                            "Nahida" in dps or "Raiden Shogun" in dps or "Xingqiu" in dps or "Yelan" in dps or "Furina" in dps or "Yae Miko" in dps):
                             agg_name = characters[0]
                             if CHARACTERS[agg_name]["element"] == "Dendro":
                                 self.comp_name = "Spread " + agg_name
@@ -379,7 +379,7 @@ class Composition:
                                     self.comp_name = "Aggravate Yae"
                             else:
                                 self.comp_name = "Aggravate " + agg_name
-                                if agg_name in ["Raiden Shogun", "Lisa", "Sucrose", "Xingqiu", "Yelan", "Fischl"]:
+                                if agg_name in ["Raiden Shogun", "Lisa", "Sucrose", "Xingqiu", "Yelan", "Furina", "Fischl"]:
                                     if "Yae Miko" in characters:
                                         self.comp_name = "Aggravate Yae"
                                     else:
@@ -390,7 +390,7 @@ class Composition:
                         elif "Cyno" in characters:
                             self.comp_name = "Chaos Cyno"
                         elif len(dps) < 2 or (
-                            "Nahida" in dps or "Raiden Shogun" in dps or "Yelan" in dps or "Yae Miko" in dps):
+                            "Nahida" in dps or "Raiden Shogun" in dps or "Xingqiu" in dps or "Yelan" in dps or "Furina" in dps or "Yae Miko" in dps):
                             self.comp_name = characters[0] + " Curry"
                             if not(CHARACTERS[characters[0]]["element"] == "Dendro" and slow_apply["Hydro"] > 0
                                 and slow_apply["Hydro"] - len_element["Hydro"] >= 0):
@@ -414,7 +414,7 @@ class Composition:
                             else:
                                 self.alt_comp_name = characters[0] + " National Team"
                         else:
-                            if characters[0] in ["Raiden Shogun", "Lisa", "Sucrose", "Xingqiu", "Yelan", "Fischl", "Traveler-D", "Xiangling"]:
+                            if characters[0] in ["Raiden Shogun", "Lisa", "Sucrose", "Xingqiu", "Yelan", "Furina", "Fischl", "Traveler-D", "Xiangling"]:
                                 self.comp_name = "Burgeon Quickswap"
                             else:
                                 self.comp_name = "Burgeon " + characters[0]
@@ -458,7 +458,7 @@ class Composition:
                             self.alt_comp_name = "Double Hydro " + characters[0]
                             if len_element["Hydro"] == 3:
                                 self.alt_comp_name = self.alt_comp_name.replace("Double Hydro", "Triple Hydro")
-                            if characters[0] in ["Xingqiu", "Yelan", "Traveler-D", "Xiangling"]:
+                            if characters[0] in ["Xingqiu", "Yelan", "Furina", "Traveler-D", "Xiangling"]:
                                 self.comp_name = self.alt_comp_name.replace(characters[0], "Quickswap")
                                 self.alt_comp_name = self.alt_comp_name.replace(characters[0], "Quickswap")
                     # elif len_element["Electro"] > 0 and (len(dps) < 2 or "Raiden Shogun" in dps):
@@ -527,16 +527,16 @@ class Composition:
                             self.comp_name = "Tapu Koko"
                         elif len_element["Pyro"] > 0 and len_element["Anemo"] > 0:
                             self.comp_name = characters[0] + " Soup"
-                        elif len(dps) < 2 or "Yae Miko" in dps or "Xingqiu" in dps:
+                        elif len(dps) < 2 or "Yae Miko" in dps or "Xingqiu" in dps or "Yelan" in dps or "Furina" in dps:
                             self.comp_name = characters[0] + " Taser"
-                            if characters[0] in ["Xingqiu", "Yelan", "Sucrose"]:
+                            if characters[0] in ["Xingqiu", "Yelan", "Furina", "Sucrose"]:
                                 self.alt_comp_name = self.comp_name.replace(characters[0], "Quickswap")
                                 self.comp_name = "Tapu Koko"
                     elif len_element["Hydro"] > 1:
                         self.comp_name = "Double Hydro " + characters[0]
                         if len_element["Hydro"] == 3:
                             self.alt_comp_name = self.comp_name.replace("Double Hydro", "Triple Hydro")
-                        if characters[0] in ["Xingqiu", "Yelan", "Sucrose"]:
+                        if characters[0] in ["Xingqiu", "Yelan", "Furina", "Sucrose"]:
                             self.comp_name = self.comp_name.replace(characters[0], "Quickswap")
                 if self.comp_name == "-":
                     if len_element["Geo"] > 1:

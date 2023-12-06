@@ -10,6 +10,7 @@
         "alt_name": "Ayaka",
         "out_name": true,
         "availability": "Limited 5*",
+        "role": "DPS",
         "on_field": true
     },
     "Jean": {
@@ -23,6 +24,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "5*",
+        "role": "Support",
         "on_field": false
     },
     "Lisa": {
@@ -36,6 +38,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "Free",
+        "role": "Sub-DPS",
         "on_field": false
     },
     "Barbara": {
@@ -49,6 +52,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "Free",
+        "role": "Support",
         "on_field": false
     },
     "Kaeya": {
@@ -62,6 +66,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "Free",
+        "role": "Sub-DPS",
         "on_field": false
     },
     "Diluc": {
@@ -75,6 +80,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "5*",
+        "role": "DPS",
         "on_field": true
     },
     "Razor": {
@@ -88,6 +94,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "4*",
+        "role": "DPS",
         "on_field": true
     },
     "Amber": {
@@ -101,6 +108,7 @@
         "alt_name": "Ambor",
         "out_name": false,
         "availability": "Free",
+        "role": "Sub-DPS",
         "on_field": false
     },
     "Venti": {
@@ -114,6 +122,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "Limited 5*",
+        "role": "Sub-DPS",
         "on_field": false
     },
     "Xiangling": {
@@ -127,6 +136,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "4*",
+        "role": "Sub-DPS",
         "on_field": false
     },
     "Beidou": {
@@ -140,6 +150,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "4*",
+        "role": "Sub-DPS",
         "on_field": false
     },
     "Xingqiu": {
@@ -153,6 +164,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "4*",
+        "role": "Sub-DPS",
         "on_field": false
     },
     "Xiao": {
@@ -166,6 +178,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "Limited 5*",
+        "role": "DPS",
         "on_field": true
     },
     "Ningguang": {
@@ -179,6 +192,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "4*",
+        "role": "DPS",
         "on_field": true
     },
     "Klee": {
@@ -192,6 +206,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "Limited 5*",
+        "role": "DPS",
         "on_field": true
     },
     "Zhongli": {
@@ -205,6 +220,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "Limited 5*",
+        "role": "Support",
         "on_field": false
     },
     "Fischl": {
@@ -218,6 +234,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "4*",
+        "role": "Sub-DPS",
         "on_field": false
     },
     "Bennett": {
@@ -231,6 +248,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "4*",
+        "role": "Support",
         "on_field": false
     },
     "Tartaglia": {
@@ -244,6 +262,7 @@
         "alt_name": "Childe",
         "out_name": false,
         "availability": "Limited 5*",
+        "role": "DPS",
         "on_field": true
     },
     "Noelle": {
@@ -257,6 +276,7 @@
         "alt_name": "Noel",
         "out_name": false,
         "availability": "Free",
+        "role": "DPS",
         "on_field": true
     },
     "Qiqi": {
@@ -270,6 +290,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "5*",
+        "role": "Support",
         "on_field": false
     },
     "Chongyun": {
@@ -283,6 +304,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "4*",
+        "role": "Sub-DPS",
         "on_field": false
     },
     "Ganyu": {
@@ -296,6 +318,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "Limited 5*",
+        "role": "DPS",
         "on_field": true
     },
     "Albedo": {
@@ -309,6 +332,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "Limited 5*",
+        "role": "Sub-DPS",
         "on_field": false
     },
     "Diona": {
@@ -322,6 +346,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "4*",
+        "role": "Support",
         "on_field": false
     },
     "Mona": {
@@ -335,6 +360,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "5*",
+        "role": "Sub-DPS",
         "on_field": false
     },
     "Keqing": {
@@ -348,6 +374,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "5*",
+        "role": "DPS",
         "on_field": true
     },
     "Sucrose": {
@@ -361,6 +388,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "4*",
+        "role": "Sub-DPS",
         "on_field": false
     },
     "Xinyan": {
@@ -374,6 +402,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "4*",
+        "role": "Sub-DPS",
         "on_field": false
     },
     "Rosaria": {
@@ -387,6 +416,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "4*",
+        "role": "Sub-DPS",
         "on_field": false
     },
     "Hu Tao": {
@@ -400,6 +430,7 @@
         "alt_name": "Hutao",
         "out_name": false,
         "availability": "Limited 5*",
+        "role": "DPS",
         "on_field": true
     },
     "Kaedehara Kazuha": {
@@ -413,6 +444,7 @@
         "alt_name": "Kazuha",
         "out_name": true,
         "availability": "Limited 5*",
+        "role": "Sub-DPS",
         "on_field": false
     },
     "Yanfei": {
@@ -426,6 +458,7 @@
         "alt_name": "Feiyan",
         "out_name": false,
         "availability": "4*",
+        "role": "DPS",
         "on_field": true
     },
     "Yoimiya": {
@@ -439,6 +472,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "Limited 5*",
+        "role": "DPS",
         "on_field": true
     },
     "Thoma": {
@@ -452,6 +486,7 @@
         "alt_name": "Tohma",
         "out_name": false,
         "availability": "4*",
+        "role": "Support",
         "on_field": false
     },
     "Eula": {
@@ -465,6 +500,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "Limited 5*",
+        "role": "DPS",
         "on_field": true
     },
     "Raiden Shogun": {
@@ -478,6 +514,7 @@
         "alt_name": "Raiden",
         "out_name": true,
         "availability": "Limited 5*",
+        "role": "DPS",
         "on_field": false
     },
     "Sayu": {
@@ -491,6 +528,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "4*",
+        "role": "Support",
         "on_field": false
     },
     "Sangonomiya Kokomi": {
@@ -504,6 +542,7 @@
         "alt_name": "Kokomi",
         "out_name": true,
         "availability": "Limited 5*",
+        "role": "Support",
         "on_field": false
     },
     "Gorou": {
@@ -517,6 +556,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "4*",
+        "role": "Sub-DPS",
         "on_field": false
     },
     "Kujou Sara": {
@@ -530,6 +570,7 @@
         "alt_name": "Sara",
         "out_name": true,
         "availability": "4*",
+        "role": "Sub-DPS",
         "on_field": false
     },
     "Arataki Itto": {
@@ -543,6 +584,7 @@
         "alt_name": "Itto",
         "out_name": true,
         "availability": "Limited 5*",
+        "role": "DPS",
         "on_field": true
     },
     "Yae Miko": {
@@ -556,6 +598,7 @@
         "alt_name": "Yae",
         "out_name": true,
         "availability": "Limited 5*",
+        "role": "Sub-DPS",
         "on_field": false
     },
     "Shikanoin Heizou": {
@@ -569,6 +612,7 @@
         "alt_name": "Heizou",
         "out_name": true,
         "availability": "4*",
+        "role": "DPS",
         "on_field": true
     },
     "Yelan": {
@@ -582,6 +626,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "Limited 5*",
+        "role": "Sub-DPS",
         "on_field": false
     },
     "Kirara": {
@@ -595,6 +640,7 @@
         "alt_name": "Kirara",
         "out_name": false,
         "availability": "4*",
+        "role": "Support",
         "on_field": false
     },
     "Aloy": {
@@ -608,6 +654,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "Free",
+        "role": "Sub-DPS",
         "on_field": false
     },
     "Shenhe": {
@@ -621,6 +668,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "Limited 5*",
+        "role": "Sub-DPS",
         "on_field": false
     },
     "Yun Jin": {
@@ -634,6 +682,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "4*",
+        "role": "Sub-DPS",
         "on_field": false
     },
     "Kuki Shinobu": {
@@ -647,6 +696,7 @@
         "alt_name": "Shinobu",
         "out_name": true,
         "availability": "4*",
+        "role": "Support",
         "on_field": false
     },
     "Kamisato Ayato": {
@@ -660,6 +710,7 @@
         "alt_name": "Ayato",
         "out_name": true,
         "availability": "Limited 5*",
+        "role": "DPS",
         "on_field": true
     },
     "Collei": {
@@ -673,6 +724,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "Free",
+        "role": "Sub-DPS",
         "on_field": false
     },
     "Dori": {
@@ -686,6 +738,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "4*",
+        "role": "Support",
         "on_field": false
     },
     "Tighnari": {
@@ -699,6 +752,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "5*",
+        "role": "DPS",
         "on_field": true
     },
     "Nilou": {
@@ -712,6 +766,7 @@
         "alt_name": "Nilou",
         "out_name": false,
         "availability": "Limited 5*",
+        "role": "Sub-DPS",
         "on_field": false
     },
     "Cyno": {
@@ -725,6 +780,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "Limited 5*",
+        "role": "DPS",
         "on_field": true
     },
     "Candace": {
@@ -738,6 +794,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "4*",
+        "role": "Sub-DPS",
         "on_field": false
     },
     "Nahida": {
@@ -751,6 +808,7 @@
         "alt_name": "Nahida",
         "out_name": false,
         "availability": "Limited 5*",
+        "role": "Sub-DPS",
         "on_field": false
     },
     "Layla": {
@@ -764,6 +822,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "4*",
+        "role": "Support",
         "on_field": false
     },
     "Wanderer": {
@@ -777,6 +836,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "Limited 5*",
+        "role": "DPS",
         "on_field": true
     },
     "Faruzan": {
@@ -790,6 +850,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "4*",
+        "role": "Sub-DPS",
         "on_field": false
     },
     "Yaoyao": {
@@ -803,6 +864,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "4*",
+        "role": "Support",
         "on_field": false
     },
     "Alhaitham": {
@@ -816,6 +878,7 @@
         "alt_name": "Alhatham",
         "out_name": false,
         "availability": "Limited 5*",
+        "role": "DPS",
         "on_field": true
     },
     "Dehya": {
@@ -829,6 +892,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "5*",
+        "role": "DPS",
         "on_field": true
     },
     "Mika": {
@@ -842,6 +906,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "4*",
+        "role": "Support",
         "on_field": false
     },
     "Kaveh": {
@@ -855,6 +920,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "4*",
+        "role": "DPS",
         "on_field": true
     },
     "Baizhu": {
@@ -868,6 +934,7 @@
         "alt_name": "Baizhuer",
         "out_name": false,
         "availability": "Limited 5*",
+        "role": "Support",
         "on_field": false
     },
     "Traveler-A": {
@@ -881,6 +948,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "Free",
+        "role": "Sub-DPS",
         "on_field": false
     },
     "Traveler-G": {
@@ -894,6 +962,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "Free",
+        "role": "Sub-DPS",
         "on_field": false
     },
     "Traveler-E": {
@@ -907,6 +976,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "Free",
+        "role": "Sub-DPS",
         "on_field": false
     },
     "Traveler-D": {
@@ -920,6 +990,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "Free",
+        "role": "Sub-DPS",
         "on_field": false
     },
     "Lynette": {
@@ -933,6 +1004,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "4*",
+        "role": "Sub-DPS",
         "on_field": false
     },
     "Lyney": {
@@ -946,6 +1018,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "Limited 5*",
+        "role": "DPS",
         "on_field": true
     },
     "Freminet": {
@@ -959,6 +1032,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "4*",
+        "role": "DPS",
         "on_field": true
     },
     "Traveler-H": {
@@ -972,6 +1046,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "Free",
+        "role": "Sub-DPS",
         "on_field": false
     },
     "Neuvillette": {
@@ -985,6 +1060,7 @@
         "alt_name": null,
         "out_name": false,
         "availability": "Limited 5*",
+        "role": "DPS",
         "on_field": true
     },
     "Wriothesley": {
@@ -998,6 +1074,35 @@
         "alt_name": null,
         "out_name": false,
         "availability": "Limited 5*",
+        "role": "DPS",
         "on_field": true
+    },
+    "Charlotte": {
+        "id": 10000088,
+        "name": "Charlotte",
+        "weapon": "Catalyst",
+        "element": "Cryo",
+        "rarity": 4,
+        "icon": "UI_AvatarIcon_Charlotte",
+        "route": "Charlotte",
+        "alt_name": null,
+        "out_name": false,
+        "availability": "4*",
+        "role": "Support",
+        "on_field": false
+    },
+    "Furina": {
+        "id": 10000089,
+        "name": "Furina",
+        "weapon": "Sword",
+        "element": "Hydro",
+        "rarity": 5,
+        "icon": "UI_AvatarIcon_Furina",
+        "route": "Furina",
+        "alt_name": null,
+        "out_name": false,
+        "availability": "Limited 5*",
+        "role": "Sub-DPS",
+        "on_field": false
     }
 }
