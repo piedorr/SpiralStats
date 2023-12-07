@@ -872,6 +872,7 @@ def comp_chars(row):
 def form_comps(col_names, table, info_char):
     room = col_names.index('half')
     comps = []
+    comp_len = {"1": 0, "2": 0, "3": 0, "4": 0}
     duration_array = {"12": {
         "1": [],
         "2": [],
@@ -904,14 +905,21 @@ def form_comps(col_names, table, info_char):
             #     duration = None
             if (duration > lenient[str(table[i][room][:2])][str(table[i][room][-1:])] or duration <= 0):
                 duration = None
-                continue
-            duration_array[str(table[i][room][:2])][str(table[i][room][-1:])].append(duration)
-            if duration > strict[str(table[i][room][:2])][str(table[i][room][-1:])]:
-                duration = None
+            else:
+                duration_array[str(table[i][room][:2])][str(table[i][room][-1:])].append(duration)
+                if duration > strict[str(table[i][room][:2])][str(table[i][room][-1:])]:
+                    duration = None
         else:
             duration = None
+        # comp_temp = comp_chars(table[i])
+        # if table[i][room][:2] == "12":
+        #     comp_len[str(len(comp_temp))] += 1
         comp = Composition(table[i][0], comp_chars(table[i]), RECENT_PHASE, table[i][room], duration, info_char)
         comps.append(comp)
+
+    # print(comp_len)
+    # exit()
+
     # for floor_iter in ["11", "12"]:
     #     for side_iter in ["1", "2"]:
     #         plt.hist(duration_array[floor_iter][side_iter])
