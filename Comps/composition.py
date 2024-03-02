@@ -115,17 +115,17 @@ class Composition:
             if character in ["Raiden Shogun", "Kuki Shinobu"]:
                 self.quick_apply["Electro"] += 1
 
-            if character in ["Tartaglia","Kamisato Ayaka","Tighnari","Hu Tao","Xiao","Eula","Arataki Itto","Razor","Diluc","Yoimiya","Keqing","Noelle","Klee","Shikanoin Heizou","Cyno","Wanderer","Alhaitham","Dehya","Kaveh","Lyney","Freminet","Neuvillette","Wriothesley"]:
+            if character in ["Tartaglia","Kamisato Ayaka","Tighnari","Hu Tao","Xiao","Eula","Arataki Itto","Razor","Diluc","Yoimiya","Keqing","Noelle","Klee","Shikanoin Heizou","Cyno","Wanderer","Alhaitham","Dehya","Kaveh","Lyney","Freminet","Neuvillette","Wriothesley","Navia","Gaming"]:
                 self.dps.insert(0, character)
             elif character in ["Bennett","Qiqi","Diona","Sayu","Kuki Shinobu","Dori","Layla","Yaoyao","Mika","Baizhu","Kirara","Charlotte"]:
                 self.healer.append(character)
             elif character in ["Kaedehara Kazuha","Venti","Traveler-A","Lynette"]:
                 self.anemo.append(character)
-            elif character in ["Thoma"]:
+            elif character in ["Thoma","Xianyun"]:
                 self.healer.insert(0, character)
             elif character in ["Raiden Shogun"]:
                 self.dps.append(character)
-            elif character in ["Shenhe","Collei","Gorou","Mona","Kujou Sara","Rosaria","Fischl","Kaeya","Yun Jin","Traveler-G","Aloy","Traveler-E","Xinyan","Traveler-D","Candace","Nahida","Traveler-H"]:
+            elif character in ["Shenhe","Collei","Gorou","Mona","Kujou Sara","Rosaria","Fischl","Kaeya","Yun Jin","Traveler-G","Aloy","Traveler-E","Xinyan","Traveler-D","Candace","Nahida","Traveler-H","Chevreuse"]:
                 self.sub.insert(0, character)
             elif character in ["Beidou","Chongyun","Amber"]:
                 self.sub.append(character)
@@ -326,6 +326,8 @@ class Composition:
         """
         self.comp_name = "-"
         self.alt_comp_name = "-"
+        if len(characters) < 4:
+            return
         if len_element["Geo"] == 4:
             self.comp_name = "Mono Geo " + characters[0]
         else:
@@ -543,8 +545,8 @@ class Composition:
                         self.comp_name = "Double Geo " + characters[0]
                         if len_element["Geo"] == 3:
                             self.alt_comp_name = self.comp_name.replace("Double Geo", "Triple Geo")
-                            if CHARACTERS[characters[0]]["element"] == "Geo":
-                                self.comp_name = self.comp_name.replace("Double Geo", "Mono Geo")
+                            # if CHARACTERS[characters[0]]["element"] == "Geo":
+                            #     self.comp_name = self.comp_name.replace("Double Geo", "Mono Geo")
                     elif len_element["Electro"] > 1 and (len(dps) < 2 or ("Raiden Shogun" in characters and "Yae Miko" in characters)):
                         if "Bennett" in characters and "Raiden Shogun" in characters and anemo:
                             if "Yae Miko" in characters:

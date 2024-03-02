@@ -1104,5 +1104,61 @@
         "availability": "Limited 5*",
         "role": "Sub-DPS",
         "on_field": false
+    },
+    "Chevreuse": {
+        "id": 10000090,
+        "name": "Chevreuse",
+        "weapon": "Polearm",
+        "element": "Pyro",
+        "rarity": 4,
+        "icon": "UI_AvatarIcon_Chevreuse",
+        "route": "Chevreuse",
+        "alt_name": null,
+        "out_name": false,
+        "availability": "4*",
+        "role": "Sub-DPS",
+        "on_field": false
+    },
+    "Navia": {
+        "id": 10000091,
+        "name": "Navia",
+        "weapon": "Claymore",
+        "element": "Geo",
+        "rarity": 5,
+        "icon": "UI_AvatarIcon_Navia",
+        "route": "Navia",
+        "alt_name": null,
+        "out_name": false,
+        "availability": "Limited 5*",
+        "role": "DPS",
+        "on_field": true
+    },
+    "Gaming": {
+        "id": 10000092,
+        "name": "Gaming",
+        "weapon": "Claymore",
+        "element": "Pyro",
+        "rarity": 4,
+        "icon": "UI_AvatarIcon_Gaming",
+        "route": "Gaming",
+        "alt_name": null,
+        "out_name": false,
+        "availability": "4*",
+        "role": "DPS",
+        "on_field": true
+    },
+    "Xianyun": {
+        "id": 10000093,
+        "name": "Xianyun",
+        "weapon": "Catalyst",
+        "element": "Anemo",
+        "rarity": 5,
+        "icon": "UI_AvatarIcon_Liuyun",
+        "route": "Xianyun",
+        "alt_name": null,
+        "out_name": false,
+        "availability": "Limited 5*",
+        "role": "Support",
+        "on_field": false
     }
 }

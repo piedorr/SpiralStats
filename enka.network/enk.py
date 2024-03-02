@@ -1,34 +1,35 @@
 import asyncio
 import time
-from enkanetwork import EnkaNetworkAPI
-from enkanetwork import EquipmentsType, DigitType
+import enka
+from enka.enums import ItemType, FightPropType, EquipmentType
+# from enkanetwork import EnkaNetworkAPI
+# from enkanetwork import EquipmentsType, DigitType
 from enka_config import *
 from pydantic import ValidationError
-client = EnkaNetworkAPI()
 
 # UNCOMMENT THE DESIRED STATS IN THE CSV
 desired_stats = {
     # 1: "Base HP",
     # 4: "Base ATK",
     # 7: "Base DEF",
-    "FIGHT_PROP_MAX_HP": "Max HP",
-    "FIGHT_PROP_CUR_ATTACK": "ATK",
-    "FIGHT_PROP_CUR_DEFENSE": "DEF",
-    "FIGHT_PROP_CRITICAL": "CRIT Rate",
-    "FIGHT_PROP_CRITICAL_HURT": "CRIT DMG",
-    "FIGHT_PROP_CHARGE_EFFICIENCY": "Energy Recharge",
-    "FIGHT_PROP_HEAL_ADD": "Healing Bonus",
+    FightPropType.FIGHT_PROP_MAX_HP: "Max HP",
+    FightPropType.FIGHT_PROP_CUR_ATTACK: "ATK",
+    FightPropType.FIGHT_PROP_CUR_DEFENSE: "DEF",
+    FightPropType.FIGHT_PROP_CRITICAL: "CRIT Rate",
+    FightPropType.FIGHT_PROP_CRITICAL_HURT: "CRIT DMG",
+    FightPropType.FIGHT_PROP_CHARGE_EFFICIENCY: "Energy Recharge",
+    FightPropType.FIGHT_PROP_HEAL_ADD: "Healing Bonus",
     # 27: "Incoming Healing Bonus",
-    "FIGHT_PROP_ELEMENT_MASTERY": "Elemental Mastery",
+    FightPropType.FIGHT_PROP_ELEMENT_MASTERY: "Elemental Mastery",
     # 29: "Physical RES",
-    "FIGHT_PROP_PHYSICAL_ADD_HURT": "Physical DMG Bonus",
-    "FIGHT_PROP_FIRE_ADD_HURT": "Pyro DMG Bonus",
-    "FIGHT_PROP_ELEC_ADD_HURT": "Electro DMG Bonus",
-    "FIGHT_PROP_WATER_ADD_HURT": "Hydro DMG Bonus",
-    "FIGHT_PROP_GRASS_ADD_HURT": "Dendro DMG Bonus",
-    "FIGHT_PROP_WIND_ADD_HURT": "Anemo DMG Bonus",
-    "FIGHT_PROP_ROCK_ADD_HURT": "Geo DMG Bonus",
-    "FIGHT_PROP_ICE_ADD_HURT": "Cryo DMG Bonus",
+    FightPropType.FIGHT_PROP_PHYSICAL_ADD_HURT: "Physical DMG Bonus",
+    FightPropType.FIGHT_PROP_FIRE_ADD_HURT: "Pyro DMG Bonus",
+    FightPropType.FIGHT_PROP_ELEC_ADD_HURT: "Electro DMG Bonus",
+    FightPropType.FIGHT_PROP_WATER_ADD_HURT: "Hydro DMG Bonus",
+    FightPropType.FIGHT_PROP_GRASS_ADD_HURT: "Dendro DMG Bonus",
+    FightPropType.FIGHT_PROP_WIND_ADD_HURT: "Anemo DMG Bonus",
+    FightPropType.FIGHT_PROP_ROCK_ADD_HURT: "Geo DMG Bonus",
+    FightPropType.FIGHT_PROP_ICE_ADD_HURT: "Cryo DMG Bonus",
     # 50: "Pyro RES",
     # 51: "Electro RES",
     # 52: "Hydro RES",
@@ -46,7 +47,7 @@ desired_stats = {
 }
 
 async def main():
-    async with client:
+    async with enka.EnkaAPI() as client:
         cpt = 1
         error_uids = []
         header = ['uid', 'nickname', 'character', 'attack_lvl', 'skill_lvl', 'burst_lvl']
@@ -65,7 +66,7 @@ async def main():
 
             for i in range(20):
                 try:
-                    data = await client.fetch_user(uid)
+                    data = await client.fetch_showcase(uid)
                     for character in data.characters:
                         line = []
                         line.append(uid)
@@ -76,27 +77,30 @@ async def main():
                         else:
                             line.append(characters[str(character.id)]["name"])
                         j = 1
-                        for skill in character.skills:
+                        for skill in character.talents:
                             if j > 3:
-                                print("There are more than 3 skills for " + characters[str(character.id)]["name"])
+                                print("There are more than 3 talents for " + characters[str(character.id)]["name"])
                             if (skill.name != "Illusory Torrent" and skill.name != "Kamisato Art: Senho"):
                                 # line.append(skill.name)
                                 line.append(skill.level)
-                            j += 1
+                            else:
+                                j += 1
 
                         for statId in desired_stats:
-                            line.append( round(getattr(character.stats, str(statId)).value, 3) )
+                            for stat_type, stat_object in character.stats.items():
+                                if stat_type == statId:
+                                    line.append(round(stat_object.value, 3))
 
-                        line.append(data.player.level)
-                        line.append(character.element)
-                        line.append(character.equipments[-1].detail.name)
-                        line.append(character.equipments[-1].level)
+                        line.append(character.level)
+                        line.append(character.element.name.title())
+                        line.append(character.weapon.name)
+                        line.append(character.weapon.level)
                         mainstats = {
-                            "EQUIP_BRACER": "",
-                            "EQUIP_NECKLACE": "",
-                            "EQUIP_SHOES": "",
-                            "EQUIP_RING": "",
-                            "EQUIP_DRESS": ""
+                            EquipmentType.FLOWER: "",
+                            EquipmentType.FEATHER: "",
+                            EquipmentType.SANDS: "",
+                            EquipmentType.GOBLET: "",
+                            EquipmentType.CIRCLET: ""
                         }
                         substats = {
                             "Flat HP": 0.00,
@@ -112,17 +116,17 @@ async def main():
                         }
 
                         artis = {}
-                        for artifact in filter(lambda x: x.type == EquipmentsType.ARTIFACT, character.equipments):
-                            mainstats[artifact.detail.artifact_type] = artifact.detail.mainstats.name
-                            for substate in artifact.detail.substats:
-                                if substate.type == DigitType.PERCENT:
+                        for artifact in character.artifacts:
+                            mainstats[artifact.equip_type] = artifact.main_stat.name
+                            for substate in artifact.sub_stats:
+                                if substate.is_percentage:
                                     substats[substate.name] += substate.value
                                 else:
                                     substats["Flat " + substate.name] += substate.value
-                            if artifact.detail.artifact_name_set not in artis:
-                                artis[artifact.detail.artifact_name_set] = 1
+                            if artifact.set_name not in artis:
+                                artis[artifact.set_name] = 1
                             else:
-                                artis[artifact.detail.artifact_name_set] += 1
+                                artis[artifact.set_name] += 1
 
                         for i in list(substats.keys())[3:]:
                             line.append(round(substats[i], 3))
@@ -151,20 +155,20 @@ async def main():
                         writer.writerow(line)
                     writer = csv.writer(open(filename + '.csv', 'a', encoding='UTF8', newline=''))
                     break
-                except TypeError as e:
-                    try:
-                        line = []
-                        line.append(uid)
-                        line.append(data.player.nickname)
-                        for j in range(20):
-                            line.append("")
-                        line.append(data.player.level)
-                        writer.writerow(line)
-                        writer = csv.writer(open(filename + '.csv', 'a', encoding='UTF8', newline=''))
-                        break
-                    except Exception as e:
-                        error_uids.append('{}: {}'.format(uid, e))
-                        break
+                # except TypeError as e:
+                #     try:
+                #         line = []
+                #         line.append(uid)
+                #         line.append(data.player.nickname)
+                #         for j in range(20):
+                #             line.append("")
+                #         line.append(data.player.level)
+                #         writer.writerow(line)
+                #         writer = csv.writer(open(filename + '.csv', 'a', encoding='UTF8', newline=''))
+                #         break
+                #     except Exception as e:
+                #         error_uids.append('{}: {}'.format(uid, e))
+                #         break
                 except asyncio.exceptions.TimeoutError as e:
                     time.sleep(1)
                     pass

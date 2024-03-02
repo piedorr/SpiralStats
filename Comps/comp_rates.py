@@ -881,18 +881,18 @@ def form_comps(col_names, table, info_char):
         "2": [],
     }}
     lenient = {"12": {
-        "1": 300,
+        "1": 200,
         "2": 200,
     }, "11": {
-        "1": 300,
+        "1": 200,
         "2": 200,
     }}
     strict = {"12": {
         "1": 200,
-        "2": 120,
+        "2": 200,
     }, "11": {
-        "1": 120,
-        "2": 100,
+        "1": 200,
+        "2": 200,
     }}
 
     for i in range(len(table)):
@@ -918,7 +918,6 @@ def form_comps(col_names, table, info_char):
         comps.append(comp)
 
     # print(comp_len)
-    # exit()
 
     # for floor_iter in ["11", "12"]:
     #     for side_iter in ["1", "2"]:
@@ -926,6 +925,7 @@ def form_comps(col_names, table, info_char):
     #         plt.title(floor_iter + ' Side ' +  side_iter)
     #         plt.savefig('../comp_results/' + floor_iter + ' Side ' +  side_iter + '.png')
     #         plt.close()
+    # exit()
 
     return comps
 

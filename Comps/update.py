@@ -115,6 +115,13 @@ for char in chars2:
                 chars1[char_name]["on_field"] = True
             else:
                 chars1[char_name]["on_field"] = False
+            role = input("DPS/Sub/Support? (0/1/2): ")
+            if role == "0":
+                chars1[char_name]["role"] = "DPS"
+            elif role == "1":
+                chars1[char_name]["role"] = "Sub-DPS"
+            else:
+                chars1[char_name]["role"] = "Support"
 
 with open("../data/characters.json", "w") as out_file:
     out_file.write(json.dumps(chars1,indent=4))

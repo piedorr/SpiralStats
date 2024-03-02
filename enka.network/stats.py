@@ -191,19 +191,19 @@ for row in data:
         continue
     if row[2] == "Traveler":
         match row[23]:
-            case "Rock":
+            case "Geo":
                 row[2] = "Traveler-G"
-            case "Wind":
+            case "Anemo":
                 row[2] = "Traveler-A"
-            case "Electric":
+            case "Electro":
                 row[2] = "Traveler-E"
-            case "Grass":
+            case "Dendro":
                 row[2] = "Traveler-D"
-            case "Water":
+            case "Hydro":
                 row[2] = "Traveler-H"
-            case "Fire":
+            case "Pyro":
                 row[2] = "Traveler-P"
-            case "Ice":
+            case "Cryo":
                 row[2] = "Traveler-C"
     # for char in chars:
     #     if row[2] == char:

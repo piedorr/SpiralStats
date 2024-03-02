@@ -3,8 +3,8 @@ import json
 with open('../data/characters.json') as char_file:
     CHARACTERS = json.load(char_file)
 
-RECENT_PHASE = "4.2a"
-past_phase = "Oct2"
+RECENT_PHASE = "4.4b"
+past_phase = "Dec1"
 
 # threshold for comps, not inclusive
 global app_rate_threshold
@@ -22,7 +22,7 @@ char_app_rate_threshold = 0.3
 # archetypes: all, Nilou, dendro, nondendro, off-field, on-field, melt, freeze, hyperbloom, spread
 archetype = "all"
 whaleCheck = True
-whaleCheckOnly = True
+whaleCheckOnly = False
 whaleSigWeap = False
 sigWeaps = []
 standWeaps = []

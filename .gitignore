@@ -304,5 +304,9 @@ enka.network/data
 enka.network/watermark.png
 enka.network/output*
 enka.network/readme_real.txt
+enka.network/.enka_py
 patch_process_real.txt
 Comps/comp_name.py
+enka.network/enka.js
+enka.network/package-lock.json
+enka.network/package.json

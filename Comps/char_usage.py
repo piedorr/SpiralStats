@@ -215,7 +215,7 @@ def appearances(players, owns, chambers=ROOMS, offset=3, info_char=False):
                     # else:
                     #     avg_duration[room_num[-1:]].append(statistics.mean(appears[phase][char]["duration"][room_num]))
 
-            if len(all_duration_1) >= 15 and avg_duration["1"]:
+            if len(all_duration_1) >= 20 and avg_duration["1"]:
                 appears[phase][char]["avg_duration_1"] = round(statistics.mean(avg_duration["1"]), 1)
             else:
                 appears[phase][char]["avg_duration_1"] = 999

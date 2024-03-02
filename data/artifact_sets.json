@@ -716,8 +716,7 @@
         },
         "icon": "UI_RelicIcon_15033_4",
         "route": "Song of Days Past",
-        "sortOrder": 98,
-        "beta": true
+        "sortOrder": 98
     },
     "15034": {
         "id": 15034,
@@ -732,7 +731,6 @@
         },
         "icon": "UI_RelicIcon_15034_4",
         "route": "Nighttime Whispers in the Echoing Woods",
-        "sortOrder": 99,
-        "beta": true
+        "sortOrder": 99
     }
 }
